@@ -10,18 +10,19 @@ type position = [number, number];
 
 function App() {
 	const grid: (string)[][] = [
-		["?","?","?","?","?","?","?"],
-		["?","?","?","?","?","?","?","?"],
-		["?","?","?","?","?","?","?"],
-		["?","?","?","?","?","?","?","?"],
-		["?","?","?","?","?","?","?"],
-		["?","?","?","?","?","?","?","?"],
-		["?","?","?","?","?","?","?"],
+		[" "," "," "," "," "," "," "," "],
+		[" "," "," "," "," "," "," "," "],
+		[" "," "," "," "," "," "," "," "],
+		[" "," "," "," "," "," "," "," "],
+		[" "," "," "," "," "," "," "," "],
+		[" "," "," "," "," "," "," "," "],
+		[" "," "," "," "," "," "," "," "]
 	];
 
 	const [lastPosition, setLastPosition] = useState<position>([-1,-1]);
 	const [board, setBoard] = useState<string[][]>(grid);
 	const [selection, setSelection] = useState<position[] | undefined>(undefined);
+	const [state, setState] = useState(false);
 
 	const letters = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
 
@@ -29,7 +30,6 @@ function App() {
 	function getRandomLetter(str: string) {
 		return str.charAt(Math.floor(Math.random() * str.length));
 	}
-
 	const initializeBoard = ()=> {
 
 		const newGrid = JSON.parse(JSON.stringify(grid));
@@ -40,17 +40,14 @@ function App() {
 				newGrid[i][b] = value;
 			}
 		}
+		setState(true);
 		setBoard(newGrid);
 	};
-
 	const loadColumn = (col:number) : React.ReactNode[]=> {
 		return board[col-1].map((char, i) => {
-			return <Tile key={`${i},${col-1}`} tilePosition={[i, col - 1]} lastPosition={lastPosition} setLastPosition={setLastPosition} char={char} selection={selection} setSelection={setSelection} />;
+			return <Tile key={`${i},${col-1}`} tilePosition={[i, col - 1]} lastPosition={lastPosition} setLastPosition={setLastPosition} char={char} selection={selection} setSelection={setSelection} state={state} setState={setState}/>;
 		});
 	};
-
-
-
 	const selectedWord = (selection: position[] | undefined): string=> {
 		let word = "";
 		if (selection) {
@@ -61,8 +58,24 @@ function App() {
 		}
 		return word;
 	};
+	const cancel = ():void => {
+		setState(false);
+		setLastPosition([-1,-1]);
+		setSelection(undefined);
+	};
+	const send = ()=> {
+		cancel();
 
-
+		const newGrid = JSON.parse(JSON.stringify(board));
+		if (selection) {
+			for (const pos of selection) {
+				newGrid[pos[1]].splice(pos[0], 1);
+				const newLetter = getRandomLetter(letters);
+				newGrid[pos[1]].unshift(newLetter);
+			}
+		}
+		setBoard(newGrid);
+	};
 	
 	return (
 		<div className="App">
@@ -89,10 +102,12 @@ function App() {
 					{loadColumn(7)}
 				</span>
 			</div>
-			<div className='set-board-button pointer' onClick={initializeBoard}>SET BOARD</div>
-			<div className='current-tile'>{lastPosition}</div>
-			<div className="current-selection">{selection}</div>
-			<div className="formed-word">{selectedWord(selection)}</div>
+			<div className='line set-board-button pointer' onClick={initializeBoard}>SET BOARD</div>
+			<div className='line current-tile'>{lastPosition}</div>
+			<div className="line current-selection">{selection}</div>
+			<div className="line formed-word">{selectedWord(selection)}</div>
+			<div className="line send" onClick={send}>SEND</div>
+			<div className="line cancel" onClick={cancel}>CANCEL</div>
 		</div>
 	);
 }

@@ -1,4 +1,4 @@
-import React,{Dispatch} from 'react';
+import React,{Dispatch, useEffect} from 'react';
 import {useState} from 'react';
 
 type position = [number, number];
@@ -10,11 +10,19 @@ interface props {
     setSelection: Dispatch<position[]>,
     char:string,
     setLastPosition: Dispatch<position>,
+	state: boolean,
+	setState: Dispatch<boolean>;
 }
 
-const Tile = ({tilePosition, lastPosition, setLastPosition, char, selection, setSelection}: props)=> {
+const Tile = ({tilePosition, lastPosition, setLastPosition, char, selection, setSelection, state, setState}: props)=> {
 	const [position] = useState<position>(tilePosition);
 	const [check, setCheck] = useState(false);
+
+	useEffect(()=> {
+		if (state === false) {
+			setCheck(false);
+		}
+	},[state]);
 
 	const handleNewPosition = ():React.MouseEventHandler<HTMLDivElement> | undefined => {
 
@@ -22,6 +30,7 @@ const Tile = ({tilePosition, lastPosition, setLastPosition, char, selection, set
 			console.log("CLICKEABLE");
 			setLastPosition(tilePosition);
 			setCheck(true);
+			setState(true);
 			if (selection) {
 				setSelection([...selection, tilePosition]);
 			} else {
@@ -36,6 +45,7 @@ const Tile = ({tilePosition, lastPosition, setLastPosition, char, selection, set
 
 		setCheck(true);
 		setLastPosition(tilePosition);
+		setState(true);
 		if (selection) {
 			setSelection([...selection, tilePosition]);
 		} else {
