@@ -1,40 +1,65 @@
-import React,{Dispatch, useEffect} from 'react';
+import React,{ useEffect} from 'react';
+import { Socket  as SocketType} from 'socket.io-client';
 import {useState} from 'react';
 
-type position = [number, number];
+type Position = [number, number];
+
 
 interface props {
-    tilePosition: position,
-    lastPosition: position,
-    selection: position[] | undefined,
-    setSelection: Dispatch<position[]>,
+    tilePosition: Position,
+    lastPosition: Position,
+    selection: Position[] | undefined,
+    setSelectionAndEmit: (selection: Position[], socket: SocketType) => void,
     char:string,
-    setLastPosition: Dispatch<position>,
+    setLastPositionAndEmit: (position: Position, socket: SocketType) => void,
 	state: boolean,
-	setState: Dispatch<boolean>;
+	setStateAndEmit: (state: boolean, socket: SocketType) => void;
+	socket: SocketType;
 }
 
-const Tile = ({tilePosition, lastPosition, setLastPosition, char, selection, setSelection, state, setState}: props)=> {
-	const [position] = useState<position>(tilePosition);
-	const [check, setCheck] = useState(false);
+const Tile = ({tilePosition, lastPosition, setLastPositionAndEmit, char, selection, setSelectionAndEmit, state, setStateAndEmit, socket}: props)=> {
+	const [position] = useState<Position>(tilePosition);
+	const [check, setCheck] = useState<boolean>(false);
 
 	useEffect(()=> {
 		if (state === false) {
-			setCheck(false);
+			setCheckAndEmit(false, socket, position);
 		}
 	},[state]);
+
+	useEffect(()=> {
+		socket.on("setCheck", check => {
+			if (position[0] === check.position[0] && position[1] === check.position[1]) {
+				setCheck(check.check);
+			}
+		});
+
+		return ()=> {
+			socket.on("setCheck", check => {
+				if (position[0] === check.position[0] && position[1] === check.position[1]) {
+					setCheck(check.check);
+				}
+			});
+		};
+	}, [check]);
+
+	const setCheckAndEmit = (check: boolean, socket: SocketType, position: Position) => {
+		setCheck(check);
+		socket.emit("setCheck", {check, position});
+	};
+
 
 	const handleNewPosition = ():React.MouseEventHandler<HTMLDivElement> | undefined => {
 
 		if ((lastPosition[0] === -1 && lastPosition[1] === -1)) {
 			console.log("CLICKEABLE");
-			setLastPosition(tilePosition);
-			setCheck(true);
-			setState(true);
+			setLastPositionAndEmit(tilePosition, socket);
+			setCheckAndEmit(true, socket, position);
+			setStateAndEmit(true, socket);
 			if (selection) {
-				setSelection([...selection, tilePosition]);
+				setSelectionAndEmit([...selection, tilePosition], socket);
 			} else {
-				setSelection([tilePosition]);
+				setSelectionAndEmit([tilePosition], socket);
 			}
 			return;
 		}
@@ -43,17 +68,17 @@ const Tile = ({tilePosition, lastPosition, setLastPosition, char, selection, set
 			return;
 		}
 
-		setCheck(true);
-		setLastPosition(tilePosition);
-		setState(true);
+		setCheckAndEmit(true, socket, position);
+
+		setLastPositionAndEmit(tilePosition, socket);
+		setStateAndEmit(true, socket);
 		if (selection) {
-			setSelection([...selection, tilePosition]);
+			setSelectionAndEmit([...selection, tilePosition], socket);
 		} else {
-			setSelection([tilePosition]);
+			setSelectionAndEmit([tilePosition], socket);
 		}
         
 	};
-
 	const isClickeable = ():boolean=> {
 		if ((position[0] <= lastPosition[0]+1 && position[0] >= lastPosition[0] - 1) && (position[1] <= lastPosition[1] + 1 && position[1] >= lastPosition[1] - 1)) {
 			console.log("CLICKEABLE");
@@ -62,7 +87,6 @@ const Tile = ({tilePosition, lastPosition, setLastPosition, char, selection, set
 		console.log("NOT CLICKEABLE");
 		return false;
 	};
-
 	const doNothing = ()=> {
 		return;
 	};
