@@ -10,19 +10,13 @@
 
 .grid {
     border: 1px solid black;
-    width: 700px;
-    height: 550px;
-
     display: flex;
     justify-content: center;
-
 }
 
 .col {
     outline: 1px solid rgb(21, 246, 0);
     outline-offset: -1px;
-    height: 100%;
-    width: 100px;
 
     display: flex;
     flex-direction: column;
@@ -34,7 +28,7 @@
 .item {
     outline: 1px solid red;
     outline-offset: -1px;
-    width: 100%;
+    width: 70px;
     height: 70px;
 
     display: flex;
@@ -48,4 +42,41 @@
 
 .line {
     height: 20px;
+}
+
+.start-form-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    background-color: white;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.start-form {
+    outline: 1px solid rgb(0, 0, 0);
+
+    padding: 30px;
+    border-radius: 15px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.start-form-title {
+    padding-bottom: 5px;
+}
+
+.start-form-input {
+    outline: 1px solid black;
+
+    padding: 10px;
+    border-radius: 15px;
+
 }

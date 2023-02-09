@@ -1,16 +1,18 @@
 import io, { Socket  as SocketType} from 'socket.io-client';
 import React, { useEffect, useState } from 'react';
 import Tile from './components/Tile';
+import StartForm from './components/StartForm';
 import "./App.css";
 
 type Position = [number, number];
+type Board = string[][];
 
 const socket = io("http://localhost:4000");
 
-// interface User {
-// 	username: string,
-// 	color: string,
-// }
+interface User {
+	username: string,
+	color: string,
+}
 
 // (COLUMNA, FILA)
 
@@ -18,71 +20,120 @@ function App() {
 	
 	const letters = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
 
-	// const grid: (string)[][] = [
-	// 	[" "," "," "," "," "," "," "," "],
-	// 	[" "," "," "," "," "," "," "," "],
-	// 	[" "," "," "," "," "," "," "," "],
-	// 	[" "," "," "," "," "," "," "," "],
-	// 	[" "," "," "," "," "," "," "," "],
-	// 	[" "," "," "," "," "," "," "," "],
-	// 	[" "," "," "," "," "," "," "," "],
-	// 	[" "," "," "," "," "," "," "," "]
-	// ];
-
 	const grid: (string)[][] = [
-		[" "," "," "],
-		[" "," "," "],
-		[" "," "," "],
+		[" "," "," ", " "],
+		[" "," "," ", " "],
+		[" "," "," ", " "],
+		[" "," "," ", " "],
 	];
 
+	// SHARES STATES
 	const [lastPosition, setLastPosition] = useState<Position>([-1,-1]);
-	const [board,        setBoard]        = useState<string[][]>(grid);
+	const [board,        setBoard]        = useState<Board>(grid);
 	const [selection,    setSelection]    = useState<Position[] | undefined>(undefined);
 	const [state,        setState]        = useState<boolean>(false);
+	const [room,         setRoom]         = useState<string>("");
+	const [userTurn,     setUserTurn]     = useState<string>("");
+	const [host,         setHost]         = useState<User>({username: "", color:""});
+	const [guest,        setGuest]        = useState<User>({username: "", color: ""});
 
-	console.log("LASTPOSITION ", lastPosition);
-	console.log("BOARD ", board);
-	console.log("SELECTION ", selection);
-	console.log("STATE ", state);
-
-	// const [user,         setUser]         = useState<User>({username:"", color: ""});
+	// LOCAL STATES
+	const [user,         setUser]         = useState<User>({username: "", color: ""});
+	const [startForm,    setStartForm]    = useState<boolean>(true);
+	
+	console.log("=============================");
+	// console.log("LASTPOSITION ", lastPosition);
+	// console.log("BOARD ", board);
+	// console.log("SELECTION ", selection);
+	// console.log("STATE ", state);
+	// console.log("ROOM", room);
+	console.log("USER TURN", userTurn);
+	console.log("HOST", host);
+	console.log("GUEST", guest);
+	// console.log("USER", user);
+	// console.log("STARTFORM", startForm);
+	// console.log("=============================");
 
 	useEffect(()=> {
-		socket.on("setBoard", newBoard => {
-			console.log("BOARD RECEIVEN FROM THE BACKEND");
-			setBoard(newBoard);
+		socket.on("setBoard", payload => {
+			setBoard(payload.board);
 		});
-		socket.on("setLastPosition", lastPosition=> {
-			console.log("LASTPOSITION RECEIVEN FROM THE BACKEND");
-			setLastPosition(lastPosition);
+		socket.on("setLastPosition", payload=> {
+			setLastPosition(payload.position);
 		});
-		socket.on("setSelection", selection=> {
-			console.log("SELECTION RECEIVEN FROM THE BACKEND");
-			setSelection(selection);
+		socket.on("setSelection", payload=> {
+			setSelection(payload.selection);
 		});
-		socket.on("setState", state => {
-			console.log("STATE RECEIVEN FROM THE BACKEND");
-			setState(state);
+		socket.on("setState", payload => {
+			setState(payload.state);
 		});
+		socket.on("setUserTurn", payload => {
+			setUserTurn(payload.userTurn);
+		});
+
+
+
+		// socket.on("setHost", payload=> {
+		// 	console.log("PAYLOAD SETHOST", payload);
+		// 	setHost(payload.host);
+		// });
 
 		return ()=> {
-			console.log("RETURN");
-			socket.off("setBoard", newBoard => {
-				setBoard(newBoard);
+			socket.off("setBoard", payload => {
+				setBoard(payload.board);
 			});
-			socket.off("setLastPosition", lastPosition=> {
-				setLastPosition(lastPosition);
+			socket.off("setLastPosition", payload=> {
+				setLastPosition(payload.lastPosition);
 			});
-			socket.off("setSelection", selection=> {
-				setSelection(selection);
+			socket.off("setSelection", payload=> {
+				setSelection(payload.selection);
 			});
-			socket.off("setState", state => {
-				setState(state);
+			socket.off("setState", payload => {
+				setState(payload.state);
+			});
+			socket.off("setUserTurn", payload => {
+				setUserTurn(payload.user.username);
+			});
+
+
+			socket.on("setHost", payload=> {
+				console.log("PAYLOAD SETHOST", payload);
+				setHost(payload.host);
 			});
 		};
-	},[board, lastPosition, selection, state]);
+	},[board, lastPosition, selection, state, userTurn]);
 
+	useEffect(()=> {
+		socket.on("join room", payload => {
+			console.log("SET HOST", host, room);
+			if (host.username !== "") {
+				socket.emit("setHost", {host, room});
+			}
+			setGuest(payload.user);
+		});
+		return ()=> {
+			socket.off("join room", payload => {
+				console.log("SET HOST", host, room);
+				setGuest(payload.user);
+			});
+		};
+	});
 
+	const joinRoom = (e:React.MouseEvent<HTMLButtonElement>)=> {
+		e.preventDefault();
+		setStartForm(false);
+		initializeBoard();
+		setGuest(user);
+		socket.emit("join room", {user, room, userTurn});
+	};
+	const createRoom = (e:React.MouseEvent<HTMLButtonElement>)=> {
+		e.preventDefault();
+		setUserTurnAndEmit(user.username, user, room, socket);
+		setStartForm(false);
+		initializeBoard();
+		setHost(user);
+		socket.emit("create room", {user, room, userTurn});
+	};
 	const getRandomLetter = (str: string)=> {
 		return str.charAt(Math.floor(Math.random() * str.length));
 	};
@@ -97,12 +148,12 @@ function App() {
 			}
 		}
 		socket.emit("setBoard", newBoard);
-		setStateAndEmit(true, socket);
-		setBoardAndEmit(newBoard, socket);
+		setStateAndEmit(true,user, room, socket);
+		setBoardAndEmit(newBoard, user, room, socket);
 	};
 	const loadColumn = (col:number) : React.ReactNode[]=> {
 		return board[col-1].map((char, i) => {
-			return <Tile key={`${i},${col-1}`} tilePosition={[i, col - 1]} lastPosition={lastPosition} setLastPositionAndEmit={setLastPositionAndEmit} char={char} selection={selection} setSelectionAndEmit={setSelectionAndEmit} state={state} setStateAndEmit={setStateAndEmit} socket={socket}/>;
+			return <Tile key={`${i},${col-1}`} tilePosition={[i, col - 1]} lastPosition={lastPosition} setLastPositionAndEmit={setLastPositionAndEmit} char={char} selection={selection} setSelectionAndEmit={setSelectionAndEmit} state={state} setStateAndEmit={setStateAndEmit} socket={socket} user={user} userTurn={userTurn} room={room}/>;
 		});
 	};
 	const selectedWord = (selection: Position[] | undefined): string=> {
@@ -116,9 +167,9 @@ function App() {
 		return word;
 	};
 	const cancel = ():void => {
-		setStateAndEmit(false, socket);
-		setLastPositionAndEmit([-1,-1], socket);
-		setSelectionAndEmit(undefined, socket);
+		setStateAndEmit(false,user, room, socket);
+		setLastPositionAndEmit([-1,-1],user, room, socket);
+		setSelectionAndEmit(undefined, user, room, socket);
 	};
 	const send = ()=> {
 		cancel();
@@ -131,30 +182,45 @@ function App() {
 				newGrid[pos[1]].unshift(newLetter);
 			}
 		}
-		setBoardAndEmit(newGrid, socket);
+		if (userTurn === guest.username) {
+			setUserTurnAndEmit(host.username, user, room, socket);
+		}  else {
+			setUserTurnAndEmit(guest.username, user, room, socket);
+		}
+		setBoardAndEmit(newGrid,user,room, socket);
 	};
-
 
 	// SET AND EMIT
-	const setLastPositionAndEmit = (position: Position, socket: SocketType)=> {
+	const setLastPositionAndEmit = (position: Position, user: User, room: string, socket: SocketType)=> {
 		setLastPosition(position);
-		socket.emit("setLastPosition", position);
+		socket.emit("setLastPosition", {position, user, room});
 	};
-	const setStateAndEmit = (state: boolean, socket: SocketType)=> {
+	const setStateAndEmit = (state: boolean, user: User, room: string, socket: SocketType)=> {
 		setState(state);
-		socket.emit("setState", state);
+		socket.emit("setState", {state, user, room});
 	};
-	const setSelectionAndEmit = (selection: Position[] | undefined, socket: SocketType)=> {
+	const setSelectionAndEmit = (selection: Position[] | undefined, user: User, room: string, socket: SocketType)=> {
 		setSelection(selection);
-		socket.emit("setSelection", selection);
+		socket.emit("setSelection", {selection, user, room});
 	};
-	const setBoardAndEmit = (board: string[][], socket: SocketType)=> {
+	const setBoardAndEmit = (board: Board, user: User, room: string, socket:SocketType)=> {
 		setBoard(board);
-		socket.emit("setBoard", board);
+		socket.emit("setBoard", {board, user, room});
+	};
+	const setUserTurnAndEmit = (userTurn: string, user:User, room:string, socket: SocketType)=> {
+		socket.emit("setUserTurn", {userTurn, user, room});
+		setUserTurn(userTurn);
+	};
+	const doNothing = ()=> {
+		console.log("doing nothing");
 	};
 	
 	return (
 		<div className="App">
+			{startForm && <div className='start-form-container'>
+				<StartForm user={user} joinRoom={joinRoom} createRoom={createRoom} setUser={setUser} setRoom={setRoom}/>
+			</div>}
+			<div>{user.username}</div>
 			<div className='grid'>
 				<span id='col-1' className='col'>
 					{loadColumn(1)}
@@ -165,10 +231,10 @@ function App() {
 				<span id='col-3' className='col'>
 					{loadColumn(3)}
 				</span>
-				{/* <span id='col-4' className='col'>
+				<span id='col-4' className='col'>
 					{loadColumn(4)}
 				</span>
-				<span id='col-5' className='col'>
+				{/* <span id='col-5' className='col'>
 					{loadColumn(5)}
 				</span>
 				<span id='col-6' className='col'>
@@ -181,12 +247,10 @@ function App() {
 					{loadColumn(8)}
 				</span> */}
 			</div>
-			<div className='line set-board-button pointer' onClick={initializeBoard}>SET BOARD</div>
-			<div className='line current-tile'>{lastPosition}</div>
-			<div className="line current-selection">{selection}</div>
+			{/* <div className='line set-board-button pointer' onClick={initializeBoard}>SET BOARD</div> */}
 			<div className="line formed-word">{selectedWord(selection)}</div>
-			<div className="line send" onClick={send}>SEND</div>
-			<div className="line cancel" onClick={cancel}>CANCEL</div>
+			<div className="line send" onClick={userTurn === user.username? send : doNothing}>SEND</div>
+			<div className="line cancel" onClick={userTurn === user.username? cancel : doNothing}>CANCEL</div>
 		</div>
 	);
 }

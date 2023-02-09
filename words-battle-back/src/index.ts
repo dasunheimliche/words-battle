@@ -19,28 +19,40 @@ app.use(express.json())
 
 // IO AND EXPRESS EVENT LISTENERS
 io.on('connection', (socket) => {
-    console.log(socket.id)
-    console.log("user connected")
+    socket.on("join room", payload => {
+        socket.join(payload.room)
+        socket.to(payload.room).emit("join room", payload)
+    })
+    socket.on("create room", payload => {
+        socket.join(payload.room)
+        socket.to(payload.room).emit("create room", payload)
+    })
 
-    socket.on("setBoard", newBoard => {
-        console.log("NEW BOARD RECEIVED FROM THE FRONTEND")
-        socket.broadcast.emit("setBoard", newBoard)
+    socket.on("setBoard", payload => {
+        socket.to(payload.room).emit("setBoard", payload)
     })
-    socket.on("setLastPosition", lastPosition => {
-        console.log("NEW LASTPOSITION RECEIVED FROM THE FRONTEND")
-        socket.broadcast.emit("setLastPosition", lastPosition)
+    socket.on("setLastPosition", payload => {
+        socket.to(payload.room).emit("setLastPosition", payload)
     })
-    socket.on("setSelection", selection => {
-        console.log("NEW SELECTION RECEIVED FROM THE FRONTEND")
-        socket.broadcast.emit("setSelection", selection)
+    socket.on("setSelection", payload => {
+        socket.to(payload.room).emit("setSelection", payload)
     })
-    socket.on("setState", state=> {
-        console.log("NEW STATE RECEIVED FROM THE FRONTEND")
-        socket.broadcast.emit("setState", state)
+    socket.on("setState", payload=> {
+        socket.to(payload.room).emit("setState", payload)
     })
-    socket.on("setCheck", check => {
-        console.log("NEW CHECK RECEIVED FROM THE FRONTEND")
-        socket.broadcast.emit("setCheck", check)
+    socket.on("setCheck", payload => {
+        socket.to(payload.room).emit("setCheck", payload)
+    })
+    socket.on("setUserTurn", payload => {
+        socket.to(payload.room).emit("setUserTurn", payload)
+        socket.emit("setUserTurn", payload)
+    })
+
+
+
+    socket.on("setHost", payload => {
+        console.log("PAYLOAD SETHOST", payload)
+        socket.to(payload.room).emit("setHost", payload)
     })
 })
 

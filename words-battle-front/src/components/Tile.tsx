@@ -3,63 +3,67 @@ import { Socket  as SocketType} from 'socket.io-client';
 import {useState} from 'react';
 
 type Position = [number, number];
+interface User {
+	username: string,
+	color: string,
+}
 
-
-interface props {
+interface TileProps {
     tilePosition: Position,
     lastPosition: Position,
     selection: Position[] | undefined,
-    setSelectionAndEmit: (selection: Position[], socket: SocketType) => void,
+    setSelectionAndEmit: (selection: Position[], user: User, room: string, socket: SocketType) => void,
     char:string,
-    setLastPositionAndEmit: (position: Position, socket: SocketType) => void,
+    setLastPositionAndEmit: (position: Position, user: User, room: string, socket: SocketType) => void,
 	state: boolean,
-	setStateAndEmit: (state: boolean, socket: SocketType) => void;
-	socket: SocketType;
+	setStateAndEmit: (state: boolean, user: User, room: string, socket: SocketType) => void,
+	socket: SocketType,
+	user: User,
+	room: string,
+	userTurn: string,
 }
 
-const Tile = ({tilePosition, lastPosition, setLastPositionAndEmit, char, selection, setSelectionAndEmit, state, setStateAndEmit, socket}: props)=> {
+const Tile = ({tilePosition, lastPosition, setLastPositionAndEmit, char, selection, setSelectionAndEmit, state, setStateAndEmit, socket, user, userTurn, room}: TileProps)=> {
 	const [position] = useState<Position>(tilePosition);
 	const [check, setCheck] = useState<boolean>(false);
 
 	useEffect(()=> {
 		if (state === false) {
-			setCheckAndEmit(false, socket, position);
+			setCheckAndEmit(false, socket, position, user, room);
 		}
 	},[state]);
 
 	useEffect(()=> {
-		socket.on("setCheck", check => {
-			if (position[0] === check.position[0] && position[1] === check.position[1]) {
-				setCheck(check.check);
+		socket.on("setCheck", payload => {
+			if (position[0] === payload.position[0] && position[1] === payload.position[1]) {
+				setCheck(payload.check);
 			}
 		});
 
 		return ()=> {
-			socket.on("setCheck", check => {
-				if (position[0] === check.position[0] && position[1] === check.position[1]) {
-					setCheck(check.check);
+			socket.off("setCheck", payload => {
+				if (position[0] === payload.position[0] && position[1] === payload.position[1]) {
+					setCheck(payload.check);
 				}
 			});
 		};
 	}, [check]);
 
-	const setCheckAndEmit = (check: boolean, socket: SocketType, position: Position) => {
+	const setCheckAndEmit = (check: boolean, socket: SocketType, position: Position, user: User, room: string) => {
 		setCheck(check);
-		socket.emit("setCheck", {check, position});
+		socket.emit("setCheck", {check, position, user, room});
 	};
-
-
 	const handleNewPosition = ():React.MouseEventHandler<HTMLDivElement> | undefined => {
 
 		if ((lastPosition[0] === -1 && lastPosition[1] === -1)) {
 			console.log("CLICKEABLE");
-			setLastPositionAndEmit(tilePosition, socket);
-			setCheckAndEmit(true, socket, position);
-			setStateAndEmit(true, socket);
+			setLastPositionAndEmit(tilePosition, user, room, socket);
+			setCheckAndEmit(true, socket, position, user, room);
+			setStateAndEmit(true, user, room, socket);
 			if (selection) {
-				setSelectionAndEmit([...selection, tilePosition], socket);
+				setSelectionAndEmit([...selection, tilePosition], user, room, socket);
 			} else {
-				setSelectionAndEmit([tilePosition], socket);
+				setSelectionAndEmit([tilePosition], user, room, socket);
 			}
 			return;
 		}
@@ -68,14 +72,14 @@ const Tile = ({tilePosition, lastPosition, setLastPositionAndEmit, char, selecti
 			return;
 		}
 
-		setCheckAndEmit(true, socket, position);
+		setCheckAndEmit(true, socket, position, user, room);
 
-		setLastPositionAndEmit(tilePosition, socket);
-		setStateAndEmit(true, socket);
+		setLastPositionAndEmit(tilePosition, user, room, socket);
+		setStateAndEmit(true, user, room, socket);
 		if (selection) {
-			setSelectionAndEmit([...selection, tilePosition], socket);
+			setSelectionAndEmit([...selection, tilePosition], user, room, socket);
 		} else {
-			setSelectionAndEmit([tilePosition], socket);
+			setSelectionAndEmit([tilePosition], user, room, socket);
 		}
         
 	};
@@ -92,7 +96,7 @@ const Tile = ({tilePosition, lastPosition, setLastPositionAndEmit, char, selecti
 	};
 
 	return (
-		<div style={check? {backgroundColor: "pink"} : {backgroundColor: "white"}} className='item' onClick={!check? handleNewPosition : doNothing}>{char}</div>
+		<div style={check? {backgroundColor: "pink"} : {backgroundColor: "white"}} className='item pointer' onClick={userTurn === user.username? !check? handleNewPosition : doNothing : doNothing}>{char}</div>
 	);
 };
 
