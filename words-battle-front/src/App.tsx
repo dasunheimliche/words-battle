@@ -1,8 +1,10 @@
+import "./App.css";
+
 import io, { Socket  as SocketType} from 'socket.io-client';
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import Tile from './components/Tile';
 import StartForm from './components/StartForm';
-import "./App.css";
 
 type Position = [number, number];
 type Board = string[][];
@@ -12,6 +14,7 @@ const socket = io("http://localhost:4000");
 interface User {
 	username: string,
 	color: string,
+	health: number
 }
 
 // (COLUMNA, FILA)
@@ -34,12 +37,14 @@ function App() {
 	const [state,        setState]        = useState<boolean>(false);
 	const [room,         setRoom]         = useState<string>("");
 	const [userTurn,     setUserTurn]     = useState<string>("");
-	const [host,         setHost]         = useState<User>({username: "", color:""});
-	const [guest,        setGuest]        = useState<User>({username: "", color: ""});
+	const [host,         setHost]         = useState<User>({username: "", color:"", health: 0});
+	const [guest,        setGuest]        = useState<User>({username: "", color: "", health: 0});
 
 	// LOCAL STATES
-	const [user,         setUser]         = useState<User>({username: "", color: ""});
+	const [user,         setUser]         = useState<User>({username: "", color: "", health:0});
 	const [startForm,    setStartForm]    = useState<boolean>(true);
+	const [block,        setBlock]        = useState<boolean>(false);
+	const [definitions,  setDefinitions]  = useState<({definitions: string, id:string})[]>([{definitions:"", id: ""}]);
 	
 	console.log("=============================");
 	// console.log("LASTPOSITION ", lastPosition);
@@ -50,9 +55,28 @@ function App() {
 	console.log("USER TURN", userTurn);
 	console.log("HOST", host);
 	console.log("GUEST", guest);
+	console.log("DEFINITIONS", definitions);
 	// console.log("USER", user);
 	// console.log("STARTFORM", startForm);
 	// console.log("=============================");
+
+	useEffect(()=> {
+		if (selection) {
+			setBlock(true);
+			let word = "";
+			for (let i=0; i < selection.length; i++) {
+				word = word + board[selection[i][1]][selection[i][0]];
+			}
+
+			axios.post("http://localhost:4000/search", {word})
+				.then(res => {
+					setBlock(false);
+					setDefinitions(res.data);
+					console.log(res.data);
+				});
+		}
+		
+	},[selection]);
 
 	useEffect(()=> {
 		socket.on("setBoard", payload => {
@@ -73,10 +97,10 @@ function App() {
 
 
 
-		// socket.on("setHost", payload=> {
-		// 	console.log("PAYLOAD SETHOST", payload);
-		// 	setHost(payload.host);
-		// });
+		socket.on("setHost", payload=> {
+			console.log("PAYLOAD SETHOST", payload);
+			setHost(payload.host);
+		});
 
 		return ()=> {
 			socket.off("setBoard", payload => {
@@ -123,7 +147,7 @@ function App() {
 		e.preventDefault();
 		setStartForm(false);
 		initializeBoard();
-		setGuest(user);
+		setGuest({...user, color:"blue"});
 		socket.emit("join room", {user, room, userTurn});
 	};
 	const createRoom = (e:React.MouseEvent<HTMLButtonElement>)=> {
@@ -131,7 +155,7 @@ function App() {
 		setUserTurnAndEmit(user.username, user, room, socket);
 		setStartForm(false);
 		initializeBoard();
-		setHost(user);
+		setHost({...user, color:"green"});
 		socket.emit("create room", {user, room, userTurn});
 	};
 	const getRandomLetter = (str: string)=> {
@@ -153,8 +177,15 @@ function App() {
 	};
 	const loadColumn = (col:number) : React.ReactNode[]=> {
 		return board[col-1].map((char, i) => {
-			return <Tile key={`${i},${col-1}`} tilePosition={[i, col - 1]} lastPosition={lastPosition} setLastPositionAndEmit={setLastPositionAndEmit} char={char} selection={selection} setSelectionAndEmit={setSelectionAndEmit} state={state} setStateAndEmit={setStateAndEmit} socket={socket} user={user} userTurn={userTurn} room={room}/>;
+			return <Tile key={`${i},${col-1}`} tilePosition={[i, col - 1]} lastPosition={lastPosition} setLastPositionAndEmit={setLastPositionAndEmit} char={char} selection={selection} setSelectionAndEmit={setSelectionAndEmit} state={state} setStateAndEmit={setStateAndEmit} socket={socket} user={user} userTurn={userTurn} room={room} block={block}/>;
 		});
+	};
+	const loadDefinitions = (defs:({definitions: string, id:string})[]) => {
+		return defs.map((def, i) => (
+			<div key={i}>
+				<div>{def.definitions}</div>
+			</div>
+		));
 	};
 	const selectedWord = (selection: Position[] | undefined): string=> {
 		let word = "";
@@ -172,6 +203,7 @@ function App() {
 		setSelectionAndEmit(undefined, user, room, socket);
 	};
 	const send = ()=> {
+		setDefinitions([{definitions:"", id: ""}]);
 		cancel();
 
 		const newGrid = JSON.parse(JSON.stringify(board));
@@ -249,8 +281,11 @@ function App() {
 			</div>
 			{/* <div className='line set-board-button pointer' onClick={initializeBoard}>SET BOARD</div> */}
 			<div className="line formed-word">{selectedWord(selection)}</div>
-			<div className="line send" onClick={userTurn === user.username? send : doNothing}>SEND</div>
+			<div className="line send" onClick={userTurn === user.username && definitions[0].definitions !== "no word found"? send : doNothing}>SEND</div>
 			<div className="line cancel" onClick={userTurn === user.username? cancel : doNothing}>CANCEL</div>
+			<div>
+				{loadDefinitions(definitions)}
+			</div>
 		</div>
 	);
 }

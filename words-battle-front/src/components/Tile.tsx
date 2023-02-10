@@ -6,6 +6,7 @@ type Position = [number, number];
 interface User {
 	username: string,
 	color: string,
+	health: number,
 }
 
 interface TileProps {
@@ -21,9 +22,10 @@ interface TileProps {
 	user: User,
 	room: string,
 	userTurn: string,
+	block: boolean,
 }
 
-const Tile = ({tilePosition, lastPosition, setLastPositionAndEmit, char, selection, setSelectionAndEmit, state, setStateAndEmit, socket, user, userTurn, room}: TileProps)=> {
+const Tile = ({tilePosition, lastPosition, setLastPositionAndEmit, char, selection, setSelectionAndEmit, state, setStateAndEmit, socket, user, userTurn, room, block}: TileProps)=> {
 	const [position] = useState<Position>(tilePosition);
 	const [check, setCheck] = useState<boolean>(false);
 
@@ -72,9 +74,8 @@ const Tile = ({tilePosition, lastPosition, setLastPositionAndEmit, char, selecti
 			return;
 		}
 
-		setCheckAndEmit(true, socket, position, user, room);
-
 		setLastPositionAndEmit(tilePosition, user, room, socket);
+		setCheckAndEmit(true, socket, position, user, room);
 		setStateAndEmit(true, user, room, socket);
 		if (selection) {
 			setSelectionAndEmit([...selection, tilePosition], user, room, socket);

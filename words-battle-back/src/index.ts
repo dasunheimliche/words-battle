@@ -1,5 +1,6 @@
 // DEPENDENCIES
 import express from 'express';
+import axios from 'axios';
 import cors from 'cors';
 import { Server as SocketServer } from 'socket.io';
 import http from 'http';
@@ -12,6 +13,7 @@ const io = new SocketServer(server, {
         origin: "*",
     }
 })
+
 
 // APLYING MIDDLEWARES
 app.use(cors())
@@ -47,17 +49,38 @@ io.on('connection', (socket) => {
         socket.to(payload.room).emit("setUserTurn", payload)
         socket.emit("setUserTurn", payload)
     })
-
-
-
     socket.on("setHost", payload => {
-        console.log("PAYLOAD SETHOST", payload)
         socket.to(payload.room).emit("setHost", payload)
     })
 })
 
-app.get('/ping', (_req, res)=> {
-    res.send('pong')
+app.post('/search', async(req, res)=> {
+
+    const body = req.body;
+
+    const app_id = "ea0b47e4";
+	const app_key = "800dab5c0718ff978bb4f2784b2914db";
+	const strictMatch = "true";
+	const wordId = body.word.toLowerCase();
+	const fields = "definitions";
+	const language = "es";
+
+	axios.get(`https://od-api.oxforddictionaries.com:443/api/v2/entries/${language}/${wordId}?fields=${fields}&strictMatch=${strictMatch}`, {
+		headers: {
+		    'app_id': app_id,
+			'app_key': app_key,
+			"Access-Control-Allow-Origin": "http://127.0.0.1:5173"
+			}
+			})
+				.then(result => {
+					console.log("RESULTADO ",result.data.results[0]["lexicalEntries"][0]["entries"][0]["senses"]);
+                    res.json(result.data.results[0]["lexicalEntries"][0]["entries"][0]["senses"])
+
+				})
+				.catch(() => {
+					console.log("ERROR WORD NOT FOUND");
+                    res.json([{definitions: "no word found", id: "error"}])
+				});
 })
 
 // STARTING THE SERVER
