@@ -21,7 +21,7 @@ interface TileProps {
 	socket: SocketType,
 	user: User,
 	room: string,
-	userTurn: string,
+	userTurn: User,
 	block: boolean,
 }
 
@@ -97,7 +97,7 @@ const Tile = ({tilePosition, lastPosition, setLastPositionAndEmit, char, selecti
 	};
 
 	return (
-		<div style={check? {backgroundColor: "pink"} : {backgroundColor: "white"}} className='item pointer' onClick={userTurn === user.username? !check? handleNewPosition : doNothing : doNothing}>{char}</div>
+		<div style={check? {backgroundColor: userTurn.color} : {backgroundColor: "white"}} className='item pointer' onClick={userTurn.username === user.username? !check? handleNewPosition : doNothing : doNothing}>{char}</div>
 	);
 };
 

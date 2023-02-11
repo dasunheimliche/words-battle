@@ -52,6 +52,12 @@ io.on('connection', (socket) => {
     socket.on("setHost", payload => {
         socket.to(payload.room).emit("setHost", payload)
     })
+    socket.on("hit host", payload => {
+        socket.to(payload.room).emit("hit host", payload.damage)
+    })
+    socket.on("hit guest", payload => {
+        socket.to(payload.room).emit("hit guest", payload.damage)
+    })
 })
 
 app.post('/search', async(req, res)=> {

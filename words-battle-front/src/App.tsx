@@ -21,13 +21,44 @@ interface User {
 
 function App() {
 	
-	const letters = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+	const letters = "AAAAAAAAAAAAABCCCCCDDDDDDEEEEEEEEEEEEEEFGHIIIIIIJKLLLLLMMMNNNNNNNÑOOOOOOOOOPPPQRRRRRRRSSSSSSSSTTTTTUUUUVWXYZ";
+	const damages: Record<string, number> = {
+		"A": 1,
+		"B": 8,
+		"C": 4,
+		"D": 2,
+		"E": 1,
+		"F": 16,
+		"G": 16,
+		"H": 16,
+		"I": 2,
+		"J": 32,
+		"K": 64,
+		"L": 4,
+		"M": 4,
+		"N": 2,
+		"Ñ": 64,
+		"O": 2,
+		"P": 4,
+		"Q": 16,
+		"R": 2,
+		"S": 2,
+		"T": 4,
+		"U": 4,
+		"V": 16,
+		"W": 120,
+		"X": 64,
+		"Y": 16,
+		"Z": 32
+	};
 
 	const grid: (string)[][] = [
-		[" "," "," ", " "],
-		[" "," "," ", " "],
-		[" "," "," ", " "],
-		[" "," "," ", " "],
+		[" "," "," "," "," "," "],
+		[" "," "," "," "," "," "],
+		[" "," "," "," "," "," "],
+		[" "," "," "," "," "," "],
+		[" "," "," "," "," "," "],
+		[" "," "," "," "," "," "]
 	];
 
 	// SHARES STATES
@@ -36,9 +67,9 @@ function App() {
 	const [selection,    setSelection]    = useState<Position[] | undefined>(undefined);
 	const [state,        setState]        = useState<boolean>(false);
 	const [room,         setRoom]         = useState<string>("");
-	const [userTurn,     setUserTurn]     = useState<string>("");
+	const [userTurn,     setUserTurn]     = useState<User>({username: "", color:"", health: 0});
 	const [host,         setHost]         = useState<User>({username: "", color:"", health: 0});
-	const [guest,        setGuest]        = useState<User>({username: "", color: "", health: 0});
+	const [guest,        setGuest]        = useState<User>({username: "", color:"", health: 0});
 
 	// LOCAL STATES
 	const [user,         setUser]         = useState<User>({username: "", color: "", health:0});
@@ -94,12 +125,15 @@ function App() {
 		socket.on("setUserTurn", payload => {
 			setUserTurn(payload.userTurn);
 		});
-
-
-
 		socket.on("setHost", payload=> {
 			console.log("PAYLOAD SETHOST", payload);
 			setHost(payload.host);
+		});
+		socket.on("hit host", damage => {
+			setHost({...host, health: host.health - damage});
+		});
+		socket.on("hit guest", damage => {
+			setGuest({...guest, health: guest.health - damage});
 		});
 
 		return ()=> {
@@ -116,13 +150,17 @@ function App() {
 				setState(payload.state);
 			});
 			socket.off("setUserTurn", payload => {
-				setUserTurn(payload.user.username);
+				setUserTurn(payload.userTurn);
 			});
-
-
 			socket.on("setHost", payload=> {
 				console.log("PAYLOAD SETHOST", payload);
 				setHost(payload.host);
+			});
+			socket.off("hit host", damage => {
+				setHost({...host, health: host.health - damage});
+			});
+			socket.off("hit guest", damage => {
+				setHost({...guest, health: guest.health - damage});
 			});
 		};
 	},[board, lastPosition, selection, state, userTurn]);
@@ -138,6 +176,9 @@ function App() {
 		return ()=> {
 			socket.off("join room", payload => {
 				console.log("SET HOST", host, room);
+				if (host.username !== "") {
+					socket.emit("setHost", {host, room});
+				}
 				setGuest(payload.user);
 			});
 		};
@@ -145,17 +186,20 @@ function App() {
 
 	const joinRoom = (e:React.MouseEvent<HTMLButtonElement>)=> {
 		e.preventDefault();
+		if (userTurn.color === "") {
+			setUserTurn({...userTurn, color: "lightgreen"});
+		}
 		setStartForm(false);
 		initializeBoard();
-		setGuest({...user, color:"blue"});
+		setGuest({...user, color:"paleturquoise"});
 		socket.emit("join room", {user, room, userTurn});
 	};
 	const createRoom = (e:React.MouseEvent<HTMLButtonElement>)=> {
 		e.preventDefault();
-		setUserTurnAndEmit(user.username, user, room, socket);
+		setUserTurnAndEmit({...user, color: "lightgreen"}, user, room, socket);
 		setStartForm(false);
 		initializeBoard();
-		setHost({...user, color:"green"});
+		setHost({...user, color:"lightgreen"});
 		socket.emit("create room", {user, room, userTurn});
 	};
 	const getRandomLetter = (str: string)=> {
@@ -182,16 +226,15 @@ function App() {
 	};
 	const loadDefinitions = (defs:({definitions: string, id:string})[]) => {
 		return defs.map((def, i) => (
-			<div key={i}>
-				<div>{def.definitions}</div>
-			</div>
+			<div key={i}>{def.definitions}</div>
 		));
 	};
 	const selectedWord = (selection: Position[] | undefined): string=> {
 		let word = "";
 		if (selection) {
 			for (let i=0; i < selection.length; i++) {
-				word = word + board[selection[i][1]][selection[i][0]];
+				const letter = board[selection[i][1]][selection[i][0]];
+				word = word + letter;
 			}
 			return word;
 		}
@@ -214,10 +257,12 @@ function App() {
 				newGrid[pos[1]].unshift(newLetter);
 			}
 		}
-		if (userTurn === guest.username) {
-			setUserTurnAndEmit(host.username, user, room, socket);
+		if (userTurn.username === guest.username) {
+			hitHost(selection, socket, room);
+			setUserTurnAndEmit({...host, color: "lightgreen"}, user, room, socket);
 		}  else {
-			setUserTurnAndEmit(guest.username, user, room, socket);
+			hitGuest(selection, socket, room);
+			setUserTurnAndEmit({...guest, color: "paleturquoise"}, user, room, socket);
 		}
 		setBoardAndEmit(newGrid,user,room, socket);
 	};
@@ -239,12 +284,39 @@ function App() {
 		setBoard(board);
 		socket.emit("setBoard", {board, user, room});
 	};
-	const setUserTurnAndEmit = (userTurn: string, user:User, room:string, socket: SocketType)=> {
+	const setUserTurnAndEmit = (userTurn: User, user:User, room:string, socket: SocketType)=> {
 		socket.emit("setUserTurn", {userTurn, user, room});
 		setUserTurn(userTurn);
 	};
 	const doNothing = ()=> {
 		console.log("doing nothing");
+	};
+	const hitHost = (damage: Position[] | undefined, socket: SocketType, room: string)=> {
+		if (damage) {
+			let hit = 0;
+			for (let i=0; i < damage.length; i++) {
+				const letter = board[damage[i][1]][damage[i][0]];
+				const daño = damages[letter];
+				hit = hit + daño;
+			}
+
+			setHost({...host, health: host.health - hit});
+			socket.emit("hit host", {room: room, damage: hit});
+		}
+		
+	};
+	const hitGuest = (damage: Position[] | undefined, socket: SocketType, room: string)=> {
+		if (damage) {
+			let hit = 0;
+			for (let i=0; i < damage.length; i++) {
+				const letter = board[damage[i][1]][damage[i][0]];
+				const daño = damages[letter];
+				hit = hit + daño;
+			}
+			setGuest({...guest, health: guest.health - hit});
+			socket.emit("hit guest", {room: room, damage: hit});
+		}
+		
 	};
 	
 	return (
@@ -252,39 +324,60 @@ function App() {
 			{startForm && <div className='start-form-container'>
 				<StartForm user={user} joinRoom={joinRoom} createRoom={createRoom} setUser={setUser} setRoom={setRoom}/>
 			</div>}
-			<div>{user.username}</div>
-			<div className='grid'>
-				<span id='col-1' className='col'>
-					{loadColumn(1)}
-				</span>
-				<span id='col-2' className='col'>
-					{loadColumn(2)}
-				</span>
-				<span id='col-3' className='col'>
-					{loadColumn(3)}
-				</span>
-				<span id='col-4' className='col'>
-					{loadColumn(4)}
-				</span>
-				{/* <span id='col-5' className='col'>
-					{loadColumn(5)}
-				</span>
-				<span id='col-6' className='col'>
-					{loadColumn(6)}
-				</span>
-				<span id='col-7' className='col'>
-					{loadColumn(7)}
-				</span>
-				<span id='col-8' className='col'>
-					{loadColumn(8)}
-				</span> */}
+			<div className="room-panel">
+				<span>HOST: {host.username}</span><span>ROOM: {room}</span>
 			</div>
-			{/* <div className='line set-board-button pointer' onClick={initializeBoard}>SET BOARD</div> */}
-			<div className="line formed-word">{selectedWord(selection)}</div>
-			<div className="line send" onClick={userTurn === user.username && definitions[0].definitions !== "no word found"? send : doNothing}>SEND</div>
-			<div className="line cancel" onClick={userTurn === user.username? cancel : doNothing}>CANCEL</div>
-			<div>
-				{loadDefinitions(definitions)}
+			<div className="versus-panel">
+				<div id="host" className="player-panel">
+					<div className="player-name host-name">{host.username} (host)</div>
+					<div className="player-health host-health">
+						<div style={{width: `${((100 - host.health)*100)/100}%`}} className="health-red"></div>
+					</div>
+				</div>
+				<div id="guest" className="player-panel">
+					<div className="player-name guest-name">{guest.username} (guest)</div>
+					<div className="player-health guest-health">
+						<div style={{width: `${((100 - guest.health)*100)/100}%`}} className="health-red"></div>
+					</div>
+				</div>
+			</div>
+			<div className="playground">
+				<div className='grid'>
+					<span id='col-1' className='col'>
+						{loadColumn(1)}
+					</span>
+					<span id='col-2' className='col'>
+						{loadColumn(2)}
+					</span>
+					<span id='col-3' className='col'>
+						{loadColumn(3)}
+					</span>
+					<span id='col-4' className='col'>
+						{loadColumn(4)}
+					</span>
+					<span id='col-5' className='col'>
+						{loadColumn(5)}
+					</span>
+					<span id='col-6' className='col'>
+						{loadColumn(6)}
+					</span>
+					{/* <span id='col-7' className='col'>
+						{loadColumn(7)}
+					</span>
+					<span id='col-8' className='col'>
+						{loadColumn(8)}
+					</span> */}
+				</div>
+				<div className="playground-actions">
+					<div className="playground-button" onClick={userTurn.username === user.username && definitions[0].definitions !== "no word found" && (selection && selection.length >=2) ? send : doNothing}>SEND</div>
+					<div className="playground-button" onClick={userTurn.username === user.username? cancel : doNothing}>CANCEL</div>
+				</div>
+				<div className="playground-result">
+					<div className="formed-word">{selectedWord(selection)}</div>
+					<div className="definitions">
+						{loadDefinitions(definitions)}
+					</div>
+				</div>
 			</div>
 		</div>
 	);

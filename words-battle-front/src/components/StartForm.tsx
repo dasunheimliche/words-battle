@@ -20,22 +20,28 @@ const StartForm = ({user, joinRoom, createRoom, setUser, setRoom}: Props)=> {
 
 	return (
 		<form className='start-form'>
-			<div className="start-form-input">
-				<div className='start-form-title'>Username</div>
-				<input value={user.username} type="text" placeholder='username'onChange={e=>setUser({username: e.target.value, color: "", health:100})}/>
+			<div className="start-form-input-container">
+				<div className='start-form-title'>Enter a username:</div>
+				<div className="start-form-input">
+					<input value={user.username} type="text" placeholder='username'onChange={e=>setUser({username: e.target.value, color: "", health:100})} required/>
+				</div>
 			</div>
-			<div className="start-form-input">
-				<div className='pointer start-form-title' onClick={()=>setMode("create")}>CREATE ROOM</div>
+			<div className={mode !== "create"? "start-form-input-container container-iddle" : "start-form-input-container" } onClick={()=>setMode("create")}>
+				<div className='pointer start-form-title' >CREATE ROOM</div>
 				{mode==="create" && <div>
-					<input type="text" placeholder='room name'onChange={e=>setRoom(e.target.value)}/>
-					<button onClick={createRoom}>Start</button>
+					<div className="start-form-input">
+						<input type="text" placeholder='room name'onChange={e=>setRoom(e.target.value)}/>
+						<button onClick={createRoom}>Start</button>
+					</div>
 				</div>}
 			</div>
-			<div className="start-form-input">
-				<div className='pointer start-form-title' onClick={()=>setMode("join")}>JOIN ROOM</div>
+			<div className={mode !== "join"? "start-form-input-container container-iddle" : "start-form-input-container" } onClick={()=>setMode("join")}>
+				<div className='pointer start-form-title' >JOIN ROOM</div>
 				{mode==="join" && <div>
-					<input type="text" placeholder='room name' onChange={e=>setRoom(e.target.value)}/>
-					<button onClick={joinRoom}>Join</button>
+					<div className="start-form-input">
+						<input type="text" placeholder='room name' onChange={e=>setRoom(e.target.value)}/>
+						<button onClick={joinRoom}>Join</button>
+					</div>
 				</div>}
 			</div>
 		</form>
