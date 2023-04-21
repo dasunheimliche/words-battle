@@ -17,10 +17,10 @@ interface User {
 	health: number
 }
 
-// (COLUMNA, FILA)
-
 function App() {
 	
+	/* VARIABLES */
+
 	const letters = "AAAAAAAAAAAAABCCCCCDDDDDDEEEEEEEEEEEEEEFGHIIIIIIJKLLLLLMMMNNNNNNNÑOOOOOOOOOPPPQRRRRRRRSSSSSSSSTTTTTUUUUVWXYZ";
 	const damages: Record<string, number> = {
 		"A": 1,
@@ -77,19 +77,18 @@ function App() {
 	const [block,        setBlock]        = useState<boolean>(false);
 	const [definitions,  setDefinitions]  = useState<({definitions: string, id:string})[]>([{definitions:"", id: ""}]);
 	
+	/** CONSOLE LOGS */
+
 	console.log("=============================");
-	// console.log("LASTPOSITION ", lastPosition);
-	// console.log("BOARD ", board);
-	// console.log("SELECTION ", selection);
-	// console.log("STATE ", state);
-	// console.log("ROOM", room);
-	console.log("USER TURN", userTurn);
-	console.log("HOST", host);
-	console.log("GUEST", guest);
-	console.log("DEFINITIONS", definitions);
-	// console.log("USER", user);
-	// console.log("STARTFORM", startForm);
-	// console.log("=============================");
+
+	// console.log("HOST", host);
+	// console.log("GUEST", guest);
+
+
+
+	console.log("=============================");
+
+	/** USE EFFECTS */
 
 	useEffect(()=> {
 		if (selection) {
@@ -126,15 +125,32 @@ function App() {
 			setUserTurn(payload.userTurn);
 		});
 		socket.on("setHost", payload=> {
-			console.log("PAYLOAD SETHOST", payload);
 			setHost(payload.host);
 		});
 		socket.on("hit host", damage => {
-			setHost({...host, health: host.health - damage});
+			setDefinitions([{definitions:"", id: ""}]);
+			if ((host.health - damage) < 0) {
+				setHost({...host, health: 0});
+			} else {
+				setHost({...host, health: host.health - damage});
+			}
 		});
 		socket.on("hit guest", damage => {
-			setGuest({...guest, health: guest.health - damage});
+			setDefinitions([{definitions:"", id: ""}]);
+			if ((guest.health - damage) < 0) {
+				setGuest({...guest, health: 0});
+			} else {
+				setGuest({...guest, health: guest.health - damage});
+			}
+
 		});
+
+		// socket.on("next round", () => {
+		// 	console.log("NEXT ROUND USE EFFECT");
+		// 	setHost({...host, health:10});
+		// 	setGuest({...guest, health:10});
+		// 	setUser({...user, health:10});
+		// });
 
 		return ()=> {
 			socket.off("setBoard", payload => {
@@ -157,17 +173,26 @@ function App() {
 				setHost(payload.host);
 			});
 			socket.off("hit host", damage => {
-				setHost({...host, health: host.health - damage});
+				setDefinitions([{definitions:"", id: ""}]);
+				if (host.health - damage < 0) {
+					setHost({...host, health: 0});
+				} else {
+					setHost({...host, health: host.health - damage});
+				}
 			});
 			socket.off("hit guest", damage => {
-				setHost({...guest, health: guest.health - damage});
+				setDefinitions([{definitions:"", id: ""}]);
+				if (guest.health - damage < 0) {
+					setGuest({...guest, health: 0});
+				} else {
+					setGuest({...guest, health: guest.health - damage});
+				}
 			});
 		};
 	},[board, lastPosition, selection, state, userTurn]);
 
 	useEffect(()=> {
 		socket.on("join room", payload => {
-			console.log("SET HOST", host, room);
 			if (host.username !== "") {
 				socket.emit("setHost", {host, room});
 			}
@@ -175,7 +200,6 @@ function App() {
 		});
 		return ()=> {
 			socket.off("join room", payload => {
-				console.log("SET HOST", host, room);
 				if (host.username !== "") {
 					socket.emit("setHost", {host, room});
 				}
@@ -183,6 +207,8 @@ function App() {
 			});
 		};
 	});
+
+	/** FUNCIONES */
 
 	const joinRoom = (e:React.MouseEvent<HTMLButtonElement>)=> {
 		e.preventDefault();
@@ -268,6 +294,7 @@ function App() {
 	};
 
 	// SET AND EMIT
+
 	const setLastPositionAndEmit = (position: Position, user: User, room: string, socket: SocketType)=> {
 		setLastPosition(position);
 		socket.emit("setLastPosition", {position, user, room});
@@ -300,7 +327,13 @@ function App() {
 				hit = hit + daño;
 			}
 
-			setHost({...host, health: host.health - hit});
+			if ((host.health - hit) < 0) {
+				setHost({...host, health: 0});
+			} else {
+				setHost({...host, health: host.health - hit});
+			}
+
+			// setHost({...host, health: host.health - hit});
 			socket.emit("hit host", {room: room, damage: hit});
 		}
 		
@@ -313,10 +346,46 @@ function App() {
 				const daño = damages[letter];
 				hit = hit + daño;
 			}
-			setGuest({...guest, health: guest.health - hit});
+
+			if ((guest.health - hit) < 0) {
+				setGuest({...guest, health: 0});
+			} else {
+				setGuest({...guest, health: guest.health - hit});
+			}
+
+			// setGuest({...guest, health: guest.health - hit});
 			socket.emit("hit guest", {room: room, damage: hit});
 		}
 		
+	};
+
+	// const nextRound = ()=> {
+	// 	socket.emit("next round", {no: "no"});
+	// };
+
+	/** RENDER */
+
+	const daño = ()=> {
+		if (selection) {
+			let hit = 0;
+			for (let i=0; i < selection.length; i++) {
+				const letter = board[selection[i][1]][selection[i][0]];
+				const daño = damages[letter];
+				hit = hit + daño;
+			}
+
+			return hit;
+		}
+	};
+
+	const winner = ()=> {
+		if (host.username === "" || guest.username === "") {
+			return undefined;
+		}
+
+		if (host.health <= 0) return (<div>{`${guest.username} wins!`}</div>);
+		if (guest.health <= 0) return (<div>{`${host.username} wins!`}</div>);
+		return undefined;
 	};
 	
 	return (
@@ -340,6 +409,20 @@ function App() {
 						<div style={{width: `${((100 - guest.health)*100)/100}%`}} className="health-red"></div>
 					</div>
 				</div>
+			</div>
+			<div className="damage-count">
+				<div className="host-damage-count">
+					<div>{host.username === userTurn.username && selectedWord(selection)}</div>
+					<div>{host.username === userTurn.username && daño()}</div>
+				</div>
+				<div className="guest-damage-count">
+					<div>{guest.username === userTurn.username && selectedWord(selection)}</div>
+					<div>{guest.username === userTurn.username && daño()}</div>
+				</div>
+			</div>
+			<div className="winner">
+				{<div>{winner()}</div>}
+				{/* {winner() && <div >NEXT ROUND</div>} */}
 			</div>
 			<div className="playground">
 				<div className='grid'>

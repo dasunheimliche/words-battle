@@ -25,7 +25,7 @@ interface TileProps {
 	block: boolean,
 }
 
-const Tile = ({tilePosition, lastPosition, setLastPositionAndEmit, char, selection, setSelectionAndEmit, state, setStateAndEmit, socket, user, userTurn, room, block}: TileProps)=> {
+const Tile = ({tilePosition, lastPosition, setLastPositionAndEmit, char, selection, setSelectionAndEmit, state, setStateAndEmit, socket, user, userTurn, room}: TileProps)=> {
 	const [position] = useState<Position>(tilePosition);
 	const [check, setCheck] = useState<boolean>(false);
 

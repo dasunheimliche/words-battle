@@ -1,8 +1,11 @@
 .App {
+    /* outline: 2px solid blue;
+    outline-offset: -2px; */
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    width: 1050px;
 
     display: flex;
     flex-direction: column;
@@ -11,26 +14,35 @@
 /* ROOM PANEL */
 
 .room-panel {
-    margin-bottom: 25px;
+    border: 1px solid black;
+    border-bottom: 0px;
     display: flex;
     gap: 50px;
     font-size: 20px;
+
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
 }
 
 /* SESSION PANEL */
 .versus-panel {
-    outline: 1px solid black;
-    width: 1020px;
+    border: 1px solid black;
+    /* width: 1020px; */
+    width: 100%;
     height: 50px;
-    border-radius: 25px;
 
-    margin-bottom: 25px;
-
+    margin-bottom: 0px;
     position: relative;
-
     display: flex;
-
     overflow: hidden;
+
+    
 }
 .player-panel {
     height: 100%;
@@ -39,12 +51,12 @@
     position: relative;
 }
 #host {
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
+    /* border-top-left-radius: 25px;
+    border-bottom-left-radius: 0px; */
 }
 #guest {
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
+    /* border-top-right-radius: 25px;
+    border-bottom-right-radius: 0px; */
 }
 .player-name {
     height: 85%;
@@ -83,14 +95,54 @@
 }
 .guest-name {
     background-color: rgba(175, 238, 238, 0.122);
+    justify-content: flex-end;
+    padding-right: 15px;
+}
+
+/* DAMAGE COUNT */
+
+.damage-count {
+    outline: 1px solid red;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    position: relative;
+}
+
+.host-damage-count {
+    outline: 1px solid red;
+    width: 50%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.guest-damage-count {
+    width: 50%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 /* PLAYGROUND PANEL */
 .playground {
     outline: 1px solid rgb(91, 91, 91);
     display: flex;
-    padding: 35px;
+    padding-top: 35px;
+    padding-bottom: 35px;
     border-radius: 15px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+
+    justify-content: center;
+
+    width: 100%;
 }
 .playground-actions {
     padding: 25px;
@@ -146,12 +198,13 @@
     flex-direction: column;
     gap: 15px;
     
-    overflow: auto;
+    overflow: hidden;
+    height: 250px;
 }
 
 
 .grid {
-    border: 1px solid black;
+    border: 3px solid rgb(228, 11, 11);
     display: flex;
     justify-content: center;
 }

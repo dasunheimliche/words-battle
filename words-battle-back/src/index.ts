@@ -58,6 +58,11 @@ io.on('connection', (socket) => {
     socket.on("hit guest", payload => {
         socket.to(payload.room).emit("hit guest", payload.damage)
     })
+
+    // socket.on("next round", payload => {
+    //     socket.to(payload.room).emit("next round", payload)
+    //     socket.emit("next round", payload)
+    // })
 })
 
 app.post('/search', async(req, res)=> {
@@ -79,7 +84,6 @@ app.post('/search', async(req, res)=> {
 			}
 			})
 				.then(result => {
-					console.log("RESULTADO ",result.data.results[0]["lexicalEntries"][0]["entries"][0]["senses"]);
                     res.json(result.data.results[0]["lexicalEntries"][0]["entries"][0]["senses"])
 
 				})

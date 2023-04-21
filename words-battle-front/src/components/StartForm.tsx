@@ -23,7 +23,7 @@ const StartForm = ({user, joinRoom, createRoom, setUser, setRoom}: Props)=> {
 			<div className="start-form-input-container">
 				<div className='start-form-title'>Enter a username:</div>
 				<div className="start-form-input">
-					<input value={user.username} type="text" placeholder='username'onChange={e=>setUser({username: e.target.value, color: "", health:100})} required/>
+					<input value={user.username} type="text" placeholder='username'onChange={e=>setUser({username: e.target.value, color: "", health:10})} required/>
 				</div>
 			</div>
 			<div className={mode !== "create"? "start-form-input-container container-iddle" : "start-form-input-container" } onClick={()=>setMode("create")}>
