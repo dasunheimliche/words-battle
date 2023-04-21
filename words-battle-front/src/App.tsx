@@ -84,8 +84,6 @@ function App() {
 	// console.log("HOST", host);
 	// console.log("GUEST", guest);
 
-
-
 	console.log("=============================");
 
 	/** USE EFFECTS */
@@ -145,12 +143,12 @@ function App() {
 
 		});
 
-		// socket.on("next round", () => {
-		// 	console.log("NEXT ROUND USE EFFECT");
-		// 	setHost({...host, health:10});
-		// 	setGuest({...guest, health:10});
-		// 	setUser({...user, health:10});
-		// });
+		socket.on("next round", () => {
+			console.log("NEXT ROUND USE EFFECT");
+			setHost({...host, health:10});
+			setGuest({...guest, health:10});
+
+		});
 
 		return ()=> {
 			socket.off("setBoard", payload => {
@@ -168,7 +166,7 @@ function App() {
 			socket.off("setUserTurn", payload => {
 				setUserTurn(payload.userTurn);
 			});
-			socket.on("setHost", payload=> {
+			socket.off("setHost", payload=> {
 				console.log("PAYLOAD SETHOST", payload);
 				setHost(payload.host);
 			});
@@ -188,6 +186,12 @@ function App() {
 					setGuest({...guest, health: guest.health - damage});
 				}
 			});
+			socket.off("next round", () => {
+				console.log("NEXT ROUND USE EFFECT");
+				setHost({...host, health:10});
+				setGuest({...guest, health:10});
+
+			});
 		};
 	},[board, lastPosition, selection, state, userTurn]);
 
@@ -198,6 +202,7 @@ function App() {
 			}
 			setGuest(payload.user);
 		});
+
 		return ()=> {
 			socket.off("join room", payload => {
 				if (host.username !== "") {
@@ -359,9 +364,9 @@ function App() {
 		
 	};
 
-	// const nextRound = ()=> {
-	// 	socket.emit("next round", {no: "no"});
-	// };
+	const nextRound = ()=> {
+		socket.emit("next round", {no: "no"});
+	};
 
 	/** RENDER */
 
@@ -422,7 +427,7 @@ function App() {
 			</div>
 			<div className="winner">
 				{<div>{winner()}</div>}
-				{/* {winner() && <div >NEXT ROUND</div>} */}
+				{winner() && <div onClick={nextRound}>NEXT ROUND</div>}
 			</div>
 			<div className="playground">
 				<div className='grid'>

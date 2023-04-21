@@ -59,10 +59,11 @@ io.on('connection', (socket) => {
         socket.to(payload.room).emit("hit guest", payload.damage)
     })
 
-    // socket.on("next round", payload => {
-    //     socket.to(payload.room).emit("next round", payload)
-    //     socket.emit("next round", payload)
-    // })
+    socket.on("next round", payload => {
+        console.log("PAYLOAD NEXT ROUND", payload)
+        socket.to(payload.room).emit("next round", payload)
+        socket.emit("next round", payload)
+    })
 })
 
 app.post('/search', async(req, res)=> {
