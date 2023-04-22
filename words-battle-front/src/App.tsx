@@ -84,6 +84,7 @@ function App() {
 	// console.log("HOST", host);
 	// console.log("GUEST", guest);
 	console.log("USER TURN", userTurn);
+	console.log("SELECTION", selection)
 
 	console.log("=============================");
 
@@ -419,8 +420,13 @@ function App() {
 				</div>
 			</div>
 			<div className={"names"}>
-				<div className="name host-name">{host.username} (host)</div>
-				<div className="name guest-name">{guest.username} (guest)</div>
+				<div className={"name host-name"}>{host.username} (host) 
+					{host.username === userTurn.username && <span className="host-arrow arrow"></span>}
+				</div>
+				<div className={"name guest-name"}>
+					{guest.username === userTurn.username && <span className="guest-arrow arrow"></span>}
+					{guest.username} (guest)
+				</div>
 			</div>
 			<div className="damage-count">
 				<div className="host-damage-count">
@@ -434,7 +440,7 @@ function App() {
 			</div>
 			<div className="winner">
 				{<div>{winner()}</div>}
-				{winner() && <div onClick={nextRound}>NEXT ROUND</div>}
+				{/* {winner() && <div onClick={nextRound}>NEXT ROUND</div>} */}
 			</div>
 			<div className="playground">
 				<div className='grid'>
@@ -471,7 +477,7 @@ function App() {
 				<div className="playground-result">
 					<div className="formed-word">{selectedWord(selection)}</div>
 					<div className="definitions">
-						{loadDefinitions(definitions)}
+						{selection && loadDefinitions(definitions)}
 					</div>
 				</div>
 			</div>
