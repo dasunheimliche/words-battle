@@ -83,6 +83,7 @@ function App() {
 
 	// console.log("HOST", host);
 	// console.log("GUEST", guest);
+	console.log("USER TURN", userTurn);
 
 	console.log("=============================");
 
@@ -256,6 +257,7 @@ function App() {
 		});
 	};
 	const loadDefinitions = (defs:({definitions: string, id:string})[]) => {
+	
 		return defs.map((def, i) => (
 			<div key={i}>{def.definitions}</div>
 		));
@@ -403,26 +405,31 @@ function App() {
 			</div>
 			<div className="versus-panel">
 				<div id="host" className="player-panel">
-					<div className="player-name host-name">{host.username} (host)</div>
+					{/* <div className="player-name host-name">{host.username} (host)</div> */}
 					<div className="player-health host-health">
+						
 						<div style={{width: `${((100 - host.health)*100)/100}%`}} className="health-red"></div>
 					</div>
 				</div>
 				<div id="guest" className="player-panel">
-					<div className="player-name guest-name">{guest.username} (guest)</div>
+					{/* <div className="player-name guest-name">{guest.username} (guest)</div> */}
 					<div className="player-health guest-health">
 						<div style={{width: `${((100 - guest.health)*100)/100}%`}} className="health-red"></div>
 					</div>
 				</div>
 			</div>
+			<div className={"names"}>
+				<div className="name host-name">{host.username} (host)</div>
+				<div className="name guest-name">{guest.username} (guest)</div>
+			</div>
 			<div className="damage-count">
 				<div className="host-damage-count">
 					<div>{host.username === userTurn.username && selectedWord(selection)}</div>
-					<div>{host.username === userTurn.username && daño()}</div>
+					<div className="daño">{host.username === userTurn.username && daño()}</div>
 				</div>
 				<div className="guest-damage-count">
 					<div>{guest.username === userTurn.username && selectedWord(selection)}</div>
-					<div>{guest.username === userTurn.username && daño()}</div>
+					<div className="daño">{guest.username === userTurn.username && daño()}</div>
 				</div>
 			</div>
 			<div className="winner">
@@ -459,6 +466,7 @@ function App() {
 				<div className="playground-actions">
 					<div className="playground-button" onClick={userTurn.username === user.username && definitions[0].definitions !== "no word found" && (selection && selection.length >=2) ? send : doNothing}>SEND</div>
 					<div className="playground-button" onClick={userTurn.username === user.username? cancel : doNothing}>CANCEL</div>
+					{winner() && <div className="playground-button" onClick={nextRound}>NEXT ROUND</div>}
 				</div>
 				<div className="playground-result">
 					<div className="formed-word">{selectedWord(selection)}</div>

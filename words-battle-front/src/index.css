@@ -6,7 +6,12 @@ body {
 
   display: flex;
   justify-content: center;
+  align-items: center;
   position: relative;
+
+  /* background-color: rgb(19,27,30); */
+  background-color: rgb(102,119,95);
+  background-color: rgb(14,14,14);
 }
 
 .pointer {

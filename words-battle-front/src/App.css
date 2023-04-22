@@ -1,24 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
 .App {
-    /* outline: 2px solid blue;
-    outline-offset: -2px; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 1050px;
+
+    font-family: 'VT323', monospace;
+    border: 1px solid rgba(77, 118, 88, 0.154);
+    border-radius: 17px;
+    color: rgb(142,163,145);
+    background-color: rgb(19,27,30);;
+    
+    padding-left: 15px;
+    padding-right: 15px;
 
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 /* ROOM PANEL */
 
 .room-panel {
-    border: 1px solid black;
-    border-bottom: 0px;
+
     display: flex;
     gap: 50px;
-    font-size: 20px;
+    font-size: 30px;
 
     width: 100%;
     display: flex;
@@ -28,28 +35,35 @@
 
     border-top-left-radius: 25px;
     border-top-right-radius: 25px;
+
+    padding-bottom: 10px;
 }
 
 /* SESSION PANEL */
 .versus-panel {
-    border: 1px solid black;
+    /* border: 1px solid black; */
     /* width: 1020px; */
     width: 100%;
-    height: 50px;
+
+    height: 30px;
 
     margin-bottom: 0px;
     position: relative;
     display: flex;
-    overflow: hidden;
+    /* overflow: hidden; */
+    gap: 1%;
 
-    
 }
 .player-panel {
     height: 100%;
     width: 50%;
-    border-right: 1px solid black;
     position: relative;
+
+    border: 2px solid rgb(66, 102, 76);
+    padding: 5px;
+    
 }
+
 #host {
     /* border-top-left-radius: 25px;
     border-bottom-left-radius: 0px; */
@@ -60,7 +74,7 @@
 }
 .player-name {
     height: 85%;
-    border-bottom: 1px solid black;
+    /* border-bottom: 1px solid black; */
 
     display: flex;
     align-items: center;
@@ -69,12 +83,14 @@
 .player-health {
     height: 15%;
     position: relative;
+
 }
 .host-health {
     display: flex;
     justify-content: flex-end;
     height: 100%;
     background-color: rgb(111, 255, 111);
+    background-color: rgb(151,87,87);
     position: relative;
 }
 .guest-health {
@@ -82,35 +98,37 @@
     justify-content: flex-start;
     height: 100%;
     background-color: rgb(111, 255, 111);
+    background-color: rgb(151,87,87);
     position: relative;
 }
 .health-red {
     height: 100%;
-    background-color: red;
+    background-color: rgb(151,87,87);
+    background-color: rgb(19,27,30);
     width: 0px;
 }
 
-.host-name {
+/* .host-name {
     background-color: rgba(144, 238, 144, 0.131);
 }
 .guest-name {
     background-color: rgba(175, 238, 238, 0.122);
     justify-content: flex-end;
     padding-right: 15px;
-}
+} */
 
 /* DAMAGE COUNT */
 
 .damage-count {
-    outline: 1px solid red;
     width: 100%;
     height: 50px;
     display: flex;
     position: relative;
+
+    font-size: 24px;
 }
 
 .host-damage-count {
-    outline: 1px solid red;
     width: 50%;
     height: 100%;
 
@@ -130,9 +148,35 @@
     justify-content: center;
 }
 
+.daño {
+    color: rgb(151,87,87);
+}
+
+.names {
+    display: flex;
+    width: 100%;
+
+    margin-top: 18px;
+    font-size: 24px;
+}
+
+.name {
+    width: 50%;
+}
+
+.guest-name {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 3px;
+}
+
+.host-name {
+    padding-left: 3px;
+}
+
 /* PLAYGROUND PANEL */
 .playground {
-    outline: 1px solid rgb(91, 91, 91);
+    /* outline: 1px solid rgb(91, 91, 91); */
     display: flex;
     padding-top: 35px;
     padding-bottom: 35px;
@@ -152,10 +196,14 @@
     gap: 25px;
 }
 .playground-button {
-    width: 120px;
+    width: 110px;
     height: 40px;
     border: 1px solid black;
-    border-radius: 15px;
+    font-size: 21px;
+    /* border-radius: 15px; */
+    border: 5px solid rgb(77,118,88);
+    border-style: double;
+    border-radius: 3px;
 
     display: flex;
     align-items: center;
@@ -163,50 +211,66 @@
 
     cursor: pointer;
 }
+
+.playground-button:hover {
+    color: rgb(151,87,87);
+}
+
 .playground-result {
-    border: 1px solid rgb(0, 0, 0);
+    /* outline: 1px solid red; */
+
     border-radius: 15px;
-    padding: 25px;
-    width: 300px;
+    width: 420px;
+    height: 420px;
     position: relative;
 
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+
+    color: rgb(0,17,16);
+
+    border-radius: 15px;
+    overflow: hidden;
 
 }
 .formed-word {
-    outline: 1px solid black;
-    border-radius: 15px;
-    width: 98%;
-    padding-left: 15px;
-    padding-top: 15px;
+    width: calc(100% - 15px);
+    padding-left: 20px;
+    padding-top: 20px;
     padding-bottom: 15px;
     height: 10px;
 
+    font-size: 27px;
+
     display: flex;
     align-items: center;
+
+    background-color: rgb(76,120,87);
 }
+
 .definitions {
-    border: 1px solid black;
-    border-radius: 15px;
-    min-height: 75%;
-    padding: 15px;
-    width: calc(98% - 15px);
+
+    /* border-radius: 15px; */
+    /* min-height: 75%; */
+    font-size: 23px;
+    height: 100%;
+    padding: 20px;
+    width: calc(100% - 30px);
     display: flex;
     flex-direction: column;
     gap: 15px;
-    
-    overflow: hidden;
-    height: 250px;
+    overflow: auto;
+    background-color: rgb(76,120,87);
+
 }
 
 
 .grid {
-    border: 3px solid rgb(228, 11, 11);
     display: flex;
     justify-content: center;
+    border-radius: 15px;
+    overflow: hidden;
 }
 
 .col {
@@ -232,6 +296,13 @@
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
+
+    color: rgb(19,27,30);
+    font-size: 27px;
+}
+
+.item:hover {
+    color: rgb(155, 40, 40);
 }
 
 .line {
@@ -256,16 +327,13 @@
 
 .start-form-container {
     z-index: 10;
-    background: linear-gradient(132deg, rgb(59, 55, 106) 0.00%, rgb(0, 143, 186) 50.00%, rgb(255, 149, 213) 100.00%);
+    background-color: rgb(19,27,30);
 }
 
-.start-form {
-    outline: 1px solid rgb(240, 240, 240);
-    background-color: rgba(255, 255, 255, 0.567);
+/* .start-form {
 
-    padding: 30px;
-    border-radius: 15px;
-
+    background-color: rgb(171,209,174);
+    border-radius: 5px;
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -334,3 +402,5 @@
 
     cursor: pointer;
 }
+ */
+

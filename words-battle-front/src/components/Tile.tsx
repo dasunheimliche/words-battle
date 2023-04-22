@@ -97,7 +97,7 @@ const Tile = ({tilePosition, lastPosition, setLastPositionAndEmit, char, selecti
 	};
 
 	return (
-		<div style={check? {backgroundColor: userTurn.color} : {backgroundColor: "white"}} className='item pointer' onClick={userTurn.username === user.username? !check? handleNewPosition : doNothing : doNothing}>{char}</div>
+		<div style={check? {backgroundColor: userTurn.color} : {backgroundColor: "rgb(142,163,145)"}} className='item pointer' onClick={userTurn.username === user.username? !check? handleNewPosition : doNothing : doNothing}>{char}</div>
 	);
 };
 
