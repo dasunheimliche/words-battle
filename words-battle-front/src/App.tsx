@@ -84,8 +84,7 @@ function App() {
 	// console.log("HOST", host);
 	// console.log("GUEST", guest);
 	console.log("USER TURN", userTurn);
-	console.log("SELECTION", selection)
-
+	console.log("SELECTION", selection);
 	console.log("=============================");
 
 	/** USE EFFECTS */
@@ -147,8 +146,8 @@ function App() {
 
 		socket.on("next round", () => {
 			console.log("NEXT ROUND USE EFFECT");
-			setHost({...host, health:10});
-			setGuest({...guest, health:10});
+			setHost({...host, health:100});
+			setGuest({...guest, health:100});
 
 		});
 
@@ -190,8 +189,8 @@ function App() {
 			});
 			socket.off("next round", () => {
 				console.log("NEXT ROUND USE EFFECT");
-				setHost({...host, health:10});
-				setGuest({...guest, health:10});
+				setHost({...host, health:100});
+				setGuest({...guest, health:100});
 
 			});
 		};
@@ -260,8 +259,19 @@ function App() {
 	const loadDefinitions = (defs:({definitions: string, id:string})[]) => {
 	
 		return defs.map((def, i) => (
-			<div key={i}>{def.definitions}</div>
+			<div className="definition" key={i}>{def.definitions}</div>
 		));
+
+		// return defs.map((def, i)=> {
+		// 	if (i > 2) {
+		// 		return;
+		// 	}
+
+
+		// 	return (
+		// 		<div className="definition" key={i}>{def.definitions}</div>
+		// 	);
+		// });
 	};
 	const selectedWord = (selection: Position[] | undefined): string=> {
 		let word = "";
