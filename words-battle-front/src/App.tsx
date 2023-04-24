@@ -92,6 +92,12 @@ function App() {
 	/** USE EFFECTS */
 
 	useEffect(()=> {
+		axios.get('https://words-battle-api.onrender.com/despertar')
+			.then(_response => console.log('El servidor ha sido despertado.'))
+			.catch(error => console.error('Error al despertar el servidor:', error));
+	}, []);
+
+	useEffect(()=> {
 		if (selection) {
 			setBlock(true);
 			let word = "";

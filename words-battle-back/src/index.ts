@@ -13,8 +13,7 @@ const app = express();
 const server = http.createServer(app)
 const io = new SocketServer(server, {
     cors: {
-        origin: "http://127.0.0.1:5173/",
-        methods: ["GET", "POST"]
+        origin: "*",
     }
 })
 
@@ -97,6 +96,10 @@ io.on('connection', (socket) => {
         socket.emit("next round", payload)
     })
 })
+
+app.get('/despertar', (_req, res) => {
+    res.send('El servidor ha sido despertado.');
+});
 
 app.post('/search', async(req, res)=> {
 

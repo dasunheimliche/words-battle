@@ -1,4 +1,5 @@
-import React, {Dispatch, useState} from 'react';
+import React, {Dispatch, useState, useEffect} from 'react';
+import axios from 'axios';
 import style from '../styles/startForm.module.css';
 
 interface User {
@@ -21,7 +22,11 @@ const StartForm = ({user, joinRoom, createRoom, setUser, setRoom}: Props)=> {
 
 	const [mode, setMode] = useState<Mode>("create");
 
-	
+	useEffect(()=> {
+		axios.get('https://words-battle-api.onrender.com/despertar')
+			.then(_response => console.log('El servidor ha sido despertado.'))
+			.catch(error => console.error('Error al despertar el servidor:', error));
+	}, []);
 
 	return (
 		<form className={style['start-form']}>

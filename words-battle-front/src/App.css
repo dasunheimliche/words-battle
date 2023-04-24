@@ -81,7 +81,16 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    position: relative;
 }
+
+/* .App::after {
+    content: "WORDS BATTLE";
+    position: absolute;
+    top: -93px;
+    font-size: 65px;
+} */
 
 /* ROOM PANEL */
 
