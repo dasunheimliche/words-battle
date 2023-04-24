@@ -9,7 +9,8 @@ import StartForm from './components/StartForm';
 type Position = [number, number];
 type Board = string[][];
 
-const socket = io("http://localhost:4000");
+// const socket = io("http://localhost:4000");
+const socket = io("https://words-battle-api.vercel.app/");
 
 interface User {
 	username: string,
@@ -85,6 +86,7 @@ function App() {
 	// console.log("GUEST", guest);
 	console.log("USER TURN", userTurn);
 	console.log("SELECTION", selection);
+	console.log("DEFINITIOS", definitions);
 	console.log("=============================");
 
 	/** USE EFFECTS */
@@ -197,6 +199,16 @@ function App() {
 	},[board, lastPosition, selection, state, userTurn]);
 
 	useEffect(()=> {
+		socket.on("create room error", ()=> {
+			setStartForm(true);
+		});
+		socket.on("create room success", ()=> {
+			setStartForm(false);
+
+			setUserTurnAndEmit({...user, color: "lightgreen"}, user, room, socket);
+			initializeBoard();
+			setHost({...user, color:"lightgreen"});
+		});
 		socket.on("join room", payload => {
 			if (host.username !== "") {
 				socket.emit("setHost", {host, room});
@@ -205,6 +217,16 @@ function App() {
 		});
 
 		return ()=> {
+			socket.off("create room error", ()=> {
+				setStartForm(true);
+			});
+			socket.off("create room success", ()=> {
+				setStartForm(false);
+	
+				setUserTurnAndEmit({...user, color: "lightgreen"}, user, room, socket);
+				initializeBoard();
+				setHost({...user, color:"lightgreen"});
+			});
 			socket.off("join room", payload => {
 				if (host.username !== "") {
 					socket.emit("setHost", {host, room});
@@ -226,13 +248,14 @@ function App() {
 		setGuest({...user, color:"paleturquoise"});
 		socket.emit("join room", {user, room, userTurn});
 	};
-	const createRoom = (e:React.MouseEvent<HTMLButtonElement>)=> {
-		e.preventDefault();
-		setUserTurnAndEmit({...user, color: "lightgreen"}, user, room, socket);
-		setStartForm(false);
-		initializeBoard();
-		setHost({...user, color:"lightgreen"});
+	const createRoom = async(e:React.MouseEvent<HTMLButtonElement>)=> {
 		socket.emit("create room", {user, room, userTurn});
+		e.preventDefault();
+		// setUserTurnAndEmit({...user, color: "lightgreen"}, user, room, socket);
+		// initializeBoard();
+		// setHost({...user, color:"lightgreen"});
+
+		// setStartForm(false);
 	};
 	const getRandomLetter = (str: string)=> {
 		return str.charAt(Math.floor(Math.random() * str.length));
@@ -261,17 +284,6 @@ function App() {
 		return defs.map((def, i) => (
 			<div className="definition" key={i}>{def.definitions}</div>
 		));
-
-		// return defs.map((def, i)=> {
-		// 	if (i > 2) {
-		// 		return;
-		// 	}
-
-
-		// 	return (
-		// 		<div className="definition" key={i}>{def.definitions}</div>
-		// 	);
-		// });
 	};
 	const selectedWord = (selection: Position[] | undefined): string=> {
 		let word = "";
@@ -431,7 +443,7 @@ function App() {
 			</div>
 			<div className={"names"}>
 				<div className={"name host-name"}>{host.username} (host) 
-					{host.username === userTurn.username && <span className="host-arrow arrow"></span>}
+					{((host.username === userTurn.username) || (userTurn.username === "")) && <span className="host-arrow arrow"></span>}
 				</div>
 				<div className={"name guest-name"}>
 					{guest.username === userTurn.username && <span className="guest-arrow arrow"></span>}
@@ -442,10 +454,12 @@ function App() {
 				<div className="host-damage-count">
 					<div>{host.username === userTurn.username && selectedWord(selection)}</div>
 					<div className="daño">{host.username === userTurn.username && daño()}</div>
+					
 				</div>
 				<div className="guest-damage-count">
 					<div>{guest.username === userTurn.username && selectedWord(selection)}</div>
-					<div className="daño">{guest.username === userTurn.username && daño()}</div>
+					{<div className="daño">{guest.username === userTurn.username && daño()}</div>}
+					{/* {definitions[0].definitions !== "no word found"} */}
 				</div>
 			</div>
 			<div className="winner">

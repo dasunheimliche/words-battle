@@ -67,12 +67,11 @@
 
 
 .App {
-
     font-family: 'VT323', monospace;
     border: 1px solid rgba(77, 118, 88, 0.154);
     border-radius: 17px;
     color: rgb(142,163,145);
-    background-color: rgb(19,27,30);;
+    background-color: rgb(19,27,30);
     
     padding-left: 15px;
     padding-right: 15px;
@@ -286,8 +285,6 @@
 
 }
 .formed-word {
-    outline: 1px solid black;
-    outline-offset: -1px;
     width: calc(100% - 20px);
     padding-left: 20px;
     padding-top: 20px;
@@ -338,13 +335,15 @@
 }
 
 .col {
-    outline: 1px solid rgb(0, 0, 0);
+    /* outline: 1px solid rgb(0, 0, 0); */
 
     display: flex;
     flex-direction: column;
 
     align-items: center;
     justify-content: flex-end;
+
+    position: relative; /* TEST */
 }
 
 .item {
@@ -392,6 +391,509 @@
 .start-form-container {
     z-index: 10;
     background-color: rgb(19,27,30);
+}
+
+
+/* ======================================================================= */
+
+/* @keyframes move-arrow {
+    0% {
+      left: 5px;
+    }
+    50% {
+      left: 0%;
+    }
+    100% {
+      left: 5px;
+    }
+}
+
+.arrow {
+    position: relative;
+    width: 22px;
+}
+
+.host-arrow {
+    margin-left: 5px;
+}
+
+.App {
+    border: 1px solid rgba(77, 118, 88, 0.154);
+    border-radius: 17px;
+    
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+}
+
+.room-panel {
+    gap: 50px;
+    font-size: 30px;
+    height: 50px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    padding-bottom: 10px;
+}
+
+.versus-panel {
+    width: 100%;
+    height: 30px;
+}
+
+.player-panel {
+    width: 50%;
+    border: 2px solid rgb(66, 102, 76);
+    padding: 5px;
+    
+}
+
+.player-name {
+    padding-left: 15px;
+}
+
+.player-health {
+    height: 15%;
+}
+
+.damage-count {
+    height: 50px;
+    font-size: 24px;
+}
+
+.names {
+    margin-top: 18px;
+    font-size: 24px;
+}
+
+.guest-name {
+    padding-right: 3px;
+}
+
+.host-name {
+    padding-left: 3px;
+}
+
+.winner {
+    bottom: 10px;
+    font-size: 31px;
+    height: 31px;
+    padding: 15px;
+}
+
+.playground {
+    border-radius: 15px;
+}
+
+.playground-actions {
+    padding: 25px;
+    gap: 25px;
+}
+.playground-button {
+    width: 110px;
+    height: 40px;
+    border: 1px solid black;
+    font-size: 21px;
+    border: 5px solid rgb(77,118,88);
+    border-radius: 3px;
+}
+
+.playground-result {
+    border-radius: 15px;
+    width: 420px;
+    height: 420px;
+    border-radius: 15px;
+}
+.formed-word {
+    width: calc(100% - 20px);
+    padding-left: 20px;
+    padding-top: 20px;
+    padding-bottom: 15px;
+    height: 28px;
+    font-size: 27px;
+}
+
+.definitions {
+    font-size: 23px;
+    padding: 20px;
+    width: calc(100% - 40px);
+    gap: 15px;
+}
+
+.grid {
+    border-radius: 15px;
+}
+
+.item {
+    width: 70px;
+    height: 70px;
+    font-size: 27px;
+}
+
+.line {
+    height: 20px;
+} */
+
+
+@media (max-width: 1600px) {
+    @keyframes move-arrow {
+        0% {
+          left: 4px;
+        }
+        50% {
+          left: 0%;
+        }
+        100% {
+          left: 4px;
+        }
+    }
+    
+    .arrow {
+        position: relative;
+        width: 18px;
+    }
+    
+    .host-arrow {
+        margin-left: 4px;
+    }
+    
+    .App {
+        border: 1px solid rgba(77, 118, 88, 0.154);
+        border-radius: 14px;
+        
+        padding-left: 12px;
+        padding-right: 12px;
+        padding-bottom: 12px;
+    }
+    
+    .room-panel {
+        gap: 42px;
+        font-size: 25px;
+        height: 42px;
+        border-top-left-radius: 21px;
+        border-top-right-radius: 21px;
+        padding-bottom: 8px;
+    }
+    
+    .versus-panel {
+        width: 100%;
+        height: 25px;
+    }
+    
+    .player-panel {
+        width: 50%;
+        border: 2px solid rgb(66, 102, 76);
+        padding: 4px;
+        
+    }
+    
+    .player-name {
+        padding-left: 12px;
+    }
+    
+    .player-health {
+        height: 15%;
+    }
+    
+    .damage-count {
+        height: 42px;
+        font-size: 20px;
+    }
+    
+    .names {
+        margin-top: 15px;
+        font-size: 20px;
+    }
+    
+    .guest-name {
+        padding-right: 2px;
+    }
+    
+    .host-name {
+        padding-left: 2px;
+    }
+    
+    .winner {
+        bottom: 8px;
+        font-size: 26px;
+        height: 26px;
+        padding: 12px;
+    }
+    
+    .playground {
+        border-radius: 12px;
+    }
+    
+    .playground-actions {
+        padding: 21px;
+        gap: 21px;
+    }
+    .playground-button {
+        width: 92px;
+        height: 33px;
+        border: 1px solid black;
+        font-size: 21px;
+        border: 4px solid rgb(77,118,88);
+        border-radius: 2px;
+    }
+    
+    .playground-result {
+        border-radius: 12px;
+        width: 350px;
+        height: 350px;
+        border-radius: 12px;
+    }
+    .formed-word {
+        width: calc(100% - 17px);
+        padding-left: 17px;
+        padding-top: 17px;
+        padding-bottom: 12px;
+        height: 23px;
+        font-size: 22px;
+    }
+    
+    .definitions {
+        font-size: 19px;
+        padding: 17px;
+        width: calc(100% - 33px);
+        gap: 12px;
+    }
+    
+    .grid {
+        border-radius: 12px;
+    }
+    
+    .item {
+        width: 58px;
+        height: 58px;
+        font-size: 22px;
+    }
+    
+    .line {
+        height: 17px;
+    }
+}
+  
+@media (max-width: 1366px) {
+    @keyframes move-arrow {
+        0% {
+          left: 4px;
+        }
+        50% {
+          left: 0%;
+        }
+        100% {
+          left: 4px;
+        }
+    }
+    
+    .arrow {
+        position: relative;
+        width: 16px;
+    }
+    
+    .host-arrow {
+        margin-left: 4px;
+    }
+    
+    .App {
+        border: 1px solid rgba(77, 118, 88, 0.154);
+        border-radius: 12px;
+        
+        padding-left: 11px;
+        padding-right: 11px;
+        padding-bottom: 11px;
+    }
+    
+    .room-panel {
+        gap: 36px;
+        font-size: 21px;
+        height: 36px;
+        border-top-left-radius: 18px;
+        border-top-right-radius: 18px;
+        padding-bottom: 7px;
+    }
+    
+    .versus-panel {
+        width: 100%;
+        height: 21px;
+    }
+    
+    .player-panel {
+        width: 50%;
+        border: 1px solid rgb(66, 102, 76);
+        padding: 4px;
+        
+    }
+    
+    .player-name {
+        padding-left: 11px;
+    }
+    
+    .player-health {
+        height: 15%;
+    }
+    
+    .damage-count {
+        height: 36px;
+        font-size: 17px;
+    }
+    
+    .names {
+        margin-top: 13px;
+        font-size: 17px;
+    }
+    
+    .guest-name {
+        padding-right: 2px;
+    }
+    
+    .host-name {
+        padding-left: 2px;
+    }
+    
+    .winner {
+        bottom: 7px;
+        font-size: 22px;
+        height: 22px;
+        padding: 11px;
+    }
+    
+    .playground {
+        border-radius: 11px;
+    }
+    
+    .playground-actions {
+        padding: 18px;
+        gap: 18px;
+    }
+    .playground-button {
+        width: 78px;
+        height: 28px;
+        border: 1px solid black;
+        font-size: 15px;
+        border: 4px solid rgb(77,118,88);
+        border-radius: 2px;
+    }
+    
+    .playground-result {
+        border-radius: 11px;
+        width: 299px;
+        height: 299px;
+        border-radius: 11px;
+    }
+    .formed-word {
+        width: calc(100% - 14px);
+        padding-left: 14px;
+        padding-top: 14px;
+        padding-bottom: 11px;
+        height: 20px;
+        font-size: 19px;
+    }
+    
+    .definitions {
+        font-size: 16px;
+        padding: 14px;
+        width: calc(100% - 28px);
+        gap: 11px;
+    }
+    
+    .grid {
+        border-radius: 11px;
+    }
+    
+    .item {
+        width: 50px;
+        height: 50px;
+        font-size: 19px;
+    }
+    
+    .line {
+        height: 14px;
+    }
+}
+  
+@media (max-width: 912px) and (orientation: portrait) {
+
+}
+  
+@media (max-width: 500px) and (orientation: portrait) {
+    .start-form-container {
+        position: fixed;
+        height: 100vh;
+    }
+
+    .App {
+        outline-offset: -3px;
+        margin: 2px;
+    }
+
+    .player-health {
+        height: 100%;
+        position: relative;
+    
+    }
+
+    .playground {
+        /* outline: 1px solid blue; */
+        flex-direction: column;
+    }
+
+    .grid {
+        /* outline: 5px solid red; */
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        /* grid-template-rows: repeat(6, 1fr); */
+        /* grid-auto-columns: 1fr; */
+    }
+
+    .item {
+        /* outline: 1px solid rgb(225, 14, 14); */
+        outline: 1px solid rgba(19, 27, 30, 0.882);
+        outline-offset: -1px;
+        /* width: 70px;
+        height: 70px; */
+        width: 100%;
+        height: 13vw;
+
+        /* min-width: 50px; */
+    
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .damage-count {
+        position: relative;
+        top: 15px;
+    }
+
+    .playground-actions {
+        flex-direction:row;
+    }
+
+    .playground-button {
+        border: 3px solid rgb(77,118,88);
+        border-style: double;
+    }
+
+    .playground-result {
+        /* outline: 1px solid blue; */
+        width: 100%;
+        position: relative;
+    }
+
+    .formed-word {
+        /* outline: 1px solid red; */
+        outline-offset: -1px;
+        /* width: 100%; */
+        font-size: 21px;
+    }
+
+    .definition {
+        font-size: 18px;
+    }
+
+   
 }
 
 

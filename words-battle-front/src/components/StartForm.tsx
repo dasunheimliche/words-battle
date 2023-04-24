@@ -32,7 +32,7 @@ const StartForm = ({user, joinRoom, createRoom, setUser, setRoom}: Props)=> {
 			</div>
 			<div className={style.inputs}>
 				<label >USERNAME:</label>
-				<input type="text" placeholder='username' onChange={e=>setUser({username: e.target.value, color: "", health:100})} value={user.username} required/>
+				<input type="text" placeholder='username' onChange={e=>setUser({username: e.target.value, color: "", health:10})} value={user.username} required/>
 				<label >ROOM:</label>
 				<input type="text" placeholder='room' onChange={e=>setRoom(e.target.value)} required/>
 			</div>

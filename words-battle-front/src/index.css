@@ -1,4 +1,6 @@
 
+
+
 body {
   margin: 0;
   padding: 0;
@@ -16,5 +18,12 @@ body {
 
 .pointer {
   cursor: pointer;
+}
+
+@media (max-width: 500px) and (orientation: portrait) {
+  body {
+    min-height: 100vh;
+    display:block;
+  }   
 }
 

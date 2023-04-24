@@ -81,3 +81,155 @@ button:hover {
     /* background-color: rgba(19, 27, 30, 0.548); */
     color: rgb(151,87,87);
 }
+
+/* ====================================================================================== */
+
+/* .start-form {
+    border-radius: 5px;
+    gap: 15px;
+}
+
+.title {
+    font-size: 51px;
+    margin-bottom: 23px;
+}
+
+.options {
+    font-size: 23px;
+    margin-bottom: 25px;
+}
+
+.option {
+    border-bottom: 3px solid rgb(77,118,88);
+    width: 200px;
+    padding-bottom: 10px;
+}
+
+.selected {
+    border-bottom: 3px solid rgb(128, 195, 146);
+}
+
+.inputs input {
+    border-bottom: 2px solid rgb(77,118,88);
+    margin-bottom: 25px;
+    height: 55px;
+    font-size: 23px;
+}
+
+.inputs label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+button {
+    width: calc(100% - 10px);
+    font-size: 23px;
+    border: 5px solid rgb(77,118,88);
+    padding-top: 8px;
+    padding-bottom: 8px;
+} */
+
+@media (max-width: 1600px) {
+    .start-form {
+        border-radius: 4px;
+        gap: 12px;
+    }
+    
+    .title {
+        font-size: 42px;
+        margin-bottom: 19px;
+    }
+    
+    .options {
+        font-size: 19px;
+        margin-bottom: 21px;
+    }
+    
+    .option {
+        border-bottom: 2px solid rgb(77,118,88);
+        width: 167px;
+        padding-bottom: 8px;
+    }
+    
+    .selected {
+        border-bottom: 2px solid rgb(128, 195, 146);
+    }
+    
+    .inputs input {
+        border-bottom: 2px solid rgb(77,118,88);
+        margin-bottom: 21px;
+        height: 46px;
+        font-size: 19px;
+    }
+    
+    .inputs label {
+        font-size: 8px;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+    
+    button {
+        width: calc(100% - 8px);
+        font-size: 19px;
+        border: 4px solid rgb(77,118,88);
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+}
+  
+@media (max-width: 1366px) {
+    .start-form {
+        border-radius: 3px;
+        gap: 11px;
+    }
+    
+    .title {
+        font-size: 36px;
+        margin-bottom: 16px;
+    }
+    
+    .options {
+        font-size: 16px;
+        margin-bottom: 18px;
+    }
+    
+    .option {
+        border-bottom: 2px solid rgb(77,118,88);
+        width: 142px;
+        padding-bottom: 7px;
+    }
+    
+    .selected {
+        border-bottom: 2px solid rgb(128, 195, 146);
+    }
+    
+    .inputs input {
+        border-bottom: 1px solid rgb(77,118,88);
+        margin-bottom: 18px;
+        height: 39px;
+        font-size: 16px;
+    }
+    
+    .inputs label {
+        font-size: 7px;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+    
+    button {
+        width: calc(100% - 7px);
+        font-size: 16px;
+        border: 3px solid rgb(77,118,88);
+        padding-top: 6px;
+        padding-bottom: 6px;
+    }
+}
+  
+@media (max-width: 912px) and (orientation: portrait) {
+
+}
+  
+@media (max-width: 500px) and (orientation: portrait) {
+    
+}
