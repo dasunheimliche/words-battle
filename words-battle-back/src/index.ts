@@ -5,6 +5,9 @@ import cors from 'cors';
 import { Server as SocketServer } from 'socket.io';
 import http from 'http';
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 // CREATING SERVER INSTANCES
 const app = express();
 const server = http.createServer(app)
@@ -19,17 +22,42 @@ const io = new SocketServer(server, {
 app.use(cors())
 app.use(express.json())
 
+// ROOMS
+
+const existingRooms: { [key: string]: boolean } = {};
+const salasAbiertas = io.sockets.adapter.rooms as Map<string, Set<string>>;
+console.log(existingRooms)
 // IO AND EXPRESS EVENT LISTENERS
 io.on('connection', (socket) => {
+
+    socket.on("disconnect", ()=> {
+        for (let nombreSala in existingRooms) {
+            if (!salasAbiertas.has(nombreSala)) {
+              delete existingRooms[nombreSala]
+            }
+        }
+    })
+
+
     socket.on("join room", payload => {
         socket.join(payload.room)
         socket.to(payload.room).emit("join room", payload)
+        
     })
     socket.on("create room", payload => {
+        console.log("SALAS ABIERTAS", salasAbiertas)
+        if (!existingRooms) return
+        if (existingRooms[`${payload.room}`]) {
+            socket.emit('create room error', `El nombre de la sala ${payload.room} ya está en uso.`);
+            return;
+        }
+        socket.emit('create room success', `Sala ${payload.room} creada con éxito.`);
+
         socket.join(payload.room)
         socket.to(payload.room).emit("create room", payload)
-    })
 
+        existingRooms[payload.room] = true;
+    })
     socket.on("setBoard", payload => {
         socket.to(payload.room).emit("setBoard", payload)
     })
@@ -60,7 +88,6 @@ io.on('connection', (socket) => {
     })
 
     socket.on("next round", payload => {
-        console.log("PAYLOAD NEXT ROUND", payload)
         socket.to(payload.room).emit("next round", payload)
         socket.emit("next round", payload)
     })
@@ -70,8 +97,10 @@ app.post('/search', async(req, res)=> {
 
     const body = req.body;
 
-    const app_id = "ea0b47e4";
-	const app_key = "800dab5c0718ff978bb4f2784b2914db";
+    // const app_id = "ea0b47e4";
+    const app_id = process.env.APP_ID;
+	// const app_key = "800dab5c0718ff978bb4f2784b2914db";
+    const app_key = process.env.APP_KEY;
 	const strictMatch = "true";
 	const wordId = body.word.toLowerCase();
 	const fields = "definitions";
@@ -89,7 +118,6 @@ app.post('/search', async(req, res)=> {
 
 				})
 				.catch(() => {
-					console.log("ERROR WORD NOT FOUND");
                     res.json([{definitions: "no word found", id: "error"}])
 				});
 })
