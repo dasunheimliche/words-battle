@@ -13,7 +13,8 @@ const app = express();
 const server = http.createServer(app)
 const io = new SocketServer(server, {
     cors: {
-        origin: "*",
+        origin: "http://127.0.0.1:5173/",
+        methods: ["GET", "POST"]
     }
 })
 
@@ -29,13 +30,17 @@ const salasAbiertas = io.sockets.adapter.rooms as Map<string, Set<string>>;
 console.log(existingRooms)
 // IO AND EXPRESS EVENT LISTENERS
 io.on('connection', (socket) => {
-
+    
     socket.on("disconnect", ()=> {
+        console.log("SALAS ABIERTAS ANTES DE FOR", salasAbiertas)
+        console.log("EXISTIN ROOMS ANTES DE FOR", existingRooms)
         for (let nombreSala in existingRooms) {
             if (!salasAbiertas.has(nombreSala)) {
               delete existingRooms[nombreSala]
             }
         }
+        console.log("SALAS ABIERTAS DESPUES DE FOR", salasAbiertas)
+        console.log("EXISTIN ROOMS DESPUES DE FOR", existingRooms)
     })
 
 

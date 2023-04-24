@@ -10,7 +10,7 @@ type Position = [number, number];
 type Board = string[][];
 
 // const socket = io("http://localhost:4000");
-const socket = io("https://words-battle-api.vercel.app/");
+const socket = io("https://words-battle-api.onrender.com");
 
 interface User {
 	username: string,
