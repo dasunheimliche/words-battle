@@ -9,8 +9,8 @@ import StartForm from './components/StartForm';
 type Position = [number, number];
 type Board = string[][];
 
-// const socket = io("http://localhost:4000");
-const socket = io("https://words-battle-api.onrender.com");
+const socket = io("http://localhost:4000");
+// const socket = io("https://words-battle-api.onrender.com");
 
 interface User {
 	username: string,
@@ -500,7 +500,7 @@ function App() {
 					</span> */}
 				</div>
 				<div className="playground-actions">
-					<div className="playground-button" onClick={userTurn.username === user.username && definitions[0].definitions !== "no word found" && (selection && selection.length >=2) ? send : doNothing}>SEND</div>
+					<div className="playground-button" onClick={(userTurn.username === user.username) && !(definitions[0].definitions === "no word found") && (selection && selection.length >=2) ? send : doNothing}>SEND</div>
 					<div className="playground-button" onClick={userTurn.username === user.username? cancel : doNothing}>CANCEL</div>
 					{winner() && <div className="playground-button" onClick={nextRound}>NEXT ROUND</div>}
 				</div>
