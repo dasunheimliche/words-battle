@@ -105,7 +105,7 @@ function App() {
 				word = word + board[selection[i][1]][selection[i][0]];
 			}
 
-			axios.post("http://localhost:4000/search", {word})
+			axios.post("https://words-battle-api.onrender.com/search", {word})
 				.then(res => {
 					setBlock(false);
 					setDefinitions(res.data);
