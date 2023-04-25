@@ -9,8 +9,8 @@ import StartForm from './components/StartForm';
 type Position = [number, number];
 type Board = string[][];
 
-const socket = io("http://localhost:4000");
-// const socket = io("https://words-battle-api.onrender.com");
+// const socket = io("http://localhost:4000");
+const socket = io("https://words-battle-api.onrender.com");
 
 interface User {
 	username: string,
