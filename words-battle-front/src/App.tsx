@@ -78,6 +78,7 @@ function App() {
 	const [block,        setBlock]        = useState<boolean>(false);
 	const [definitions,  setDefinitions]  = useState<({definitions: string, id:string})[]>([{definitions:"", id: ""}]);
 	
+	
 	/** CONSOLE LOGS */
 
 	console.log("=============================");
@@ -90,12 +91,6 @@ function App() {
 	console.log("=============================");
 
 	/** USE EFFECTS */
-
-	useEffect(()=> {
-		axios.get('https://words-battle-api.onrender.com/despertar')
-			.then(_response => console.log('El servidor ha sido despertado.'))
-			.catch(error => console.error('Error al despertar el servidor:', error));
-	}, []);
 
 	useEffect(()=> {
 		if (selection) {

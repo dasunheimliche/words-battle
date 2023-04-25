@@ -21,12 +21,23 @@ type Mode = "join" | "create";
 const StartForm = ({user, joinRoom, createRoom, setUser, setRoom}: Props)=> {
 
 	const [mode, setMode] = useState<Mode>("create");
+	const [sleep, setSleep] = useState(true);
 
 	useEffect(()=> {
 		axios.get('https://words-battle-api.onrender.com/despertar')
-			.then(_response => console.log('El servidor ha sido despertado.'))
+			.then(_response => {
+				setSleep(false);
+			})
 			.catch(error => console.error('Error al despertar el servidor:', error));
 	}, []);
+
+	const wakeUpServer = async()=> {
+		await axios.get('https://words-battle-api.onrender.com/despertar')
+			.then(_response => {
+				setSleep(false);
+			})
+			.catch(error => console.error('Error al despertar el servidor:', error));
+	};
 
 	return (
 		<form className={style['start-form']}>
@@ -41,8 +52,11 @@ const StartForm = ({user, joinRoom, createRoom, setUser, setRoom}: Props)=> {
 				<label >ROOM:</label>
 				<input type="text" placeholder='room' onChange={e=>setRoom(e.target.value)} required/>
 			</div>
-			{mode === "create" && <button type='submit' onClick={createRoom}>CREATE ROOM</button>}
+			{mode === "create" && <button type='submit' onClick={sleep === false? createRoom : undefined}>CREATE ROOM</button>}
 			{mode === "join" && <button type='submit' onClick={joinRoom}>JOIN ROOM</button>}
+			{sleep === false && <div>Server is awake!</div>}
+			{sleep === true && <div>Server is sleeping. Wake it up!</div>}
+			{sleep === true && <button type='button' onClick={wakeUpServer}>WAKE UP!</button>}
 		</form>
 	);
 };
