@@ -33,6 +33,22 @@
     }
 }
 
+@keyframes parpadeo {
+    0% {
+      opacity: 0.7;
+    }
+    50% {
+      opacity: 0.2;
+    }
+    100% {
+      opacity: 0.7;
+    }
+}
+
+.parpadeo {
+    animation: parpadeo 0.8s infinite;
+}
+
 .arrow {
     position: relative;
     width: 22px;
@@ -153,6 +169,39 @@
     background-color: rgb(151,87,87);
     position: relative;
 }
+.host-counter {
+    /* outline: 1px solid red; */
+    /* width: 100%;
+    height: 100%; */
+
+    /* align-items: center;
+    justify-content: flex-start; */
+    position: absolute;
+    left: 0px;
+
+    padding-left: 5px;
+    padding-top: 2px;
+
+    color: rgb(210, 210, 210);
+}
+
+.guest-counter {
+    /* outline: 1px solid red; */
+    /* width: 100%;
+    height: 100%; */
+
+    /* align-items: center;
+    justify-content: flex-end; */
+    position: absolute;
+    right: 0px;
+
+
+    padding-right: 5px;
+    padding-top: 2px;
+
+    color: rgb(210, 210, 210);
+}
+
 .guest-health {
     display: flex;
     justify-content: flex-start;

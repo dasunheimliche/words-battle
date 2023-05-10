@@ -54,24 +54,26 @@ const StartForm = ({user, joinRoom, createRoom, setUser, setRoom}: Props)=> {
 	};
 
 	return (
-		<form className={style['start-form']}>
-			<div className={style.title}>WORDS BATTLE</div>
-			<div className={style.options}>
-				<div className={mode === "create"? `${style.option} ${style.selected}` : style.option } onClick={()=>setMode("create")}>CREATE ROOM</div>
-				<div className={mode === "join"? `${style.option} ${style.selected}` : style.option} onClick={()=>setMode("join")}>JOIN ROOM</div>
-			</div>
-			<div className={style.inputs}>
-				<label >USERNAME:</label>
-				<input type="text" placeholder='username' onChange={e=>setUser({username: e.target.value, color: "", health:100})} value={user.username} required/>
-				<label >ROOM:</label>
-				<input type="text" placeholder='room' onChange={e=>setRoom(e.target.value)} required/>
-			</div>
-			{mode === "create" && <button type='submit' onClick={sleep === false? createRoom : undefined}>CREATE ROOM</button>}
-			{mode === "join" && <button type='submit' onClick={joinRoom}>JOIN ROOM</button>}
-			{sleep === false && <div>Server is awake!</div>}
-			{sleep === true && <div>Sorry, free host, server is sleeping. Wake it up!</div>}
-			{sleep === true && <button type='button' onClick={wakeUpServer}>WAKE UP!</button>}
-		</form>
+		<div className={style.container}>
+			<form className={style['start-form']}>
+				<div className={style.title}>WORDS BATTLE</div>
+				<div className={style.options}>
+					<div className={mode === "create"? `${style.option} ${style.selected}` : style.option } onClick={()=>setMode("create")}>CREATE ROOM</div>
+					<div className={mode === "join"? `${style.option} ${style.selected}` : style.option} onClick={()=>setMode("join")}>JOIN ROOM</div>
+				</div>
+				<div className={style.inputs}>
+					<label >USERNAME:</label>
+					<input type="text" placeholder='username' onChange={e=>setUser({username: e.target.value, color: "", health:100})} value={user.username} required/>
+					<label >ROOM:</label>
+					<input type="text" placeholder='room' onChange={e=>setRoom(e.target.value)} required/>
+				</div>
+				{mode === "create" && <button type='submit' onClick={sleep === false? createRoom : undefined}>CREATE ROOM</button>}
+				{mode === "join" && <button type='submit' onClick={joinRoom}>JOIN ROOM</button>}
+				{sleep === false && <div className={style.message}>Server is awake!</div>}
+				{sleep === true && <div className={style.message}>Sorry, free host, server is sleeping. Wake it up!</div>}
+				{sleep === true && <button type='button' onClick={wakeUpServer}>WAKE UP!</button>}
+			</form>
+		</div>
 	);
 };
 

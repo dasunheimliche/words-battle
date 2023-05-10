@@ -429,15 +429,14 @@ function App() {
 			</div>
 			<div className="versus-panel">
 				<div id="host" className="player-panel">
-					{/* <div className="player-name host-name">{host.username} (host)</div> */}
 					<div className="player-health host-health">
-						
+						<div className="host-counter">{`${host.health}/100`}</div>
 						<div style={{width: `${((100 - host.health)*100)/100}%`}} className="health-red"></div>
 					</div>
 				</div>
 				<div id="guest" className="player-panel">
-					{/* <div className="player-name guest-name">{guest.username} (guest)</div> */}
 					<div className="player-health guest-health">
+						<div className="guest-counter">{`${guest.health}/100`}</div>
 						<div style={{width: `${((100 - guest.health)*100)/100}%`}} className="health-red"></div>
 					</div>
 				</div>
@@ -448,7 +447,8 @@ function App() {
 				</div>
 				<div className={"name guest-name"}>
 					{guest.username === userTurn.username && <span className="guest-arrow arrow"></span>}
-					{guest.username} (guest)
+					{guest.username !== "" && `${guest.username} (guest)`}
+					{guest.username === "" && <div className="parpadeo">{"Waiting for a guest..."}</div>}
 				</div>
 			</div>
 			<div className="damage-count">
@@ -460,12 +460,10 @@ function App() {
 				<div className="guest-damage-count">
 					<div>{guest.username === userTurn.username && selectedWord(selection)}</div>
 					{<div className="daño">{guest.username === userTurn.username && daño()}</div>}
-					{/* {definitions[0].definitions !== "no word found"} */}
 				</div>
 			</div>
 			<div className="winner">
 				{<div>{winner()}</div>}
-				{/* {winner() && <div onClick={nextRound}>NEXT ROUND</div>} */}
 			</div>
 			<div className="playground">
 				<div className='grid'>
