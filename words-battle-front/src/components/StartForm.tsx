@@ -21,8 +21,8 @@ type Mode = "join" | "create";
 const StartForm = ({user, joinRoom, createRoom, setUser, setRoom}: Props)=> {
 
 	let woke;
-	if (typeof window !== "undefined" && localStorage.getItem('sleep')) {
-		const isWoke = localStorage.getItem('sleep');
+	if (typeof window !== "undefined" && sessionStorage.getItem('sleep')) {
+		const isWoke = sessionStorage.getItem('sleep');
 		if (isWoke) {
 			woke = JSON.parse(isWoke);
 		}
@@ -40,7 +40,7 @@ const StartForm = ({user, joinRoom, createRoom, setUser, setRoom}: Props)=> {
 		axios.get('https://words-battle-api.onrender.com/despertar')
 			.then(_response => {
 				setSleep(false);
-				localStorage.setItem("sleep", "false");
+				sessionStorage.setItem("sleep", "false");
 			})
 			.catch(error => console.error('Error al despertar el servidor:', error));
 	}, []);
