@@ -116,10 +116,11 @@ app.post('/search', async(req, res)=> {
     console.log("WORDDD", wordId)
 
     let filteredWords: string[] = []
-
+    console.log("ENTRANDO A CONSULTA A WORDREFERENCE")
     try {
-        const { data: wordTextList} = await axios.get(`https://www.wordreference.com/autocomplete?dict=eses&query=${wordId}`)
+        const { data: wordTextList} = await axios.get(`https://www.wordreference.com/autocomplete?dict=eses&query=${wordId}`, {headers: {"Access-Control-Allow-Origin": "http://127.0.0.1:5173"}})
         const lines = wordTextList.split('\n')
+        console.log("LINES", lines)
         const words = lines.map((line:String) => {
             const word = line.split('\t')[0].trim()
             return word
@@ -132,13 +133,14 @@ app.post('/search', async(req, res)=> {
             return res.json([{definitions: "no word found", id: "error"}])
         }
     } catch {
+        console.log("ALGUN ERROR RARO EN LA CONSULTA A AUTOCOMPLETE")
         return res.json([{definitions: "no word found", id: "error"}])
     }
 
-    
+    console.log("SALIENDO DE LA CONSULTA A AUTOCOMPLETE")
 
     try {
-        const {data: htmlResult} = await axios.get(`https://www.wordreference.com/definicion/${wordId}`)
+        const {data: htmlResult} = await axios.get(`https://www.wordreference.com/definicion/${wordId}`, {headers: {"Access-Control-Allow-Origin": "http://127.0.0.1:5173"}})
         const root = parse(htmlResult)
         const main = root.querySelector('.entry')
         console.log("DEF", main?.text)

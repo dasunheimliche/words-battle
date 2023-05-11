@@ -112,9 +112,11 @@ app.post('/search', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     // const language = "es";
     console.log("WORDDD", wordId);
     let filteredWords = [];
+    console.log("ENTRANDO A CONSULTA A WORDREFERENCE");
     try {
-        const { data: wordTextList } = yield axios_1.default.get(`https://www.wordreference.com/autocomplete?dict=eses&query=${wordId}`);
+        const { data: wordTextList } = yield axios_1.default.get(`https://www.wordreference.com/autocomplete?dict=eses&query=${wordId}`, { headers: { "Access-Control-Allow-Origin": "http://127.0.0.1:5173" } });
         const lines = wordTextList.split('\n');
+        console.log("LINES", lines);
         const words = lines.map((line) => {
             const word = line.split('\t')[0].trim();
             return word;
@@ -126,10 +128,12 @@ app.post('/search', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         }
     }
     catch (_a) {
+        console.log("ALGUN ERROR RARO EN LA CONSULTA A AUTOCOMPLETE");
         return res.json([{ definitions: "no word found", id: "error" }]);
     }
+    console.log("SALIENDO DE LA CONSULTA A AUTOCOMPLETE");
     try {
-        const { data: htmlResult } = yield axios_1.default.get(`https://www.wordreference.com/definicion/${wordId}`);
+        const { data: htmlResult } = yield axios_1.default.get(`https://www.wordreference.com/definicion/${wordId}`, { headers: { "Access-Control-Allow-Origin": "http://127.0.0.1:5173" } });
         const root = (0, node_html_parser_1.parse)(htmlResult);
         const main = root.querySelector('.entry');
         console.log("DEF", main === null || main === void 0 ? void 0 : main.text);
