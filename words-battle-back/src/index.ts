@@ -118,7 +118,7 @@ app.post('/search', async(req, res)=> {
     let filteredWords: string[] = []
     console.log("ENTRANDO A CONSULTA A WORDREFERENCE")
     try {
-        const { data: wordTextList} = await axios.get(`https://www.wordreference.com/autocomplete?dict=eses&query=${wordId}`, {headers: {"Access-Control-Allow-Origin": "http://127.0.0.1:5173"}})
+        const { data: wordTextList} = await axios.get(`https://www.wordreference.com/autocomplete?dict=eses&query=${wordId}`, {headers: {"Access-Control-Allow-Origin": "*"}})
         const lines = wordTextList.split('\n')
         console.log("LINES", lines)
         const words = lines.map((line:String) => {
@@ -140,7 +140,7 @@ app.post('/search', async(req, res)=> {
     console.log("SALIENDO DE LA CONSULTA A AUTOCOMPLETE")
 
     try {
-        const {data: htmlResult} = await axios.get(`https://www.wordreference.com/definicion/${wordId}`, {headers: {"Access-Control-Allow-Origin": "http://127.0.0.1:5173"}})
+        const {data: htmlResult} = await axios.get(`https://www.wordreference.com/definicion/${wordId}`, {headers: {"Access-Control-Allow-Origin": "*"}})
         const root = parse(htmlResult)
         const main = root.querySelector('.entry')
         console.log("DEF", main?.text)
