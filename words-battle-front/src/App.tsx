@@ -102,9 +102,12 @@ function App() {
 				word = word + board[selection[i][1]][selection[i][0]];
 			}
 
-			const res:any =  axios.get(`https://www.wordreference.com/autocomplete?dict=eses&query=hola`);
-			const lines = res.data.split('\n');
-			console.log("LINES", lines);
+			axios.get(`https://www.wordreference.com/autocomplete?dict=eses&query=hola`)
+				.then(res => {
+					const lines = res.data.split('\n');
+					console.log("LINES", lines);
+				});
+			
 			
 			
 
