@@ -3,6 +3,8 @@ import "./App.css";
 import io, { Socket  as SocketType} from 'socket.io-client';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { parse } from 'node-html-parser';
+
 import Tile from './components/Tile';
 import StartForm from './components/StartForm';
 
@@ -81,20 +83,86 @@ function App() {
 	
 	/** CONSOLE LOGS */
 
-	console.log("=============================");
+	// console.log("=============================");
 
 	// console.log("HOST", host);
 	// console.log("GUEST", guest);
-	console.log("USER TURN", userTurn);
-	console.log("SELECTION", selection);
-	console.log("DEFINITIOS", definitions);
-	console.log("=============================");
+
+	// console.log("USER TURN", userTurn);
+	// console.log("SELECTION", selection);
+	// console.log("DEFINITIOS", definitions);
+
+	// console.log("=============================");
 
 	/** USE EFFECTS */
+
+
+	const searchDefs = async()=> {
+
+		if (!selection) {
+			return;
+		}
+
+		if (selection.length === 1) {
+			return;
+		}
+
+		let filteredWords: string[] = [];
+		console.log("ENTRANDO A CONSULTA A WORDREFERENCE");
+
+		let word = "";
+		for (let i=0; i < selection.length; i++) {
+			word = word + board[selection[i][1]][selection[i][0]];
+			word = word.toLocaleLowerCase();
+		}
+		console.log("SEARCHED WORD", word);
+		try {
+			const { data: wordTextList} = await axios.get(`https://www.wordreference.com/autocomplete?dict=eses&query=${word}`);
+			const lines = wordTextList.split('\n');
+			const words = lines.map((line:string) => {
+				const word = line.split('\t')[0].trim();
+				return word;
+			});
+
+			filteredWords = words.filter((word:string) => word !== "");
+
+			console.log("FILTERED WORDS", filteredWords);
+
+			if (!filteredWords.includes(word)) {
+				console.log("LA PALABRA NO EXISTE");
+				return [{definitions: "no word found", id: "error"}];
+			}
+
+
+		} catch(err) {
+			console.log("ALGUN ERROR RARO EN LA CONSULTA A AUTOCOMPLETE", err);
+			return [{definitions: "no word found", id: "error"}];
+		}
+
+		console.log("WORD EXISTS");
+
+		try {
+			const {data: htmlResult} = await axios.get(`https://www.wordreference.com/definicion/${word}`);
+			const root = parse(htmlResult);
+			const main = root.querySelector('.entry');
+			console.log("DEFINITION", main?.text);
+			if (!main?.text) {
+				console.log("TIRANDO ERROR");
+				throw Error;
+			}
+
+			setBlock(false);
+			return [{definitions: main?.text, id: "1"}];
+		} catch(err) {
+			console.log("TIRANDO ERROR EN CATCH DIRECTAMENTE", err);
+			return [{definitions: "no word found", id: "error"}];
+		}
+	};
 
 	
 
 	useEffect(()=> {
+		setDefinitions([{definitions:"", id: ""}]);
 		if (selection) {
 			setBlock(true);
 			let word = "";
@@ -102,23 +170,25 @@ function App() {
 				word = word + board[selection[i][1]][selection[i][0]];
 			}
 
-			axios.get(`https://www.wordreference.com/autocomplete?dict=eses&query=hola`)
-				.then(res => {
-					const lines = res.data.split('\n');
-					console.log("LINES", lines);
-				});
-			
-			
-			
-
 			const delayDebounceFn = setTimeout(()=> {
-				axios.post("https://words-battle-api.onrender.com/search", {word})
-					.then(res => {
-						console.log("RES", res);
+
+				searchDefs()
+					.then(res=> {
+						if (!res) {
+							return;
+						}
+						console.log("DEFS", res);
 						setBlock(false);
-						setDefinitions(res.data);
-						console.log(res.data);
+						setDefinitions(res);
 					});
+
+				// axios.post("https://words-battle-api.onrender.com/search", {word})
+				// 	.then(res => {
+				// 		console.log("RES", res);
+				// 		setBlock(false);
+				// 		setDefinitions(res.data);
+				// 		console.log(res.data);
+				// 	});
 			}, 500);
 
 			return ()=> clearTimeout(delayDebounceFn);
@@ -268,11 +338,6 @@ function App() {
 	const createRoom = async(e:React.MouseEvent<HTMLButtonElement>)=> {
 		socket.emit("create room", {user, room, userTurn});
 		e.preventDefault();
-		// setUserTurnAndEmit({...user, color: "lightgreen"}, user, room, socket);
-		// initializeBoard();
-		// setHost({...user, color:"lightgreen"});
-
-		// setStartForm(false);
 	};
 	const getRandomLetter = (str: string)=> {
 		return str.charAt(Math.floor(Math.random() * str.length));
