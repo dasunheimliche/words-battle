@@ -127,8 +127,8 @@ app.post('/search', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             return res.json([{ definitions: "no word found", id: "error" }]);
         }
     }
-    catch (_a) {
-        console.log("ALGUN ERROR RARO EN LA CONSULTA A AUTOCOMPLETE");
+    catch (err) {
+        console.log("ALGUN ERROR RARO EN LA CONSULTA A AUTOCOMPLETE", err);
         return res.json([{ definitions: "no word found", id: "error" }]);
     }
     console.log("SALIENDO DE LA CONSULTA A AUTOCOMPLETE");
@@ -143,8 +143,8 @@ app.post('/search', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         }
         return res.json([{ definitions: main === null || main === void 0 ? void 0 : main.text, id: 1 }]);
     }
-    catch (_b) {
-        console.log("TIRANDO ERROR EN CATCH DIRECTAMENTE");
+    catch (err) {
+        console.log("TIRANDO ERROR EN CATCH DIRECTAMENTE", err);
         return res.json([{ definitions: "no word found", id: "error" }]);
     }
     // axios.get(`https://www.wordreference.com/definicion/${wordId}`,{headers: {"Access-Control-Allow-Origin": "http://127.0.0.1:5173"}})

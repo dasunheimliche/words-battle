@@ -132,8 +132,8 @@ app.post('/search', async(req, res)=> {
             console.log("LA PALABRA NO EXISTE")
             return res.json([{definitions: "no word found", id: "error"}])
         }
-    } catch {
-        console.log("ALGUN ERROR RARO EN LA CONSULTA A AUTOCOMPLETE")
+    } catch(err) {
+        console.log("ALGUN ERROR RARO EN LA CONSULTA A AUTOCOMPLETE", err)
         return res.json([{definitions: "no word found", id: "error"}])
     }
 
@@ -149,8 +149,8 @@ app.post('/search', async(req, res)=> {
             throw Error;
         }
         return res.json([{definitions: main?.text, id: 1}])
-    } catch {
-        console.log("TIRANDO ERROR EN CATCH DIRECTAMENTE")
+    } catch(err) {
+        console.log("TIRANDO ERROR EN CATCH DIRECTAMENTE", err)
         return res.json([{definitions: "no word found", id: "error"}])
     }
 
