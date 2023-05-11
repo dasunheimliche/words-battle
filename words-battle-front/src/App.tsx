@@ -92,6 +92,8 @@ function App() {
 
 	/** USE EFFECTS */
 
+	
+
 	useEffect(()=> {
 		if (selection) {
 			setBlock(true);
@@ -99,13 +101,20 @@ function App() {
 			for (let i=0; i < selection.length; i++) {
 				word = word + board[selection[i][1]][selection[i][0]];
 			}
+			
+			
 
-			axios.post("https://words-battle-api.onrender.com/search", {word})
-				.then(res => {
-					setBlock(false);
-					setDefinitions(res.data);
-					console.log(res.data);
-				});
+			const delayDebounceFn = setTimeout(()=> {
+				axios.post("https://words-battle-api.onrender.com/search", {word})
+					.then(res => {
+						console.log("RES", res);
+						setBlock(false);
+						setDefinitions(res.data);
+						console.log(res.data);
+					});
+			}, 500);
+
+			return ()=> clearTimeout(delayDebounceFn);
 		}
 		
 	},[selection]);
@@ -303,6 +312,11 @@ function App() {
 		setSelectionAndEmit(undefined, user, room, socket);
 	};
 	const send = ()=> {
+
+		if (block === true) {
+			return;
+		}
+
 		setDefinitions([{definitions:"", id: ""}]);
 		cancel();
 

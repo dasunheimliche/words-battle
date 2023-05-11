@@ -18,6 +18,7 @@ const axios_1 = __importDefault(require("axios"));
 const cors_1 = __importDefault(require("cors"));
 const socket_io_1 = require("socket.io");
 const http_1 = __importDefault(require("http"));
+const node_html_parser_1 = require("node-html-parser");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 // CREATING SERVER INSTANCES
@@ -103,27 +104,74 @@ app.get('/despertar', (_req, res) => {
 });
 app.post('/search', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const body = req.body;
-    // const app_id = "ea0b47e4";
-    const app_id = process.env.APP_ID;
-    // const app_key = "800dab5c0718ff978bb4f2784b2914db";
-    const app_key = process.env.APP_KEY;
-    const strictMatch = "true";
+    // const app_id = process.env.APP_ID;
+    // const app_key = process.env.APP_KEY;
+    // const strictMatch = "true";
     const wordId = body.word.toLowerCase();
-    const fields = "definitions";
-    const language = "es";
-    axios_1.default.get(`https://od-api.oxforddictionaries.com:443/api/v2/entries/${language}/${wordId}?fields=${fields}&strictMatch=${strictMatch}`, {
-        headers: {
-            'app_id': app_id,
-            'app_key': app_key,
-            "Access-Control-Allow-Origin": "http://127.0.0.1:5173"
+    // const fields = "definitions";
+    // const language = "es";
+    console.log("WORDDD", wordId);
+    let filteredWords = [];
+    try {
+        const { data: wordTextList } = yield axios_1.default.get(`https://www.wordreference.com/autocomplete?dict=eses&query=${wordId}`);
+        const lines = wordTextList.split('\n');
+        const words = lines.map((line) => {
+            const word = line.split('\t')[0].trim();
+            return word;
+        });
+        filteredWords = words.filter((word) => word !== "");
+        if (!filteredWords.includes(wordId)) {
+            console.log("LA PALABRA NO EXISTE");
+            return res.json([{ definitions: "no word found", id: "error" }]);
         }
-    })
-        .then(result => {
-        res.json(result.data.results[0]["lexicalEntries"][0]["entries"][0]["senses"]);
-    })
-        .catch(() => {
-        res.json([{ definitions: "no word found", id: "error" }]);
-    });
+    }
+    catch (_a) {
+        return res.json([{ definitions: "no word found", id: "error" }]);
+    }
+    try {
+        const { data: htmlResult } = yield axios_1.default.get(`https://www.wordreference.com/definicion/${wordId}`);
+        const root = (0, node_html_parser_1.parse)(htmlResult);
+        const main = root.querySelector('.entry');
+        console.log("DEF", main === null || main === void 0 ? void 0 : main.text);
+        if (!(main === null || main === void 0 ? void 0 : main.text)) {
+            console.log("TIRANDO ERROR");
+            throw Error;
+        }
+        return res.json([{ definitions: main === null || main === void 0 ? void 0 : main.text, id: 1 }]);
+    }
+    catch (_b) {
+        console.log("TIRANDO ERROR EN CATCH DIRECTAMENTE");
+        return res.json([{ definitions: "no word found", id: "error" }]);
+    }
+    // axios.get(`https://www.wordreference.com/definicion/${wordId}`,{headers: {"Access-Control-Allow-Origin": "http://127.0.0.1:5173"}})
+    //     .then(result => {
+    //         const html = result.data;
+    //         const root = parse(html)
+    //         const main = root.querySelector('.entry')
+    //         console.log("DEF", main?.text)
+    //         if (!main?.text) {
+    //             console.log("TIRANDO ERROR")
+    //             throw Error;
+    //         }
+    //         res.json([{definitions: main?.text, id: 1}])
+    //     })
+    //     .catch(()=> {
+    //         console.log("TIRANDO ERROR EN CATCH DIRECTAMENTE")
+    //         res.json([{definitions: "no word found", id: "error"}])
+    //     })
+    // axios.get(`https://od-api.oxforddictionaries.com:443/api/v2/entries/${language}/${wordId}?fields=${fields}&strictMatch=${strictMatch}`, {
+    // 	headers: {
+    // 	    'app_id': app_id,
+    // 		'app_key': app_key,
+    // 		"Access-Control-Allow-Origin": "http://127.0.0.1:5173"
+    // 		}
+    // 		})
+    // 			.then(result => {
+    //                 res.json(result.data.results[0]["lexicalEntries"][0]["entries"][0]["senses"])
+    // 			})
+    // 			.catch(() => {
+    //                 res.json([{definitions: "no word found", id: "error"}])
+    // 			});
 }));
 // STARTING THE SERVER
 const PORT = 4000;
