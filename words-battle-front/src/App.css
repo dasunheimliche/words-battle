@@ -924,7 +924,7 @@
         /* outline: 1px solid red;
         outline-offset: -3px; */
         margin: 2px;
-        height: 100%;
+        height: calc(100dvh - 4px);
     }
 
     .player-health {
