@@ -360,7 +360,7 @@ function App() {
 	};
 	const loadColumn = (col:number) : React.ReactNode[]=> {
 		return board[col-1].map((char, i) => {
-			return <Tile key={`${i},${col-1}`} tilePosition={[i, col - 1]} lastPosition={lastPosition} setLastPositionAndEmit={setLastPositionAndEmit} char={char} selection={selection} setSelectionAndEmit={setSelectionAndEmit} state={state} setStateAndEmit={setStateAndEmit} socket={socket} user={user} userTurn={userTurn} room={room} block={block}/>;
+			return <Tile key={`${i},${col-1}`} tilePosition={[i, col - 1]} lastPosition={lastPosition} setLastPositionAndEmit={setLastPositionAndEmit} char={char} selection={selection} setSelectionAndEmit={setSelectionAndEmit} state={state} setStateAndEmit={setStateAndEmit} socket={socket} user={user} userTurn={userTurn} room={room} guest={guest}/>;
 		});
 	};
 	const loadDefinitions = (defs:({definitions: string, id:string})[]) => {

@@ -22,10 +22,10 @@ interface TileProps {
 	user: User,
 	room: string,
 	userTurn: User,
-	block: boolean,
+	guest: User
 }
 
-const Tile = ({tilePosition, lastPosition, setLastPositionAndEmit, char, selection, setSelectionAndEmit, state, setStateAndEmit, socket, user, userTurn, room}: TileProps)=> {
+const Tile = ({guest, tilePosition, lastPosition, setLastPositionAndEmit, char, selection, setSelectionAndEmit, state, setStateAndEmit, socket, user, userTurn, room}: TileProps)=> {
 	const [position] = useState<Position>(tilePosition);
 	const [check, setCheck] = useState<boolean>(false);
 
@@ -85,6 +85,10 @@ const Tile = ({tilePosition, lastPosition, setLastPositionAndEmit, char, selecti
         
 	};
 	const isClickeable = ():boolean=> {
+		if (guest.username === "") {
+			return false;
+		}
+
 		if ((position[0] <= lastPosition[0]+1 && position[0] >= lastPosition[0] - 1) && (position[1] <= lastPosition[1] + 1 && position[1] >= lastPosition[1] - 1)) {
 			console.log("CLICKEABLE");
 			return true;
