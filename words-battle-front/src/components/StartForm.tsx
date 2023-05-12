@@ -54,7 +54,7 @@ const StartForm = ({user, joinRoom, createRoom, setUser, setRoom}: Props)=> {
 	};
 
 	return (
-		<div className={style.container}>
+		<div className={`${style.container} scanlines`}>
 			<form className={style['start-form']}>
 				<div className={style.title}>WORDS BATTLE</div>
 				<div className={style.options}>

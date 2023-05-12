@@ -159,8 +159,6 @@ function App() {
 		}
 	};
 
-	
-
 	useEffect(()=> {
 		setDefinitions([{definitions:"", id: ""}]);
 		if (selection) {
@@ -506,7 +504,7 @@ function App() {
 	};
 	
 	return (
-		<div className="App scanlines">
+		<div className={startForm? "App" : "App scanlines"}>
 			{startForm && <div className='start-form-container'>
 				<StartForm user={user} joinRoom={joinRoom} createRoom={createRoom} setUser={setUser} setRoom={setRoom}/>
 			</div>}
@@ -551,7 +549,7 @@ function App() {
 			<div className="winner">
 				{<div>{winner()}</div>}
 			</div>
-			<div className="playground">
+			{!startForm && <div className="playground">
 				<div className='grid'>
 					<span id='col-1' className='col'>
 						{loadColumn(1)}
@@ -589,7 +587,7 @@ function App() {
 						{selection && loadDefinitions(definitions)}
 					</div>
 				</div>
-			</div>
+			</div>}
 		</div>
 	);
 }
