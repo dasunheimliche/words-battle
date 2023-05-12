@@ -544,7 +544,6 @@ function App() {
 				<div className="host-damage-count">
 					<div>{host.username === userTurn.username && selectedWord(selection)}</div>
 					<div className="daño">{host.username === userTurn.username && daño()}</div>
-				
 				</div>
 				<div className="guest-damage-count">
 					<div>{guest.username === userTurn.username && selectedWord(selection)}</div>

@@ -921,8 +921,10 @@
     }
 
     .App {
-        outline-offset: -3px;
+        /* outline: 1px solid red;
+        outline-offset: -3px; */
         margin: 2px;
+        height: 100%;
     }
 
     .player-health {
@@ -984,16 +986,25 @@
         width: 100%;
         position: relative;
         border-radius: 7px;
+
+        height: calc(100dvh - 555px);
+        max-height: 255px;
     }
 
     .formed-word {
         /* outline: 1px solid red; */
         outline-offset: -1px;
         /* width: 100%; */
-        font-size: 21px;
+        font-size: 19px;
+        padding-bottom: 0px;
+    }
+
+    .definitions {
+        padding-top: 3px;
     }
 
     .definition {
+        /* outline: 1px solid red; */
         font-size: 18px;
     }
 
