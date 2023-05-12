@@ -60,6 +60,10 @@ body {
 
   overflow: hidden;
   overscroll-behavior: contain;
+
+  -webkit-user-select:none;
+  user-select:none;
+  
 }
 
 .pointer {

@@ -45,10 +45,14 @@ io.on('connection', (socket) => {
 
 
     socket.on("join room", payload => {
-        socket.join(payload.room)
-        socket.to(payload.room).emit("join room", payload)
-        
+        const sala = salasAbiertas.get(payload.room);
+
+        if (sala && sala.size !== undefined && sala.size < 2) {
+            socket.join(payload.room);
+            socket.to(payload.room).emit("join room", payload);
+        }
     })
+
     socket.on("create room", payload => {
         console.log("SALAS ABIERTAS", salasAbiertas)
         if (!existingRooms) return

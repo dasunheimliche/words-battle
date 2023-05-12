@@ -138,6 +138,11 @@
     padding-bottom: 10px;
 }
 
+.room-panel:nth-child(2) {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
 /* SESSION PANEL */
 .versus-panel {
     width: 100%;
