@@ -419,7 +419,7 @@
 }
 
 .item {
-    outline: 1px solid rgb(0, 0, 0);
+    outline: 1px solid rgba(0, 0, 0, 0);
     outline-offset: -1px;
     width: 70px;
     height: 70px;
@@ -940,11 +940,13 @@
         grid-template-columns: repeat(6, 1fr);
         /* grid-template-rows: repeat(6, 1fr); */
         /* grid-auto-columns: 1fr; */
+
+        border-radius: 7px;
     }
 
     .item {
         /* outline: 1px solid rgb(225, 14, 14); */
-        outline: 1px solid rgba(19, 27, 30, 0.882);
+        outline: 1px solid rgba(19, 27, 30, 0.25);
         outline-offset: -1px;
         /* width: 70px;
         height: 70px; */
@@ -965,17 +967,21 @@
 
     .playground-actions {
         flex-direction:row;
+        justify-content: center;
     }
 
     .playground-button {
         border: 3px solid rgb(77,118,88);
         border-style: double;
+        border-radius: 20px;
+        font-size: 18px;
     }
 
     .playground-result {
         /* outline: 1px solid blue; */
         width: 100%;
         position: relative;
+        border-radius: 7px;
     }
 
     .formed-word {
