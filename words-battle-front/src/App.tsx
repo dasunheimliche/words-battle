@@ -508,83 +508,85 @@ function App() {
 			{startForm && <div className='start-form-container'>
 				<StartForm user={user} joinRoom={joinRoom} createRoom={createRoom} setUser={setUser} setRoom={setRoom}/>
 			</div>}
-			<div className="room-panel">
-				<span>HOST: {host.username}</span><span>ROOM: {room}</span>
-			</div>
-			<div className="versus-panel">
-				<div id="host" className="player-panel">
-					<div className="player-health host-health">
-						<div className="host-counter">{`${host.health}/100`}</div>
-						<div style={{width: `${((100 - host.health)*100)/100}%`}} className="health-red"></div>
+			{!startForm && <div style={{width: "100%"}}>
+				<div className="room-panel">
+					<span>HOST: {host.username}</span><span>ROOM: {room}</span>
+				</div>
+				<div className="versus-panel">
+					<div id="host" className="player-panel">
+						<div className="player-health host-health">
+							<div className="host-counter">{`${host.health}/100`}</div>
+							<div style={{width: `${((100 - host.health)*100)/100}%`}} className="health-red"></div>
+						</div>
+					</div>
+					<div id="guest" className="player-panel">
+						<div className="player-health guest-health">
+							<div className="guest-counter">{`${guest.health}/100`}</div>
+							<div style={{width: `${((100 - guest.health)*100)/100}%`}} className="health-red"></div>
+						</div>
 					</div>
 				</div>
-				<div id="guest" className="player-panel">
-					<div className="player-health guest-health">
-						<div className="guest-counter">{`${guest.health}/100`}</div>
-						<div style={{width: `${((100 - guest.health)*100)/100}%`}} className="health-red"></div>
+				<div className={"names"}>
+					<div className={"name host-name"}>{host.username} (host)
+						{((host.username === userTurn.username) || (userTurn.username === "")) && <span className="host-arrow arrow"></span>}
+					</div>
+					<div className={"name guest-name"}>
+						{guest.username === userTurn.username && <span className="guest-arrow arrow"></span>}
+						{guest.username !== "" && `${guest.username} (guest)`}
+						{guest.username === "" && <div className="parpadeo">{"Waiting for a guest..."}</div>}
 					</div>
 				</div>
-			</div>
-			<div className={"names"}>
-				<div className={"name host-name"}>{host.username} (host) 
-					{((host.username === userTurn.username) || (userTurn.username === "")) && <span className="host-arrow arrow"></span>}
+				<div className="damage-count">
+					<div className="host-damage-count">
+						<div>{host.username === userTurn.username && selectedWord(selection)}</div>
+						<div className="daño">{host.username === userTurn.username && daño()}</div>
+				
+					</div>
+					<div className="guest-damage-count">
+						<div>{guest.username === userTurn.username && selectedWord(selection)}</div>
+						{<div className="daño">{guest.username === userTurn.username && daño()}</div>}
+					</div>
 				</div>
-				<div className={"name guest-name"}>
-					{guest.username === userTurn.username && <span className="guest-arrow arrow"></span>}
-					{guest.username !== "" && `${guest.username} (guest)`}
-					{guest.username === "" && <div className="parpadeo">{"Waiting for a guest..."}</div>}
+				<div className="winner">
+					{<div>{winner()}</div>}
 				</div>
-			</div>
-			<div className="damage-count">
-				<div className="host-damage-count">
-					<div>{host.username === userTurn.username && selectedWord(selection)}</div>
-					<div className="daño">{host.username === userTurn.username && daño()}</div>
-					
-				</div>
-				<div className="guest-damage-count">
-					<div>{guest.username === userTurn.username && selectedWord(selection)}</div>
-					{<div className="daño">{guest.username === userTurn.username && daño()}</div>}
-				</div>
-			</div>
-			<div className="winner">
-				{<div>{winner()}</div>}
-			</div>
-			{!startForm && <div className="playground">
-				<div className='grid'>
-					<span id='col-1' className='col'>
-						{loadColumn(1)}
-					</span>
-					<span id='col-2' className='col'>
-						{loadColumn(2)}
-					</span>
-					<span id='col-3' className='col'>
-						{loadColumn(3)}
-					</span>
-					<span id='col-4' className='col'>
-						{loadColumn(4)}
-					</span>
-					<span id='col-5' className='col'>
-						{loadColumn(5)}
-					</span>
-					<span id='col-6' className='col'>
-						{loadColumn(6)}
-					</span>
-					{/* <span id='col-7' className='col'>
-						{loadColumn(7)}
-					</span>
-					<span id='col-8' className='col'>
-						{loadColumn(8)}
-					</span> */}
-				</div>
-				<div className="playground-actions">
-					<div className="playground-button" onClick={(userTurn.username === user.username) && !(definitions[0].definitions === "no word found") && (selection && selection.length >=2) ? send : doNothing}>SEND</div>
-					<div className="playground-button" onClick={userTurn.username === user.username? cancel : doNothing}>CANCEL</div>
-					{winner() && <div className="playground-button" onClick={nextRound}>NEXT ROUND</div>}
-				</div>
-				<div className="playground-result">
-					<div className="formed-word">{selectedWord(selection)}</div>
-					<div className="definitions">
-						{selection && loadDefinitions(definitions)}
+				<div className="playground">
+					<div className='grid'>
+						<span id='col-1' className='col'>
+							{loadColumn(1)}
+						</span>
+						<span id='col-2' className='col'>
+							{loadColumn(2)}
+						</span>
+						<span id='col-3' className='col'>
+							{loadColumn(3)}
+						</span>
+						<span id='col-4' className='col'>
+							{loadColumn(4)}
+						</span>
+						<span id='col-5' className='col'>
+							{loadColumn(5)}
+						</span>
+						<span id='col-6' className='col'>
+							{loadColumn(6)}
+						</span>
+						{/* <span id='col-7' className='col'>
+							{loadColumn(7)}
+						</span>
+						<span id='col-8' className='col'>
+							{loadColumn(8)}
+						</span> */}
+					</div>
+					<div className="playground-actions">
+						<div className="playground-button" onClick={(userTurn.username === user.username) && !(definitions[0].definitions === "no word found") && (selection && selection.length >=2) ? send : doNothing}>SEND</div>
+						<div className="playground-button" onClick={userTurn.username === user.username? cancel : doNothing}>CANCEL</div>
+						{winner() && <div className="playground-button" onClick={nextRound}>NEXT ROUND</div>}
+					</div>
+					<div className="playground-result">
+						<div className="formed-word">{selectedWord(selection)}</div>
+						<div className="definitions">
+							{selection && loadDefinitions(definitions)}
+						</div>
 					</div>
 				</div>
 			</div>}
