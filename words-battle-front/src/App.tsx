@@ -506,7 +506,7 @@ function App() {
 	};
 	
 	return (
-		<div className="App">
+		<div className="App scanlines">
 			{startForm && <div className='start-form-container'>
 				<StartForm user={user} joinRoom={joinRoom} createRoom={createRoom} setUser={setUser} setRoom={setRoom}/>
 			</div>}
