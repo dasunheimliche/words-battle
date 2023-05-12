@@ -541,18 +541,21 @@ function App() {
 				</div>
 			</div>
 			<div className="damage-count">
-				<div className="host-damage-count">
+				{!winner() && <div className="host-damage-count">
 					<div>{host.username === userTurn.username && selectedWord(selection)}</div>
 					<div className="daño">{host.username === userTurn.username && daño()}</div>
-				</div>
-				<div className="guest-damage-count">
+				</div>}
+				{!winner() && <div className="guest-damage-count">
 					<div>{guest.username === userTurn.username && selectedWord(selection)}</div>
 					{<div className="daño">{guest.username === userTurn.username && daño()}</div>}
-				</div>
+				</div>}
+				{winner() && <div className="winner">
+					{<div>{winner()}</div>}
+				</div>}
 			</div>
-			<div className="winner">
+			{/* <div className="winner">
 				{<div>{winner()}</div>}
-			</div>
+			</div> */}
 			<div className="playground">
 				<div className='grid'>
 					<span id='col-1' className='col'>
