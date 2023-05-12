@@ -537,7 +537,7 @@ function App() {
 				<div className={"name guest-name"}>
 					{guest.username === userTurn.username && <span className="guest-arrow arrow"></span>}
 					{guest.username !== "" && `${guest.username} (guest)`}
-					{guest.username === "" && <div className="parpadeo">{"Waiting for a guest..."}</div>}
+					{guest.username === "" && <div className="waiting parpadeo">{"Waiting for a guest..."}</div>}
 				</div>
 			</div>
 			<div className="damage-count">

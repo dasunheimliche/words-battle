@@ -940,11 +940,17 @@
         justify-content: flex-start;
     }
 
+    .room-panel {
+        font-size: 19px;
+    }
+
     .player-health {
         height: 100%;
         position: relative;
     
     }
+
+    
 
     .playground {
         /* outline: 1px solid blue; */
@@ -1001,7 +1007,7 @@
         position: relative;
         border-radius: 7px;
 
-        height: calc(100dvh - 520px);
+        height: calc(100dvh - 530px);
         max-height: 300px;
     }
 
