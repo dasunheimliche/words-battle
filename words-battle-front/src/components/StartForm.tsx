@@ -20,7 +20,7 @@ type Mode = "join" | "create";
 
 const StartForm = ({user, joinRoom, createRoom, setUser, setRoom}: Props)=> {
 
-	let woke;
+	let woke = true;
 	if (typeof window !== "undefined" && sessionStorage.getItem('sleep')) {
 		const isWoke = sessionStorage.getItem('sleep');
 		if (isWoke) {
@@ -45,13 +45,13 @@ const StartForm = ({user, joinRoom, createRoom, setUser, setRoom}: Props)=> {
 			.catch(error => console.error('Error al despertar el servidor:', error));
 	}, []);
 
-	const wakeUpServer = async()=> {
-		await axios.get('https://words-battle-api.onrender.com/despertar')
-			.then(_response => {
-				setSleep(false);
-			})
-			.catch(error => console.error('Error al despertar el servidor:', error));
-	};
+	// const wakeUpServer = async()=> {
+	// 	await axios.get('https://words-battle-api.onrender.com/despertar')
+	// 		.then(_response => {
+	// 			setSleep(false);
+	// 		})
+	// 		.catch(error => console.error('Error al despertar el servidor:', error));
+	// };
 
 	return (
 		<form className={style['start-form']}>
@@ -70,7 +70,7 @@ const StartForm = ({user, joinRoom, createRoom, setUser, setRoom}: Props)=> {
 			{mode === "join" && <button type='submit' onClick={joinRoom}>JOIN ROOM</button>}
 			{sleep === false && <div className={style.message}>Server is awake!</div>}
 			{sleep === true && <div className={style.message}>Sorry, free host, server is sleeping. Wake it up!</div>}
-			{sleep === true && <button type='button' onClick={wakeUpServer}>WAKE UP!</button>}
+			{/* {sleep === true && <button type='button' onClick={wakeUpServer}>WAKE UP!</button>} */}
 		</form>
 	);
 };
