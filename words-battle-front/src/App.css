@@ -121,6 +121,7 @@
 /* ROOM PANEL */
 
 .room-panel {
+    position: relative;
 
     display: flex;
     gap: 50px;
@@ -141,6 +142,20 @@
 .room-panel:nth-child(2) {
     -webkit-user-select: text;
     user-select: text;
+}
+
+.close {
+    /* outline: 1px solid red; */
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    color: rgb(151,87,87);
+    font-weight: bolder;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    cursor: pointer;
 }
 
 /* SESSION PANEL */

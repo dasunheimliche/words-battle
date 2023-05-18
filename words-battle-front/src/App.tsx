@@ -506,6 +506,10 @@ function App() {
 		if (guest.health <= 0) return (<div>{`${host.username} wins!`}</div>);
 		return undefined;
 	};
+
+	const reload = ()=> {
+		location.reload();
+	};
 	
 	return (
 		<div className={"App scanlines"}>
@@ -515,6 +519,7 @@ function App() {
 
 			<div className="room-panel">
 				<span>HOST: {host.username}</span><span>ROOM: {room}</span>
+				<span className="close" onClick={reload}>EXIT</span>
 			</div>
 			<div className="versus-panel">
 				<div id="host" className="player-panel">
