@@ -158,9 +158,6 @@ app.post('/search', async(req, res)=> {
         return res.json([{definitions: "no word found", id: "error"}])
     }
 
-    
-
-
     // axios.get(`https://www.wordreference.com/definicion/${wordId}`,{headers: {"Access-Control-Allow-Origin": "http://127.0.0.1:5173"}})
     //     .then(result => {
     //         const html = result.data;

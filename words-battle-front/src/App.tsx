@@ -83,17 +83,6 @@ function App() {
 	
 	/** CONSOLE LOGS */
 
-	// console.log("=============================");
-
-	// console.log("HOST", host);
-	// console.log("GUEST", guest);
-
-	// console.log("USER TURN", userTurn);
-	// console.log("SELECTION", selection);
-	// console.log("DEFINITIOS", definitions);
-
-	// console.log("=============================");
-
 	/** USE EFFECTS */
 
 
@@ -121,7 +110,8 @@ function App() {
 			const lines = wordTextList.split('\n');
 			const words = lines.map((line:string) => {
 				const word = line.split('\t')[0].trim();
-				return word;
+				const normalized = word.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+				return normalized;
 			});
 
 			filteredWords = words.filter((word:string) => word !== "");
