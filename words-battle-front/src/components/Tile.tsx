@@ -1,4 +1,4 @@
-import React,{ useEffect} from 'react';
+import React,{ useEffect, Dispatch} from 'react';
 import { Socket  as SocketType} from 'socket.io-client';
 import {useState} from 'react';
 
@@ -13,19 +13,24 @@ interface TileProps {
     tilePosition: Position,
     lastPosition: Position,
     selection: Position[] | undefined,
-    setSelectionAndEmit: (selection: Position[], user: User, room: string, socket: SocketType) => void,
     char:string,
-    setLastPositionAndEmit: (position: Position, user: User, room: string, socket: SocketType) => void,
 	state: boolean,
-	setStateAndEmit: (state: boolean, user: User, room: string, socket: SocketType) => void,
 	socket: SocketType,
 	user: User,
 	room: string,
 	userTurn: User,
-	guest: User
+	guest: User,
+
+	setSelection: Dispatch<Position[] | undefined>,
+	setState: Dispatch<boolean>,
+	setLastPosition: Dispatch<Position>,
+	setSelectionAndEmit: (selection: Position[], user: User, room: string, socket: SocketType, setSelection: Dispatch<Position[] | undefined>) => void,
+    setLastPositionAndEmit: (position: Position, user: User, room: string, socket: SocketType, setLastPosition: Dispatch<Position>) => void,
+	setStateAndEmit: (state: boolean, user: User, room: string, socket: SocketType, setState: Dispatch<boolean>) => void
+
 }
 
-const Tile = ({guest, tilePosition, lastPosition, setLastPositionAndEmit, char, selection, setSelectionAndEmit, state, setStateAndEmit, socket, user, userTurn, room}: TileProps)=> {
+const Tile = ({guest, tilePosition, lastPosition, setLastPosition, setLastPositionAndEmit, char, selection, setSelection, setSelectionAndEmit, state, setState, setStateAndEmit, socket, user, userTurn, room}: TileProps)=> {
 	const [position] = useState<Position>(tilePosition);
 	const [check, setCheck] = useState<boolean>(false);
 
@@ -59,13 +64,13 @@ const Tile = ({guest, tilePosition, lastPosition, setLastPositionAndEmit, char, 
 
 		if ((lastPosition[0] === -1 && lastPosition[1] === -1)) {
 			console.log("CLICKEABLE");
-			setLastPositionAndEmit(tilePosition, user, room, socket);
+			setLastPositionAndEmit(tilePosition, user, room, socket, setLastPosition);
 			setCheckAndEmit(true, socket, position, user, room);
-			setStateAndEmit(true, user, room, socket);
+			setStateAndEmit(true, user, room, socket, setState);
 			if (selection) {
-				setSelectionAndEmit([...selection, tilePosition], user, room, socket);
+				setSelectionAndEmit([...selection, tilePosition], user, room, socket, setSelection);
 			} else {
-				setSelectionAndEmit([tilePosition], user, room, socket);
+				setSelectionAndEmit([tilePosition], user, room, socket, setSelection);
 			}
 			return;
 		}
@@ -74,13 +79,13 @@ const Tile = ({guest, tilePosition, lastPosition, setLastPositionAndEmit, char, 
 			return;
 		}
 
-		setLastPositionAndEmit(tilePosition, user, room, socket);
+		setLastPositionAndEmit(tilePosition, user, room, socket, setLastPosition);
 		setCheckAndEmit(true, socket, position, user, room);
-		setStateAndEmit(true, user, room, socket);
+		setStateAndEmit(true, user, room, socket, setState);
 		if (selection) {
-			setSelectionAndEmit([...selection, tilePosition], user, room, socket);
+			setSelectionAndEmit([...selection, tilePosition], user, room, socket, setSelection);
 		} else {
-			setSelectionAndEmit([tilePosition], user, room, socket);
+			setSelectionAndEmit([tilePosition], user, room, socket, setSelection);
 		}
         
 	};
