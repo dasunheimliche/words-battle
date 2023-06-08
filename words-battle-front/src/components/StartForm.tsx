@@ -31,8 +31,6 @@ const StartForm = ({user, joinRoom, createRoom, setUser, setRoom}: Props)=> {
 		}
 	}
 
-	console.log("SLEPT?", woke);
-
 	const [mode, setMode] = useState<Mode>("create");
 	const [sleep, setSleep] = useState<boolean>(woke);
 

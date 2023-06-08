@@ -66,7 +66,6 @@ function App() {
 						if (!res) {
 							return;
 						}
-						console.log("DEFS", res);
 						setBlock(false);
 						setDefinitions(res);
 					});
@@ -123,7 +122,6 @@ function App() {
 		});
 
 		socket.on("next round", () => {
-			console.log("NEXT ROUND USE EFFECT");
 			setHost({...host, health:100});
 			setGuest({...guest, health:100});
 
@@ -146,7 +144,6 @@ function App() {
 				setUserTurn(payload.userTurn);
 			});
 			socket.off("setHost", payload=> {
-				console.log("PAYLOAD SETHOST", payload);
 				setHost(payload.host);
 			});
 			socket.off("hit host", damage => {
@@ -166,7 +163,6 @@ function App() {
 				}
 			});
 			socket.off("next round", () => {
-				console.log("NEXT ROUND USE EFFECT");
 				setHost({...host, health:100});
 				setGuest({...guest, health:100});
 
