@@ -1,13 +1,13 @@
 import React from "react";
 import { User } from "../types/types";
+import { reload } from "../utils/functions";
 
 interface RoomPanelProps {
     host: User
-    reload: ()=>void
     room: string
 }
 
-const RoomPanel = ({host, reload, room} : RoomPanelProps)=> {
+const RoomPanel = ({host, room} : RoomPanelProps)=> {
 
 	return(
 		<div className="room-panel">

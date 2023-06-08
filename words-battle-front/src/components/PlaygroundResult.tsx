@@ -1,4 +1,5 @@
 import React from "react";
+import { loadDefinitions } from "../utils/functions";
 import { Position, Board } from "../types/types";
 
 interface PlaygroundResultProps {
@@ -6,13 +7,9 @@ interface PlaygroundResultProps {
     selection: Position[] | undefined
     board: Board
     definitions: ({definitions: string, id:string})[]
-    loadDefinitions: (defs: ({
-        definitions: string;
-        id: string;
-    })[]) => JSX.Element[]
 }
 
-const PlaygroundResult = ({selectedWord, selection, board, definitions, loadDefinitions} : PlaygroundResultProps)=> {
+const PlaygroundResult = ({selectedWord, selection, board, definitions } : PlaygroundResultProps)=> {
 
 	return(
 		<div className="playground-result">

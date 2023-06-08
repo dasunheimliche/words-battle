@@ -1,5 +1,7 @@
 import React from "react";
+import { winner, selectedWord, daño } from "../utils/functions";
 import { Position, User, Board } from "../types/types";
+import { damages } from "../utils/variables";
 
 interface DamageCountProps {
     host: User
@@ -7,13 +9,9 @@ interface DamageCountProps {
     userTurn: User
     selection: Position[] | undefined
     board: Board
-    damages: Record<string, number>
-    selectedWord: (selection: Position[] | undefined, board: Board) => string
-    winner: (host: User, guest: User) => JSX.Element | undefined
-    daño: (selection: Position[] | undefined, board: Board, damages: Record<string, number>) => number | undefined
 }
 
-const DamageCountPanel = ({host, guest, userTurn, selection, board, damages, winner, daño, selectedWord} : DamageCountProps)=> {
+const DamageCountPanel = ({host, guest, userTurn, selection, board } : DamageCountProps)=> {
 
 	return(
 		<div className="damage-count">

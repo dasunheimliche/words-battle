@@ -1,4 +1,5 @@
 import React from "react";
+import { doNothing, winner } from "../utils/functions";
 import { User, Position } from "../types/types";
 
 interface PlaygroundActionsProps {
@@ -9,13 +10,11 @@ interface PlaygroundActionsProps {
     definitions: ({definitions: string, id:string})[]
     selection: Position[] | undefined
     nextRound: () => void
-    winner: (host: User, guest: User) => JSX.Element | undefined
-    doNothing: () => void
     send: () => void
     cancel: () => void
 }
 
-const PlaygroundActions = ({host, guest, user, userTurn, definitions, selection, nextRound, winner, doNothing, send, cancel} : PlaygroundActionsProps)=> {
+const PlaygroundActions = ({host, guest, user, userTurn, definitions, selection, nextRound, send, cancel} : PlaygroundActionsProps)=> {
 
 	return(
 		<div className="playground-actions">

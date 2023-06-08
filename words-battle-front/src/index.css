@@ -43,8 +43,6 @@
 /* -------------------------------------------- */
 
 body {
-  /* outline: 1px solid blue;
-  outline-offset: -1px; */
   margin: 0;
   padding: 0;
   height: 100dvh;
@@ -55,7 +53,6 @@ body {
   align-items: center;
   position: relative;
 
-  /* background-color: rgb(19,27,30); */
   background-color: rgb(102,119,95);
   background-color: rgb(14,14,14);
 

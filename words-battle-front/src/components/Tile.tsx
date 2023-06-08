@@ -1,13 +1,6 @@
-import React,{ useEffect, Dispatch} from 'react';
+import React,{ useEffect, Dispatch, useState} from 'react';
+import { Position, User } from '../types/types';
 import { Socket  as SocketType} from 'socket.io-client';
-import {useState} from 'react';
-
-type Position = [number, number];
-interface User {
-	username: string,
-	color: string,
-	health: number,
-}
 
 interface TileProps {
     tilePosition: Position,
@@ -63,7 +56,6 @@ const Tile = ({guest, tilePosition, lastPosition, setLastPosition, setLastPositi
 	const handleNewPosition = ():React.MouseEventHandler<HTMLDivElement> | undefined => {
 
 		if ((lastPosition[0] === -1 && lastPosition[1] === -1)) {
-			console.log("CLICKEABLE");
 			setLastPositionAndEmit(tilePosition, user, room, socket, setLastPosition);
 			setCheckAndEmit(true, socket, position, user, room);
 			setStateAndEmit(true, user, room, socket, setState);
@@ -95,10 +87,8 @@ const Tile = ({guest, tilePosition, lastPosition, setLastPosition, setLastPositi
 		}
 
 		if ((position[0] <= lastPosition[0]+1 && position[0] >= lastPosition[0] - 1) && (position[1] <= lastPosition[1] + 1 && position[1] >= lastPosition[1] - 1)) {
-			console.log("CLICKEABLE");
 			return true;
 		}
-		console.log("NOT CLICKEABLE");
 		return false;
 	};
 	const doNothing = ()=> {

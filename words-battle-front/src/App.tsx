@@ -1,37 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
-import {setLastPositionAndEmit, setStateAndEmit, setSelectionAndEmit, setBoardAndEmit, setUserTurnAndEmit, hitHost, hitGuest} from '../src/utils/emiting';
-import { daño, winner, reload, doNothing, getRandomLetter, loadDefinitions, selectedWord, searchDefs} from '../src/utils/functions';
-import { letters, damages, grid } from './utils/variables';
+import { 
+	setLastPositionAndEmit, 
+	setStateAndEmit, 
+	setSelectionAndEmit, 
+	setBoardAndEmit, 
+	setUserTurnAndEmit, 
+	hitHost, 
+	hitGuest 
+} from '../src/utils/emiting';
 
-import RoomPanel from './components/RoomPanel';
-import VersusPanel from './components/VersusPanel';
-import Tile from './components/Tile';
-import StartForm from './components/StartForm';
+import { getRandomLetter, selectedWord, searchDefs} from '../src/utils/functions';
+import { letters, damages, grid } from './utils/variables';
+import { Position, Board, User, Definitions } from './types/types';
+
+import RoomPanel         from './components/RoomPanel';
+import VersusPanel       from './components/VersusPanel';
+import Tile              from './components/Tile';
+import StartForm         from './components/StartForm';
+import NamesPanel        from './components/NamesPanel';
+import DamageCountPanel  from './components/DamageCountPanel';
+import Grid              from './components/Grid';
+import PlaygroundActions from './components/PlaygroundActions';
+import PlaygroundResult  from './components/PlaygroundResult';
 
 import "./App.css";
-import NamesPanel from './components/NamesPanel';
-import DamageCountPanel from './components/DamageCountPanel';
-import Grid from './components/Grid';
-import PlaygroundActions from './components/PlaygroundActions';
-import PlaygroundResult from './components/PlaygroundResult';
-
-type Position = [number, number];
-type Board = string[][];
 
 // const socket = io("http://localhost:4000");
 const socket = io("https://words-battle-api.onrender.com");
 
-interface User {
-	username: string,
-	color: string,
-	health: number
-}
-
 function App() {
 	
-	// SHARED STATES
+	//** SHARED STATES
 	const [lastPosition, setLastPosition] = useState<Position>([-1,-1]);
 	const [board,        setBoard]        = useState<Board>(grid);
 	const [selection,    setSelection]    = useState<Position[] | undefined>(undefined);
@@ -41,13 +42,13 @@ function App() {
 	const [host,         setHost]         = useState<User>({username: "", color:"", health: 0});
 	const [guest,        setGuest]        = useState<User>({username: "", color:"", health: 0});
 
-	// LOCAL STATES
+	//** LOCAL STATES
 	const [user,         setUser]         = useState<User>({username: "", color: "", health:0});
 	const [startForm,    setStartForm]    = useState<boolean>(true);
 	const [block,        setBlock]        = useState<boolean>(false);
-	const [definitions,  setDefinitions]  = useState<({definitions: string, id:string})[]>([{definitions:"", id: ""}]);
+	const [definitions,  setDefinitions]  = useState<Definitions>([{definitions:"", id: ""}]);
 	
-	/* USE EFFECTS */
+	//** USE EFFECTS
 
 	useEffect(()=> {
 		setDefinitions([{definitions:"", id: ""}]);
@@ -215,10 +216,13 @@ function App() {
 		window.scrollTo({top: 0, left: 0});
 	}, [startForm]);
 
-	/** FUNCIONES */
+	//** FUNCIONES
 
 	const joinRoom = (e:React.MouseEvent<HTMLButtonElement>)=> {
 		e.preventDefault();
+		if (room.length <= 0 || user.username.length <= 0) {
+			return;
+		}
 		if (userTurn.color === "") {
 			setUserTurn({...userTurn, color: "lightgreen"});
 		}
@@ -228,8 +232,11 @@ function App() {
 		socket.emit("join room", {user, room, userTurn});
 	};
 	const createRoom = async(e:React.MouseEvent<HTMLButtonElement>)=> {
-		socket.emit("create room", {user, room, userTurn});
 		e.preventDefault();
+		if (room.length <= 0 || user.username.length <= 0) {
+			return;
+		}
+		socket.emit("create room", {user, room, userTurn});
 	};
 	const initializeBoard = ()=> {
 
@@ -290,48 +297,39 @@ function App() {
 	} else {
 		return (
 			<div className={"App scanlines"}>
-				{startForm && <StartForm user={user} joinRoom={joinRoom} createRoom={createRoom} setUser={setUser} setRoom={setRoom}/>}
-	
-				<RoomPanel   host={host} reload={reload} room={room} />
+				<RoomPanel   host={host} room={room} />
 				<VersusPanel host={host} guest={guest} />
 				<NamesPanel  host={host} guest={guest} userTurn={userTurn} />
 				<DamageCountPanel 
-					host={host} 
-					guest={guest} 
-					userTurn={userTurn} 
-					selection={selection} 
-					board={board} 
-					damages={damages} 
-					selectedWord={selectedWord} 
-					winner={winner} 
-					daño={daño} />
+					host      = {host} 
+					guest     = {guest} 
+					userTurn  = {userTurn} 
+					selection = {selection} 
+					board     = {board}  
+				/>
 	
 				<div className="playground">
 					<Grid loadColumn={loadColumn} />
 					<PlaygroundActions 
-						host={host} 
-						guest={guest} 
-						user={user} 
-						userTurn={userTurn} 
-						definitions={definitions} 
-						selection={selection} 
-						nextRound={nextRound} 
-						winner={winner} 
-						doNothing={doNothing} 
-						send={send} 
-						cancel={cancel} />
+						host        = {host} 
+						guest       = {guest} 
+						user        = {user} 
+						userTurn    = {userTurn} 
+						definitions = {definitions} 
+						selection   = {selection} 
+						nextRound   = {nextRound} 
+						send        = {send} 
+						cancel      = {cancel} />
 					<PlaygroundResult 
-						selectedWord={selectedWord} 
-						selection={selection} 
-						board={board} 
-						definitions={definitions} 
-						loadDefinitions={loadDefinitions} />
+						selectedWord = {selectedWord} 
+						selection    = {selection} 
+						board        = {board} 
+						definitions  = {definitions} 
+					/>
 				</div>
-	
 			</div>
 		);
 	}
-
 }
 
 export default App;

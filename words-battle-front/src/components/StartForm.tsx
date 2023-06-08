@@ -68,7 +68,7 @@ const StartForm = ({user, joinRoom, createRoom, setUser, setRoom}: Props)=> {
 					<input type="text" placeholder='room' onChange={e=>setRoom(e.target.value)} required/>
 				</div>
 				{mode === "create" && <button type='submit' onClick={sleep === false? createRoom : undefined}>CREATE ROOM</button>}
-				{mode === "join" && <button type='submit' onClick={joinRoom}>JOIN ROOM</button>}
+				{mode === "join" && <button type='submit' onClick={sleep === false? joinRoom : undefined}>JOIN ROOM</button>}
 				{sleep === false && <div className={style.message}>Server is awake!</div>}
 				{sleep === true && <div className={style.message}><span>Sorry, free host, server is sleeping.</span><span>Wait a few seconds...</span></div>}
 			</form>
