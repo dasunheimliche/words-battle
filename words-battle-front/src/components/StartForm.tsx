@@ -43,14 +43,6 @@ const StartForm = ({user, joinRoom, createRoom, setUser, setRoom}: Props)=> {
 			.catch(error => console.error('Error al despertar el servidor:', error));
 	}, []);
 
-	// const wakeUpServer = async()=> {
-	// 	await axios.get('https://words-battle-api.onrender.com/despertar')
-	// 		.then(_response => {
-	// 			setSleep(false);
-	// 		})
-	// 		.catch(error => console.error('Error al despertar el servidor:', error));
-	// };
-
 	return (
 		<div className='start-form-container' >
 			<form className={style['start-form']}>

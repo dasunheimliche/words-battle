@@ -54,10 +54,6 @@ function App() {
 		setDefinitions([{definitions:"", id: ""}]);
 		if (selection) {
 			setBlock(true);
-			let word = "";
-			for (let i=0; i < selection.length; i++) {
-				word = word + board[selection[i][1]][selection[i][0]];
-			}
 
 			const delayDebounceFn = setTimeout(()=> {
 
@@ -69,14 +65,6 @@ function App() {
 						setBlock(false);
 						setDefinitions(res);
 					});
-
-				// axios.post("https://words-battle-api.onrender.com/search", {word})
-				// 	.then(res => {
-				// 		console.log("RES", res);
-				// 		setBlock(false);
-				// 		setDefinitions(res.data);
-				// 		console.log(res.data);
-				// 	});
 			}, 500);
 
 			return ()=> clearTimeout(delayDebounceFn);
@@ -216,9 +204,8 @@ function App() {
 
 	const joinRoom = (e:React.MouseEvent<HTMLButtonElement>)=> {
 		e.preventDefault();
-		if (room.length <= 0 || user.username.length <= 0) {
-			return;
-		}
+		if (room.length <= 0 || user.username.length <= 0) return;
+		
 		if (userTurn.color === "") {
 			setUserTurn({...userTurn, color: "lightgreen"});
 		}
@@ -229,9 +216,8 @@ function App() {
 	};
 	const createRoom = async(e:React.MouseEvent<HTMLButtonElement>)=> {
 		e.preventDefault();
-		if (room.length <= 0 || user.username.length <= 0) {
-			return;
-		}
+		if (room.length <= 0 || user.username.length <= 0) return;
+		
 		socket.emit("create room", {user, room, userTurn});
 	};
 	const initializeBoard = ()=> {
@@ -260,9 +246,8 @@ function App() {
 	};
 	const send = ()=> {
 
-		if (block === true) {
-			return;
-		}
+		if (block === true) return;
+		
 
 		setDefinitions([{definitions:"", id: ""}]);
 		cancel();

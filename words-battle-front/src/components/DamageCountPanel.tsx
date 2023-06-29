@@ -12,16 +12,17 @@ interface DamageCountProps {
 }
 
 const DamageCountPanel = ({host, guest, userTurn, selection, board } : DamageCountProps)=> {
+	console.log("UESR TURN DAMAGE COUNT PANEL",userTurn, selection);
 
 	return(
 		<div className="damage-count">
 			{!winner(host, guest) && <div className="host-damage-count">
-				<div>{host.username === userTurn.username && selectedWord(selection, board)}</div>
-				<div className="daño">{host.username === userTurn.username && daño(selection, board, damages)}</div>
+				<div>{guest.username !== userTurn.username && selectedWord(selection, board)}</div>
+				<div className="daño">{guest.username !== userTurn.username && daño(selection, board, damages)}</div>
 			</div>}
 			{!winner(host, guest) && <div className="guest-damage-count">
 				<div>{guest.username === userTurn.username && selectedWord(selection, board)}</div>
-				{<div className="daño">{guest.username === userTurn.username && daño(selection, board, damages)}</div>}
+				<div className="daño">{guest.username === userTurn.username && daño(selection, board, damages)}</div>
 			</div>}
 			{winner(host, guest) && <div className="winner">
 				{<div>{winner(host, guest)}</div>}
