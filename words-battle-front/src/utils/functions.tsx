@@ -11,8 +11,8 @@ export const daño = (selection: Position[] | undefined, board: Board, damages:R
 
 export const winner = (host: User, guest: User)=> {
 	if (!host.username || !guest.username) return undefined;
-	if (host.health <= 0) return (<div>{`${guest.username} wins!`}</div>);
-	if (guest.health <= 0) return (<div>{`${host.username} wins!`}</div>);
+	if (host.health <= 0) return `${guest.username} wins!`;
+	if (guest.health <= 0) return `${host.username} wins!`;
 	return undefined;
 };
 
@@ -79,3 +79,18 @@ export const searchDefs = async(selection: Position[] | undefined, board: Board,
 	}
 
 };
+
+export function isServerSleeping() {
+
+	if (!(typeof window !== "undefined" && sessionStorage.getItem('sleep'))) return true;
+
+	const sleep = sessionStorage.getItem('sleep');
+
+	if (sleep === "false") {
+		return false;
+	}
+	else if (sleep === "true") {
+		return true;
+	}
+	
+}

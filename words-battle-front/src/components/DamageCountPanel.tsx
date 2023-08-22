@@ -12,21 +12,30 @@ interface DamageCountProps {
 }
 
 const DamageCountPanel = ({host, guest, userTurn, selection, board } : DamageCountProps)=> {
-	console.log("UESR TURN DAMAGE COUNT PANEL",userTurn, selection);
+
+	const sessionWinner : string | undefined = winner(host,guest);
+	const isGuestTurn = guest.username === userTurn.username;
+	const isHostTurn = guest.username !== userTurn.username;
 
 	return(
 		<div className="damage-count">
-			{!winner(host, guest) && <div className="host-damage-count">
-				<div>{guest.username !== userTurn.username && selectedWord(selection, board)}</div>
-				<div className="daño">{guest.username !== userTurn.username && daño(selection, board, damages)}</div>
-			</div>}
-			{!winner(host, guest) && <div className="guest-damage-count">
-				<div>{guest.username === userTurn.username && selectedWord(selection, board)}</div>
-				<div className="daño">{guest.username === userTurn.username && daño(selection, board, damages)}</div>
-			</div>}
-			{winner(host, guest) && <div className="winner">
-				{<div>{winner(host, guest)}</div>}
-			</div>}
+			{!sessionWinner && 
+				<div className="host-damage-count">
+					<div>{isHostTurn && selectedWord(selection, board)}</div>
+					<div className="daño">{isHostTurn && daño(selection, board, damages)}</div>
+				</div>
+			}
+			{!sessionWinner && 
+				<div className="guest-damage-count">
+					<div>{isGuestTurn && selectedWord(selection, board)}</div>
+					<div className="daño">{isGuestTurn && daño(selection, board, damages)}</div>
+				</div>
+			}
+			{sessionWinner && 
+				<div className="winner">
+					{<div>{sessionWinner}</div>}
+				</div>
+			}
 		</div>
 	);
 };

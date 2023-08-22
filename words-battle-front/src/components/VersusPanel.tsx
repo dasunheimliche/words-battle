@@ -1,25 +1,24 @@
 import React from "react";
-import { User } from "../types/types";
 
 interface VersusPanelProps {
-    host: User
-    guest: User
+    hostHealth: number
+    guestHealth: number
 }
 
-const VersusPanel = ({host, guest} : VersusPanelProps)=> {
+const VersusPanel = ({hostHealth, guestHealth} : VersusPanelProps)=> {
 
 	return(
 		<div className="versus-panel">
 			<div id="host" className="player-panel">
 				<div className="player-health host-health">
-					<div className="host-counter">{`${host.health}/100`}</div>
-					<div style={{width: `${((100 - host.health)*100)/100}%`}} className="health-red"></div>
+					<div className="host-counter">{`${hostHealth}/100`}</div>
+					<div style={{width: `${((100 - hostHealth)*100)/100}%`}} className="health-red"></div>
 				</div>
 			</div>
 			<div id="guest" className="player-panel">
 				<div className="player-health guest-health">
-					<div className="guest-counter">{`${guest.health}/100`}</div>
-					<div style={{width: `${((100 - guest.health)*100)/100}%`}} className="health-red"></div>
+					<div className="guest-counter">{`${guestHealth}/100`}</div>
+					<div style={{width: `${((100 - guestHealth)*100)/100}%`}} className="health-red"></div>
 				</div>
 			</div>
 		</div>

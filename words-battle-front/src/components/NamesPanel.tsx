@@ -9,15 +9,20 @@ interface NamesPanelProps {
 
 const NamesPanel = ({host, guest, userTurn} : NamesPanelProps)=> {
 
+	const isHostTurn = ((host.username === userTurn.username) || (userTurn.username === ""));
+	const isGuestTurn = guest.username === userTurn.username;
+
+	const guestExists = guest.username !== "";
+
 	return(
 		<div className={"names"}>
 			<div className={"name host-name"}>{host.username} (host)
-				{((host.username === userTurn.username) || (userTurn.username === "")) && <span className="host-arrow arrow"></span>}
+				{isHostTurn && <span className="host-arrow arrow"></span>}
 			</div>
 			<div className={"name guest-name"}>
-				{guest.username === userTurn.username && <span className="guest-arrow arrow"></span>}
-				{guest.username !== "" && `${guest.username} (guest)`}
-				{guest.username === "" && <div className="waiting parpadeo">{"Waiting for a guest..."}</div>}
+				{isGuestTurn && <span className="guest-arrow arrow"></span>}
+				{guestExists && `${guest.username} (guest)`}
+				{!guestExists && <div className="waiting parpadeo">{"Waiting for a guest..."}</div>}
 			</div>
 		</div>
 	);

@@ -11,59 +11,74 @@
     }
 }
 
-.container {
-    background-color: rgb(19,27,30);
+.start-form-background {
+    z-index: 10;
     position: absolute;
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    top: 0px;
+    left: 0px;
 
-    width: 100vw;
-    height: 100dvh;
+    width: 100%;
+    height: 100%;
+    
+    background-color: rgb(12, 18, 19);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .start-form {
-    
-    color: rgb(77,118,88);
-    border-radius: 5px;
     display: flex;
+
+    width: 21.87rem;
+    
+    border-radius: 0.31rem;
+    
+    
+    font-family: 'VT323', monospace;
+    color: rgb(77,118,88);
+
     flex-direction: column;
     align-items: center;
-    gap: 15px;
-
-    font-family: 'VT323', monospace;
+    gap: 0.94rem;
 
     animation: terminal-blink 0.5s;
     animation-fill-mode: forwards;
+
     opacity: 0;
 
 }
 
 .title {
-    font-size: 51px;
-    margin-bottom: 23px;
+    width: 100%;
+    font-size: 3.19rem;
+    margin-bottom: 1.44rem;
+
+    text-align: center;
 }
 
 .options {
+    width: 100%;
     display: flex;
-    font-size: 23px;
-    margin-bottom: 25px;
+    justify-content: center;
+    font-size: 1.44rem;
+    margin-bottom: 1.56rem;
 }
 
 .option {
-    border-bottom: 3px solid rgb(77,118,88);
-    width: 200px;
+    border-bottom: 0.19rem solid rgb(77,118,88);
+    width: 50%;
 
     display: flex;
     justify-content: center;
-    padding-bottom: 10px;
+    padding-bottom: 0.62rem;
 
     cursor: pointer;
 }
 
 .selected {
-    border-bottom: 3px solid rgb(128, 195, 146);
+    border-bottom: 0.19rem solid rgb(128, 195, 146);
 }
 
 .inputs {
@@ -74,203 +89,76 @@
 
 .inputs input {
     all: unset;
-    border-bottom: 2px solid rgb(77,118,88);
-    margin-bottom: 25px;
-    height: 55px;
+    border-bottom: 0.12rem solid rgb(77,118,88);
+    margin-bottom: 1.56rem;
+    height: 3.44rem;
 
-    font-size: 23px;
+    font-size: 0.81rem;
+
+    color: rgb(106, 116, 109);
 }
 
 .inputs label {
+    color: rgb(58, 112, 73);
     font-family: 'Montserrat', sans-serif;;
-    font-size: 10px;
+    font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 1px;
+
+    display: flex;
+    flex-direction: column;
 }
 
 button {
     all: unset;
-    width: calc(100% - 6px);
+    width: calc(100% - 0.37rem);
+
     cursor: pointer;
     display: flex;
     justify-content: center;
 
-    border: 3px solid rgb(77,118,88);
-    font-size: 22px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    /* border-style: double; */
-    border-radius: 20px;
+    border: 0.19rem solid rgb(77,118,88);
+    font-size: 1.37rem;
+    padding-top: 0.62rem;
+    padding-bottom: 0.62rem;
+    border-radius: 1.25rem;
 }
 
 button:hover {
-    /* background-color: rgba(19, 27, 30, 0.548); */
     color: rgb(151,87,87);
 }
 
-.message {
+.server-off {
+    height: 2rem;
+    text-align: center;
+    width: 100%;
+    color: rgb(151,87,87);
+    font-size: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.server-on {
+    height: 2rem;
     font-size: 24px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-/* ====================================================================================== */
-
-/* .start-form {
-    border-radius: 5px;
-    gap: 15px;
-}
-
-.title {
-    font-size: 51px;
-    margin-bottom: 23px;
-}
-
-.options {
-    font-size: 23px;
-    margin-bottom: 25px;
-}
-
-.option {
-    border-bottom: 3px solid rgb(77,118,88);
-    width: 200px;
-    padding-bottom: 10px;
-}
-
-.selected {
-    border-bottom: 3px solid rgb(128, 195, 146);
-}
-
-.inputs input {
-    border-bottom: 2px solid rgb(77,118,88);
-    margin-bottom: 25px;
-    height: 55px;
-    font-size: 23px;
-}
-
-.inputs label {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 1px;
-}
-
-button {
-    width: calc(100% - 10px);
-    font-size: 23px;
-    border: 5px solid rgb(77,118,88);
-    padding-top: 8px;
-    padding-bottom: 8px;
-} */
-
 @media (max-width: 1600px) {
-    .start-form {
-        border-radius: 4px;
-        gap: 12px;
-    }
-    
-    .title {
-        font-size: 42px;
-        margin-bottom: 19px;
-    }
-    
-    .options {
-        font-size: 19px;
-        margin-bottom: 21px;
-    }
-    
-    .option {
-        border-bottom: 2px solid rgb(77,118,88);
-        width: 167px;
-        padding-bottom: 8px;
-    }
-    
-    .selected {
-        border-bottom: 2px solid rgb(128, 195, 146);
-    }
-    
-    .inputs input {
-        border-bottom: 2px solid rgb(77,118,88);
-        margin-bottom: 21px;
-        height: 46px;
-        font-size: 19px;
-    }
-    
-    .inputs label {
-        font-size: 8px;
-        font-weight: 600;
-        letter-spacing: 1px;
-    }
-    
-    button {
-        width: calc(100% - 4px);
-        font-size: 18px;
-        border: 2px solid rgb(77,118,88);
-        padding-top: 8px;
-        padding-bottom: 8px;
-    }
-
-    .message {
-        font-size: 20px;
-    }
 }
   
 @media (max-width: 1366px) {
-    .start-form {
-        border-radius: 3px;
-        gap: 11px;
-    }
-    
-    .title {
-        font-size: 36px;
-        margin-bottom: 16px;
-    }
-    
-    .options {
-        font-size: 16px;
-        margin-bottom: 18px;
-    }
-    
-    .option {
-        border-bottom: 2px solid rgb(77,118,88);
-        width: 142px;
-        padding-bottom: 7px;
-    }
-    
-    .selected {
-        border-bottom: 2px solid rgb(128, 195, 146);
-    }
-    
-    .inputs input {
-        border-bottom: 1px solid rgb(77,118,88);
-        margin-bottom: 18px;
-        height: 39px;
-        font-size: 16px;
-    }
-    
-    .inputs label {
-        font-size: 7px;
-        font-weight: 600;
-        letter-spacing: 1px;
-    }
-    
-    button {
-        width: calc(100% - 7px);
-        font-size: 16px;
-        border: 2px solid rgb(77,118,88);
-        padding-top: 7px;
-        padding-bottom: 7px;
-    }
-
-    .message {
-        font-size: 17px;
-    }
 }
   
 @media (max-width: 912px) and (orientation: portrait) {
-
 }
   
 @media (max-width: 500px) and (orientation: portrait) {
-    
+    .start-form-container {
+        position: fixed;
+        height: 100vh;
+    }
 }

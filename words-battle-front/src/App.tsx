@@ -47,7 +47,7 @@ function App() {
 	const [startForm,    setStartForm]    = useState<boolean>(true);
 	const [block,        setBlock]        = useState<boolean>(false);
 	const [definitions,  setDefinitions]  = useState<Definitions>([{definitions:"", id: ""}]);
-	
+
 	//** USE EFFECTS
 
 	useEffect(()=> {
@@ -278,29 +278,28 @@ function App() {
 	} else {
 		return (
 			<div className={"App scanlines"}>
-				<RoomPanel   host={host} room={room} />
-				<VersusPanel host={host} guest={guest} />
+				<RoomPanel   host={host.username} room={room} />
+				<VersusPanel hostHealth={host.health} guestHealth={guest.health} />
 				<NamesPanel  host={host} guest={guest} userTurn={userTurn} />
 				<DamageCountPanel 
-					host      = {host} 
-					guest     = {guest} 
-					userTurn  = {userTurn} 
-					selection = {selection} 
-					board     = {board}  
+					host={host} 
+					guest={guest} 
+					userTurn={userTurn} 
+					selection={selection} 
+					board={board} 
 				/>
-	
 				<div className="playground">
 					<Grid loadColumn={loadColumn} />
 					<PlaygroundActions 
-						host        = {host} 
-						guest       = {guest} 
-						user        = {user} 
-						userTurn    = {userTurn} 
-						definitions = {definitions} 
-						selection   = {selection} 
-						nextRound   = {nextRound} 
-						send        = {send} 
-						cancel      = {cancel} />
+						host             = {host} 
+						guest            = {guest} 
+						user             = {user} 
+						userTurn         = {userTurn} 
+						definitions      = {definitions} 
+						selection        = {selection} 
+						onStartNextRount = {nextRound} 
+						onSend           = {send} 
+						onCancel         = {cancel} />
 					<PlaygroundResult 
 						selectedWord = {selectedWord} 
 						selection    = {selection} 

@@ -4,13 +4,13 @@
 
 @keyframes move-arrow {
     0% {
-      left: 5px; /* posición inicial de la flecha fuera del contenedor del texto */
+      left: 0.31rem; /* posición inicial de la flecha fuera del contenedor del texto */
     }
     50% {
       left: 0%; /* posición media de la flecha apuntando al comienzo del texto */
     }
     100% {
-      left: 5px; /* posición final de la flecha apuntando al final del texto */
+      left: 0.31rem; /* posición final de la flecha apuntando al final del texto */
     }
 }
   
@@ -51,11 +51,11 @@
 
 .arrow {
     position: relative;
-    width: 22px;
+    width: 1.37rem;
 }
 
 .host-arrow {
-    margin-left: 5px;
+    margin-left: 0.31rem;
 }
 
 
@@ -80,18 +80,16 @@
 }
 
 
-
-
 .App {
     font-family: 'VT323', monospace;
     border: 1px solid rgba(77, 118, 88, 0.154);
-    border-radius: 17px;
+    border-radius: 1.06rem;
     color: rgb(142,163,145);
     background-color: rgb(19,27,30);
     
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-bottom: 15px;
+    padding-left: 0.94rem;
+    padding-right: 0.94rem;
+    padding-bottom: 0.94rem;
 
     display: flex;
     flex-direction: column;
@@ -101,22 +99,9 @@
     position: relative;
 
     text-shadow:
-    0 0 7px rgba(142, 163, 145, 0.597),
-    /* 0 0 10px #fff,
-    0 0 21px #fff,
-    0 0 42px deepskyblue,
-    0 0 82px deepskyblue,
-    0 0 92px deepskyblue,
-    0 0 102px deepskyblue, */
-    0 0 101px rgba(142, 163, 145, 0.361);
+    0 0 0.44rem rgba(142, 163, 145, 0.597),
+    0 0 6.31rem rgba(142, 163, 145, 0.361);
 }
-
-/* .App::after {
-    content: "WORDS BATTLE";
-    position: absolute;
-    top: -93px;
-    font-size: 65px;
-} */
 
 /* ROOM PANEL */
 
@@ -124,19 +109,19 @@
     position: relative;
 
     display: flex;
-    gap: 50px;
-    font-size: 30px;
+    gap: 3.12rem;
+    font-size: 1.87rem;
 
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 50px;
+    height: 3.12rem;
 
-    border-top-left-radius: 25px;
-    border-top-right-radius: 25px;
+    border-top-left-radius: 1.56rem;
+    border-top-right-radius: 1.56rem;
 
-    padding-bottom: 10px;
+    padding-bottom: 0.62rem;
 }
 
 .room-panel:nth-child(2) {
@@ -145,27 +130,28 @@
 }
 
 .close {
-    /* outline: 1px solid red; */
     position: absolute;
+    display: flex;
+
     height: 100%;
     width: 100%;
+
     color: rgb(151,87,87);
     font-weight: bolder;
-    display: flex;
+    
     align-items: center;
     justify-content: flex-end;
     cursor: pointer;
 
-    /* color: rgb(142,163,145); */
     filter: brightness(0.85);
-    font-size: 21px;
+    font-size: 1.31rem;
 }
 
 /* SESSION PANEL */
 .versus-panel {
     width: 100%;
 
-    height: 30px;
+    height: 1.87rem;
 
     margin-bottom: 0px;
     position: relative;
@@ -179,7 +165,7 @@
     position: relative;
 
     border: 2px solid rgb(66, 102, 76);
-    padding: 5px;
+    padding: 0.31rem;
     
 }
 
@@ -187,7 +173,7 @@
     height: 85%;
     display: flex;
     align-items: center;
-    padding-left: 15px;
+    padding-left: 0.94rem;
 }
 .player-health {
     height: 100%;
@@ -198,45 +184,32 @@
     display: flex;
     justify-content: flex-end;
     height: 100%;
-    background-color: rgb(111, 255, 111);
     background-color: rgb(151,87,87);
     position: relative;
 }
 .host-counter {
-    /* outline: 1px solid red; */
-    /* width: 100%;
-    height: 100%; */
-
-    /* align-items: center;
-    justify-content: flex-start; */
     position: absolute;
     left: 0px;
     font-weight: bold;
 
-    margin-left: 6px;
-    margin-top: 5px;
+    margin-left: 0.37rem;
+    margin-top: 0.31rem;
 
     color: rgb(210, 210, 210);
 
-    font-size: 20px;
+    font-size: 1.25rem;
 }
 
 .guest-counter {
-    /* outline: 1px solid red; */
-    /* width: 100%; */
-    /* height: 100%; */
-
-    /* align-items: center;
-    justify-content: flex-end; */
     position: absolute;
     right: 0px;
     font-weight: bold;
 
-    margin-right: 6px;
-    margin-top: 5px;
+    margin-right: 0.37rem;
+    margin-top: 0.31rem;
 
     color: rgb(210, 210, 210);
-    font-size: 20px;
+    font-size: 1.25rem;
 }
 
 .guest-health {
@@ -259,16 +232,15 @@
 /* DAMAGE COUNT */
 
 .damage-count {
-    /* outline: 1px solid red; */
     width: 100%;
-    height: 50px;
+    height: 3.12rem;
     display: flex;
     position: relative;
 
-    font-size: 24px;
+    font-size: 1.5rem;
 
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 0.31rem;
+    margin-bottom: 0.31rem;
 }
 
 .host-damage-count {
@@ -296,12 +268,11 @@
 }
 
 .names {
-    /* outline: 1px solid rgba(255, 0, 0, 0.147); */
     display: flex;
     width: 100%;
 
-    margin-top: 18px;
-    font-size: 24px;
+    margin-top: 1.12rem;
+    font-size: 1.5rem;
 }
 
 .name {
@@ -311,19 +282,19 @@
 .guest-name {
     display: flex;
     justify-content: flex-end;
-    padding-right: 3px;
+    padding-right: 0.19rem;
 }
 
 .host-name {
-    padding-left: 3px;
+    padding-left: 0.19rem;
 }
 
 .winner {
     position: relative;
-    bottom: 10px;
-    font-size: 31px;
-    height: 31px;
-    padding: 15px;
+    bottom: 0.62rem;
+    font-size: 1.94rem;
+    height: 1.94rem;
+    padding: 0.94rem;
     padding-top: 0px;
     width: 100%;
 
@@ -336,7 +307,7 @@
 .playground {
 
     display: flex;
-    border-radius: 15px;
+    border-radius: 0.94rem;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
 
@@ -345,21 +316,20 @@
     width: 100%;
 }
 .playground-actions {
-    padding: 25px;
+
+    padding: 1.56rem;
     padding-top: 0px;
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 1.56rem;
 }
 .playground-button {
-    width: 110px;
-    height: 40px;
+    width: 6.87rem;
+    height: 2.5rem;
     border: 1px solid black;
-    font-size: 21px;
-    border: 5px solid rgb(77,118,88);
-    border: 3px solid rgb(66, 100, 75);
-    /* border-style: double; */
-    border-radius: 20px;
+    font-size: 1.31rem;
+    border: 0.19rem solid rgb(66, 100, 75);
+    border-radius: 1.25rem;
 
     display: flex;
     align-items: center;
@@ -375,9 +345,9 @@
 .playground-result {
     background-color: rgb(76,120,87);
     border: 1px solid rgba(77, 118, 88, 0.474);
-    border-radius: 15px;
-    width: 420px;
-    height: 420px;
+    border-radius: 0.94rem;
+    width: 26.25rem;
+    height: 26.25rem;
     position: relative;
 
     display: flex;
@@ -386,7 +356,7 @@
 
     color: rgb(0,17,16);
 
-    border-radius: 15px;
+    border-radius: 0.94rem;
     overflow: hidden;
 
     box-shadow: inset 0 0 0px 0 #000000;
@@ -395,30 +365,27 @@
 
 
 .formed-word {
-    width: calc(100% - 20px);
-    padding-left: 20px;
-    padding-top: 20px;
-    padding-bottom: 15px;
-    height: 28px;
+    width: calc(100% - 1.25rem);
+    padding-left: 1.25rem;
+    padding-top: 1.25rem;
+    padding-bottom: 0.94rem;
+    height: 1.75rem;
 
-    font-size: 27px;
+    font-size: 1.69rem;
 
     display: flex;
     align-items: center;
-
-    /* background-color: rgb(76,120,87); */
 }
 
 .definitions {
-    font-size: 23px;
-    padding: 20px;
+    font-size: 1.44rem;
+    padding: 1.25rem;
     padding-top: 0px;
-    width: calc(100% - 40px);
+    width: calc(100% - 2.5rem);
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 0.94rem;
     overflow: auto;
-    /* background-color: rgb(76,120,87); */
 
     overflow: auto;
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
@@ -429,24 +396,14 @@
     display: none;  /* Safari and Chrome */
 }
 
-
-.definition {
-    /* animation: fadeIn 0.5s ease-in-out;
-    animation-delay: 1s; */
-}
-
-
-
 .grid {
     display: flex;
     justify-content: center;
-    border-radius: 15px;
+    border-radius: 0.94rem;
     overflow: hidden;
 }
 
 .col {
-    /* outline: 1px solid rgb(0, 0, 0); */
-
     display: flex;
     flex-direction: column;
 
@@ -459,8 +416,8 @@
 .item {
     outline: 1px solid rgba(0, 0, 0, 0.33);
     outline-offset: -1px;
-    width: 70px;
-    height: 70px;
+    width: 4.37rem;
+    height: 4.37rem;
 
     display: flex;
     justify-content: center;
@@ -471,24 +428,27 @@
     user-select: none; /* Standard syntax */
 
     color: rgb(19,27,30);
-    font-size: 27px;
+    font-size: 1.69rem;
 }
 
 .item:hover {
-    color: rgb(155, 40, 40);
+    filter: brightness(0.90);
 }
 
 .line {
-    height: 20px;
+    height: 1.25rem;
 }
 
 .start-form-container {
+    z-index: 10;
     position: absolute;
-    width: 100%;
-    height: 100%;
     top: 0px;
     left: 0px;
-    background-color: white;
+
+    width: 100%;
+    height: 100%;
+    
+    background-color: rgb(12, 18, 19);
 
     display: flex;
     flex-direction: column;
@@ -496,464 +456,14 @@
     align-items: center;
 }
 
-/* FORMULARIO DE INICIO */
-
-.start-form-container {
-    z-index: 10;
-    background-color: rgb(19,27,30);
-}
-
-
-/* ======================================================================= */
-
-/* @keyframes move-arrow {
-    0% {
-      left: 5px;
-    }
-    50% {
-      left: 0%;
-    }
-    100% {
-      left: 5px;
-    }
-}
-
-.arrow {
-    position: relative;
-    width: 22px;
-}
-
-.host-arrow {
-    margin-left: 5px;
-}
-
-.App {
-    border: 1px solid rgba(77, 118, 88, 0.154);
-    border-radius: 17px;
-    
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-bottom: 15px;
-}
-
-.room-panel {
-    gap: 50px;
-    font-size: 30px;
-    height: 50px;
-    border-top-left-radius: 25px;
-    border-top-right-radius: 25px;
-    padding-bottom: 10px;
-}
-
-.versus-panel {
-    width: 100%;
-    height: 30px;
-}
-
-.player-panel {
-    width: 50%;
-    border: 2px solid rgb(66, 102, 76);
-    padding: 5px;
-    
-}
-
-.player-name {
-    padding-left: 15px;
-}
-
-.player-health {
-    height: 15%;
-}
-
-.damage-count {
-    height: 50px;
-    font-size: 24px;
-}
-
-.names {
-    margin-top: 18px;
-    font-size: 24px;
-}
-
-.guest-name {
-    padding-right: 3px;
-}
-
-.host-name {
-    padding-left: 3px;
-}
-
-.winner {
-    bottom: 10px;
-    font-size: 31px;
-    height: 31px;
-    padding: 15px;
-}
-
-.playground {
-    border-radius: 15px;
-}
-
-.playground-actions {
-    padding: 25px;
-    gap: 25px;
-}
-.playground-button {
-    width: 110px;
-    height: 40px;
-    border: 1px solid black;
-    font-size: 21px;
-    border: 5px solid rgb(77,118,88);
-    border-radius: 3px;
-}
-
-.playground-result {
-    border-radius: 15px;
-    width: 420px;
-    height: 420px;
-    border-radius: 15px;
-}
-.formed-word {
-    width: calc(100% - 20px);
-    padding-left: 20px;
-    padding-top: 20px;
-    padding-bottom: 15px;
-    height: 28px;
-    font-size: 27px;
-}
-
-.definitions {
-    font-size: 23px;
-    padding: 20px;
-    width: calc(100% - 40px);
-    gap: 15px;
-}
-
-.grid {
-    border-radius: 15px;
-}
-
-.item {
-    width: 70px;
-    height: 70px;
-    font-size: 27px;
-}
-
-.line {
-    height: 20px;
-} */
-
 
 @media (max-width: 1600px) {
-    @keyframes move-arrow {
-        0% {
-          left: 4px;
-        }
-        50% {
-          left: 0%;
-        }
-        100% {
-          left: 4px;
-        }
-    }
-
-    .close {
-        font-size: 17px
-    }
-    
-    .arrow {
-        position: relative;
-        width: 18px;
-    }
-    
-    .host-arrow {
-        margin-left: 4px;
-    }
-    
-    .App {
-        border: 1px solid rgba(77, 118, 88, 0.154);
-        border-radius: 14px;
-        
-        padding-left: 12px;
-        padding-right: 12px;
-        padding-bottom: 12px;
-    }
-    
-    .room-panel {
-        gap: 42px;
-        font-size: 25px;
-        height: 42px;
-        border-top-left-radius: 21px;
-        border-top-right-radius: 21px;
-        padding-bottom: 8px;
-    }
-    
-    .versus-panel {
-        width: 100%;
-        height: 25px;
-    }
-    
-    .player-panel {
-        width: 50%;
-        border: 2px solid rgb(66, 102, 76);
-        padding: 4px;
-        
-    }
-    
-    .player-name {
-        padding-left: 12px;
-    }
-    
-    .player-health {
-        height:100%;
-    }
-    
-    .damage-count {
-        height: 42px;
-        font-size: 20px;
-    }
-    
-    .names {
-        margin-top: 15px;
-        font-size: 20px;
-    }
-    
-    .guest-name {
-        padding-right: 2px;
-    }
-    
-    .host-name {
-        padding-left: 2px;
-    }
-
-    .host-counter {
-        margin-left: 6px;
-        margin-top: 4px;
-        font-size: 17px;
-    }
-    
-    .guest-counter {
-        margin-right: 6px;
-        margin-top: 4px;
-        font-size: 17px;
-    }
-    
-    .winner {
-        bottom: 8px;
-        font-size: 26px;
-        height: 26px;
-        padding: 12px;
-    }
-    
-    .playground {
-        border-radius: 12px;
-    }
-    
-    .playground-actions {
-        padding: 21px;
-        gap: 21px;
-    }
-    .playground-button {
-        width: 92px;
-        height: 33px;
-        font-size: 21px;
-        border: 2px solid rgb(77,118,88);
-        border-radius: 17px;
-    }
-    
-    .playground-result {
-        border-radius: 12px;
-        width: 350px;
-        height: 350px;
-        border-radius: 12px;
-    }
-    .formed-word {
-        width: calc(100% - 17px);
-        padding-left: 17px;
-        padding-top: 17px;
-        padding-bottom: 12px;
-        height: 23px;
-        font-size: 22px;
-    }
-    
-    .definitions {
-        font-size: 19px;
-        padding: 17px;
-        width: calc(100% - 33px);
-        gap: 12px;
-    }
-    
-    .grid {
-        border-radius: 12px;
-    }
-    
-    .item {
-        width: 58px;
-        height: 58px;
-        font-size: 22px;
-    }
-    
-    .line {
-        height: 17px;
-    }
 }
   
 @media (max-width: 1366px) {
-    @keyframes move-arrow {
-        0% {
-          left: 4px;
-        }
-        50% {
-          left: 0%;
-        }
-        100% {
-          left: 4px;
-        }
-    }
-
-    .close {
-        font-size: 15px;
-    }
-    
-    .arrow {
-        position: relative;
-        width: 16px;
-    }
-    
-    .host-arrow {
-        margin-left: 4px;
-    }
-    
-    .App {
-        border: 1px solid rgba(77, 118, 88, 0.154);
-        border-radius: 12px;
-        
-        padding-left: 11px;
-        padding-right: 11px;
-        padding-bottom: 11px;
-    }
-    
-    .room-panel {
-        gap: 36px;
-        font-size: 21px;
-        height: 36px;
-        border-top-left-radius: 18px;
-        border-top-right-radius: 18px;
-        padding-bottom: 7px;
-    }
-    
-    .versus-panel {
-        width: 100%;
-        height: 21px;
-    }
-    
-    .player-panel {
-        width: 50%;
-        border: 1px solid rgb(66, 102, 76);
-        padding: 4px;
-        
-    }
-    
-    .player-name {
-        padding-left: 11px;
-    }
-    
-    .player-health {
-        height: 100%;
-    }
-    
-    .damage-count {
-        height: 36px;
-        font-size: 17px;
-    }
-    
-    .names {
-        margin-top: 13px;
-        font-size: 17px;
-    }
-    
-    .guest-name {
-        padding-right: 2px;
-    }
-    
-    .host-name {
-        padding-left: 2px;
-    }
-
-    .host-counter {
-        margin-left: 5px;
-        margin-top: 3px;
-        font-size: 14px;
-    }
-    
-    .guest-counter {
-        margin-right: 5px;
-        margin-top: 3px;
-        font-size: 14px;
-    }
-    
-    .winner {
-        bottom: 7px;
-        font-size: 22px;
-        height: 22px;
-        padding: 11px;
-    }
-    
-    .playground {
-        border-radius: 11px;
-    }
-    
-    .playground-actions {
-        padding: 18px;
-        gap: 18px;
-    }
-    .playground-button {
-        width: 78px;
-        height: 28px;
-        font-size: 15px;
-        border: 2px solid rgb(77,118,88);
-        border-radius: 14px;
-    }
-    
-    .playground-result {
-        border-radius: 11px;
-        width: 299px;
-        height: 299px;
-        border-radius: 11px;
-    }
-    .formed-word {
-        width: calc(100% - 14px);
-        padding-left: 14px;
-        padding-top: 14px;
-        padding-bottom: 11px;
-        height: 20px;
-        font-size: 19px;
-    }
-    
-    .definitions {
-        font-size: 16px;
-        padding: 14px;
-        width: calc(100% - 28px);
-        gap: 11px;
-    }
-    
-    .grid {
-        border-radius: 11px;
-    }
-    
-    .item {
-        width: 50px;
-        height: 50px;
-        font-size: 19px;
-    }
-    
-    .line {
-        height: 14px;
-    }
 }
   
 @media (max-width: 912px) and (orientation: portrait) {
-
 }
   
 @media (max-width: 500px) and (orientation: portrait) {
@@ -963,8 +473,6 @@
     }
 
     .App {
-        /* outline: 1px solid red;
-        outline-offset: -3px; */
         margin: 2px;
         height: calc(100dvh - 4px);
         justify-content: flex-start;
@@ -983,30 +491,22 @@
     
 
     .playground {
-        /* outline: 1px solid blue; */
         flex-direction: column;
     }
 
     .grid {
-        /* outline: 5px solid red; */
         display: grid;
         grid-template-columns: repeat(6, 1fr);
-        /* grid-template-rows: repeat(6, 1fr); */
-        /* grid-auto-columns: 1fr; */
 
         border-radius: 7px;
     }
 
     .item {
-        /* outline: 1px solid rgb(225, 14, 14); */
         outline: 1px solid rgba(19, 27, 30, 0.25);
         outline-offset: -1px;
-        /* width: 70px;
-        height: 70px; */
+
         width: 100%;
         height: 13vw;
-
-        /* min-width: 50px; */
     
         display: flex;
         justify-content: center;
@@ -1015,12 +515,14 @@
 
     .damage-count {
         position: relative;
-        /* top: 15px; */
     }
 
     .playground-actions {
+
         flex-direction:row;
         justify-content: center;
+
+        padding: 10px 0;
     }
 
     .playground-button {
@@ -1028,10 +530,11 @@
         border-radius: 20px;
         font-size: 18px;
         width: 100px;
+
+        margin: 0px;
     }
 
     .playground-result {
-        /* outline: 1px solid blue; */
         width: 100%;
         position: relative;
         border-radius: 7px;
@@ -1052,9 +555,7 @@
     }
 
     .formed-word {
-        /* outline: 1px solid red; */
         outline-offset: -1px;
-        /* width: 100%; */
         font-size: 19px;
         padding-bottom: 0px;
     }
@@ -1064,7 +565,6 @@
     }
 
     .definition {
-        /* outline: 1px solid red; */
         font-size: 18px;
     }
 

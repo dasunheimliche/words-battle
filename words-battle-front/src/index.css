@@ -23,7 +23,6 @@
   left: 0;
   z-index: 2147483648;
   background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, .3) 51%);
-  background-size: 100% 4px;
   background-size: 100% 3px;
   animation: scanlines 1s steps(60) infinite;
 }
@@ -68,6 +67,17 @@ body {
   cursor: pointer;
 }
 
+@media (max-width: 1600px) {
+  html {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 1366px) {
+  html {
+    font-size: 11px;
+  }
+}
 @media (max-width: 500px) and (orientation: portrait) {
 
   .scanlines:after {
