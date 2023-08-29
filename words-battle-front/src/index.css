@@ -2,17 +2,18 @@
   position: relative;
   overflow: hidden;
 }
-.scanlines:before, .scanlines:after {
+.scanlines:before,
+.scanlines:after {
   display: block;
   pointer-events: none;
-  content: '';
+  content: "";
   position: absolute;
 }
 .scanlines:before {
   width: 100%;
   height: 2px;
   z-index: 2147483649;
-  background: rgba(0, 0, 0, .3);
+  background: rgba(0, 0, 0, 0.3);
   opacity: 0.75;
   animation: scanline 6s linear infinite;
 }
@@ -22,7 +23,11 @@
   bottom: 0;
   left: 0;
   z-index: 2147483648;
-  background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, .3) 51%);
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0, 0, 0, 0.3) 51%
+  );
   background-size: 100% 3px;
   animation: scanlines 1s steps(60) infinite;
 }
@@ -30,12 +35,12 @@
 @keyframes scanline {
   0% {
     transform: translate3d(0, 200000%, 0);
- }
+  }
 }
 @keyframes scanlines {
   0% {
     background-position: 0 50%;
- }
+  }
 }
 
 /* -------------------------------------------- */
@@ -52,15 +57,14 @@ body {
   align-items: center;
   position: relative;
 
-  background-color: rgb(102,119,95);
-  background-color: rgb(14,14,14);
+  background-color: rgb(102, 119, 95);
+  background-color: rgb(14, 14, 14);
 
   overflow: hidden;
   overscroll-behavior: contain;
 
-  -webkit-user-select:none;
-  user-select:none;
-  
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .pointer {
@@ -79,14 +83,12 @@ body {
   }
 }
 @media (max-width: 500px) and (orientation: portrait) {
-
   .scanlines:after {
     background-size: 100% 2px;
   }
 
   body {
     min-height: 100vh;
-    display:block;
-  }   
+    display: block;
+  }
 }
-
