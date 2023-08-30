@@ -39,6 +39,62 @@ interface EnterButtonProps {
   onJoinRoom: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
+export default function StartForm({
+  user,
+  joinRoom,
+  createRoom,
+  setUser,
+  setRoom,
+}: Props) {
+  const [mode, setMode] = useState<Mode>("create");
+  const [woke, setWoke] = useState<boolean>(false);
+
+  const handleTypeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUser({ username: e.target.value, color: "", health: 100 });
+  };
+
+  const handleTypeRoomname = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRoom(e.target.value);
+  };
+
+  useEffect(() => {
+    axios
+      .get("https://words-battle-api.onrender.com/despertar")
+      .then((_response) => {
+        setWoke(!woke);
+        sessionStorage.setItem("sleep", "false");
+      })
+      .catch((error) => {
+        console.error("Error al despertar el servidor:", error);
+        sessionStorage.setItem("sleep", "true");
+      });
+  }, []);
+
+  return (
+    <div className={style["start-form-background"]}>
+      <form className={style["start-form"]}>
+        <Logo />
+        <Tabs
+          mode={mode}
+          onSelectCreate={() => setMode("create")}
+          onSelectJoin={() => setMode("join")}
+        />
+        <Inputs
+          username={user.username}
+          onTypeUsername={handleTypeUsername}
+          onTypeRoomname={handleTypeRoomname}
+        />
+        <EnterButton
+          mode={mode}
+          onCreateRoom={createRoom}
+          onJoinRoom={joinRoom}
+        />
+        <ServerStatus />
+      </form>
+    </div>
+  );
+}
+
 function Logo() {
   return <div className={style.title}>WORDS BATTLE</div>;
 }
@@ -117,60 +173,8 @@ function ServerStatus() {
   return (
     <div className={isServerSlept ? style["server-off"] : style["server-on"]}>
       {isServerSlept
-        ? "Sorry, free host, server is sleeping."
+        ? "Sorry, free host, server is sleeping. Wait a minute..."
         : "Server is awake!"}
     </div>
   );
 }
-
-const StartForm = ({ user, joinRoom, createRoom, setUser, setRoom }: Props) => {
-  const [mode, setMode] = useState<Mode>("create");
-  const [woke, setWoke] = useState<boolean>(false);
-
-  const handleTypeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUser({ username: e.target.value, color: "", health: 100 });
-  };
-
-  const handleTypeRoomname = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRoom(e.target.value);
-  };
-
-  useEffect(() => {
-    axios
-      .get("https://words-battle-api.onrender.com/despertar")
-      .then((_response) => {
-        setWoke(!woke);
-        sessionStorage.setItem("sleep", "false");
-      })
-      .catch((error) => {
-        console.error("Error al despertar el servidor:", error);
-        sessionStorage.setItem("sleep", "true");
-      });
-  }, []);
-
-  return (
-    <div className={style["start-form-background"]}>
-      <form className={style["start-form"]}>
-        <Logo />
-        <Tabs
-          mode={mode}
-          onSelectCreate={() => setMode("create")}
-          onSelectJoin={() => setMode("join")}
-        />
-        <Inputs
-          username={user.username}
-          onTypeUsername={handleTypeUsername}
-          onTypeRoomname={handleTypeRoomname}
-        />
-        <EnterButton
-          mode={mode}
-          onCreateRoom={createRoom}
-          onJoinRoom={joinRoom}
-        />
-        <ServerStatus />
-      </form>
-    </div>
-  );
-};
-
-export default StartForm;
