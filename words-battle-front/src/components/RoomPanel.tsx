@@ -2,7 +2,7 @@ import React from "react";
 import { reload } from "../utils/functions";
 
 interface RoomPanelProps {
-  host: string;
+  host: string | undefined;
   room: string;
 }
 

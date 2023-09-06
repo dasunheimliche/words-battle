@@ -3,20 +3,16 @@ import io from "socket.io-client";
 
 import {
   setLastPositionAndEmit,
-  setStateAndEmit,
   setSelectionAndEmit,
-  setBoardAndEmit,
-  setUserTurnAndEmit,
-  hitHost,
-  hitGuest,
 } from "../src/utils/emiting";
 
 import {
-  getRandomLetter,
   selectedWord,
   searchDefs,
+  isSelectionValid,
+  isClickeable,
 } from "../src/utils/functions";
-import { letters, damages, grid } from "./utils/variables";
+import { grid } from "./utils/variables";
 import { Position, Board, User, Definitions } from "./types/types";
 
 import RoomPanel from "./components/RoomPanel";
@@ -36,303 +32,214 @@ const socket = io("https://words-battle-api.onrender.com");
 
 function App() {
   //** SHARED STATES
-  const [lastPosition, setLastPosition] = useState<Position>([-1, -1]);
   const [board, setBoard] = useState<Board>(grid);
+
+  const [lastPosition, setLastPosition] = useState<Position>([-1, -1]);
   const [selection, setSelection] = useState<Position[] | undefined>(undefined);
-  const [state, setState] = useState<boolean>(false);
+
   const [room, setRoom] = useState<string>("");
-  const [userTurn, setUserTurn] = useState<User>({
-    username: "",
-    color: "",
-    health: 0,
-  });
-  const [host, setHost] = useState<User>({
-    username: "",
-    color: "",
-    health: 0,
-  });
-  const [guest, setGuest] = useState<User>({
-    username: "",
-    color: "",
-    health: 0,
-  });
+
+  const [userTurn, setUserTurn] = useState<User | null>(null);
+  const [host, setHost] = useState<User | null>(null);
+  const [guest, setGuest] = useState<User | null>(null);
 
   //** LOCAL STATES
-  const [user, setUser] = useState<User>({
-    username: "",
-    color: "",
-    health: 0,
-  });
+  const [user, setUser] = useState<User | null>(null);
   const [startForm, setStartForm] = useState<boolean>(true);
-  const [block, setBlock] = useState<boolean>(false);
+  const [fetching, setFetching] = useState<boolean>(false);
   const [definitions, setDefinitions] = useState<Definitions>([
     { definitions: "", id: "" },
   ]);
 
-  //** USE EFFECTS
-
   useEffect(() => {
     setDefinitions([{ definitions: "", id: "" }]);
-    if (selection) {
-      setBlock(true);
+    if (!selection) return;
 
-      const delayDebounceFn = setTimeout(() => {
-        searchDefs(selection, board, setBlock).then((res) => {
-          if (!res) {
-            return;
-          }
-          setBlock(false);
-          setDefinitions(res);
-        });
-      }, 500);
+    setFetching(true);
 
-      return () => clearTimeout(delayDebounceFn);
-    }
+    const delayDebounceFn = setTimeout(() => {
+      searchDefs(selection, board).then((res) => {
+        if (!res) {
+          return;
+        }
+        setFetching(false);
+        setDefinitions(res);
+      });
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
   }, [selection]);
 
   useEffect(() => {
-    socket.on("setBoard", (payload) => {
+    socket.on("hit", (payload) => {
+      setHost(payload.host);
+      setGuest(payload.guest);
       setBoard(payload.board);
+
+      setUserTurn(payload.userTurn);
     });
+
     socket.on("setLastPosition", (payload) => {
       setLastPosition(payload.position);
     });
+
     socket.on("setSelection", (payload) => {
-      setSelection(payload.selection);
-    });
-    socket.on("setState", (payload) => {
-      setState(payload.state);
-    });
-    socket.on("setUserTurn", (payload) => {
-      setUserTurn(payload.userTurn);
-    });
-    socket.on("setHost", (payload) => {
-      setHost(payload.host);
-    });
-    socket.on("hit host", (damage) => {
-      setDefinitions([{ definitions: "", id: "" }]);
-      if (host.health - damage < 0) {
-        setHost({ ...host, health: 0 });
-      } else {
-        setHost({ ...host, health: host.health - damage });
-      }
-    });
-    socket.on("hit guest", (damage) => {
-      setDefinitions([{ definitions: "", id: "" }]);
-      if (guest.health - damage < 0) {
-        setGuest({ ...guest, health: 0 });
-      } else {
-        setGuest({ ...guest, health: guest.health - damage });
-      }
+      setSelection(payload);
     });
 
-    socket.on("next round", () => {
-      setHost({ ...host, health: 100 });
-      setGuest({ ...guest, health: 100 });
+    socket.on("next round", (payload) => {
+      setHost(payload.host);
+      setGuest(payload.guest);
+      setBoard(payload.board);
     });
 
     return () => {
-      socket.off("setBoard", (payload) => {
-        setBoard(payload.board);
-      });
       socket.off("setLastPosition", (payload) => {
         setLastPosition(payload.lastPosition);
       });
+
       socket.off("setSelection", (payload) => {
         setSelection(payload.selection);
       });
-      socket.off("setState", (payload) => {
-        setState(payload.state);
-      });
-      socket.off("setUserTurn", (payload) => {
-        setUserTurn(payload.userTurn);
-      });
-      socket.off("setHost", (payload) => {
-        setHost(payload.host);
-      });
-      socket.off("hit host", (damage) => {
-        setDefinitions([{ definitions: "", id: "" }]);
-        if (host.health - damage < 0) {
-          setHost({ ...host, health: 0 });
-        } else {
-          setHost({ ...host, health: host.health - damage });
-        }
-      });
-      socket.off("hit guest", (damage) => {
-        setDefinitions([{ definitions: "", id: "" }]);
-        if (guest.health - damage < 0) {
-          setGuest({ ...guest, health: 0 });
-        } else {
-          setGuest({ ...guest, health: guest.health - damage });
-        }
-      });
+
       socket.off("next round", () => {
+        if (!host || !guest) return;
         setHost({ ...host, health: 100 });
         setGuest({ ...guest, health: 100 });
       });
     };
-  }, [board, lastPosition, selection, state, userTurn]);
+  }, [board, lastPosition, selection, userTurn]);
 
   useEffect(() => {
     socket.on("create room error", () => {
       setStartForm(true);
     });
-    socket.on("create room success", () => {
-      setStartForm(false);
 
-      setUserTurnAndEmit(
-        { ...user, color: "lightgreen" },
-        user,
-        room,
-        socket,
-        setUserTurn
-      );
-      initializeBoard();
+    socket.on("create room success", (payload) => {
+      if (!user) return;
+      setBoard(payload.board);
+      setStartForm(false);
+      setUserTurn(payload.userTurn);
       setHost({ ...user, color: "lightgreen" });
     });
+
     socket.on("join room", (payload) => {
-      if (host.username !== "") {
-        socket.emit("setHost", { host, room });
-      }
-      setGuest(payload.user);
+      setHost(payload.host);
+      setGuest(payload.guest);
+      setBoard(payload.board);
+      setUserTurn(payload.userTurn);
     });
 
     return () => {
       socket.off("create room error", () => {
         setStartForm(true);
       });
-      socket.off("create room success", () => {
+      socket.off("create room success", (payload) => {
+        if (!user) return;
+        setBoard(payload.board);
         setStartForm(false);
-
-        setUserTurnAndEmit(
-          { ...user, color: "lightgreen" },
-          user,
-          room,
-          socket,
-          setUserTurn
-        );
-        initializeBoard();
+        setUserTurn(payload.userTurn);
         setHost({ ...user, color: "lightgreen" });
       });
       socket.off("join room", (payload) => {
-        if (host.username !== "") {
-          socket.emit("setHost", { host, room });
-        }
-        setGuest(payload.user);
+        setHost(payload.host);
+        setGuest(payload.guest);
+        setBoard(payload.board);
       });
     };
   });
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0 });
-  }, [startForm]);
 
   //** FUNCIONES
 
   const joinRoom = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
+    if (!user) return;
     if (room.length <= 0 || user.username.length <= 0) return;
 
-    if (userTurn.color === "") {
-      setUserTurn({ ...userTurn, color: "lightgreen" });
-    }
     setStartForm(false);
-    initializeBoard();
     setGuest({ ...user, color: "paleturquoise" });
     socket.emit("join room", { user, room, userTurn });
   };
+
   const createRoom = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    if (!user) return;
+
     if (room.length <= 0 || user.username.length <= 0) return;
 
     socket.emit("create room", { user, room, userTurn });
   };
-  const initializeBoard = () => {
-    const newBoard = JSON.parse(JSON.stringify(grid));
 
-    for (let i = 0; i < newBoard.length; i++) {
-      for (let b = 0; b < newBoard[i].length; b++) {
-        const value = getRandomLetter(letters);
-        newBoard[i][b] = value;
-      }
-    }
-    socket.emit("setBoard", newBoard);
-    setStateAndEmit(true, user, room, socket, setState);
-    setBoardAndEmit(newBoard, user, room, socket, setBoard);
-  };
   const loadColumn = (col: number): React.ReactNode[] => {
     return board[col - 1].map((char, i) => {
+      const isChecked = selection?.some(
+        (item) => item[0] === [i, col - 1][0] && item[1] === [i, col - 1][1]
+      );
+      const isTileDisabled = userTurn?.username !== user?.username || isChecked;
+
+      const onClickTile = ():
+        | React.MouseEventHandler<HTMLDivElement>
+        | undefined => {
+        if (!isClickeable(guest, [i, col - 1], lastPosition)) return;
+
+        setLastPositionAndEmit(
+          [i, col - 1],
+          user,
+          room,
+          socket,
+          setLastPosition
+        );
+        if (selection) {
+          setSelectionAndEmit(
+            [...selection, [i, col - 1]],
+            user,
+            room,
+            socket,
+            setSelection
+          );
+        } else {
+          setSelectionAndEmit([[i, col - 1]], user, room, socket, setSelection);
+        }
+      };
+
       return (
         <Tile
           key={`${i},${col - 1}`}
-          tilePosition={[i, col - 1]}
-          lastPosition={lastPosition}
-          setLastPosition={setLastPosition}
-          setLastPositionAndEmit={setLastPositionAndEmit}
           char={char}
-          selection={selection}
-          setSelection={setSelection}
-          setSelectionAndEmit={setSelectionAndEmit}
-          state={state}
-          setState={setState}
-          setStateAndEmit={setStateAndEmit}
-          socket={socket}
-          user={user}
           userTurn={userTurn}
-          room={room}
-          guest={guest}
+          onClickTile={onClickTile}
+          isChecked={isChecked}
+          isTileDisabled={isTileDisabled}
         />
       );
     });
   };
+
   const cancel = (): void => {
-    setStateAndEmit(false, user, room, socket, setState);
+    if (userTurn?.username !== user?.username) return;
     setLastPositionAndEmit([-1, -1], user, room, socket, setLastPosition);
     setSelectionAndEmit(undefined, user, room, socket, setSelection);
   };
+
   const send = () => {
-    if (block === true) return;
+    if (!isSelectionValid(fetching, selection, userTurn, user, definitions))
+      return;
 
     setDefinitions([{ definitions: "", id: "" }]);
-    cancel();
 
-    const newGrid = JSON.parse(JSON.stringify(board));
-    if (selection) {
-      for (const pos of selection) {
-        newGrid[pos[1]].splice(pos[0], 1);
-        const newLetter = getRandomLetter(letters);
-        newGrid[pos[1]].unshift(newLetter);
-      }
-    }
-    if (userTurn.username === guest.username) {
-      hitHost(selection, socket, room, damages, board, host, setHost);
-      setUserTurnAndEmit(
-        { ...host, color: "lightgreen" },
-        user,
-        room,
-        socket,
-        setUserTurn
-      );
-    } else {
-      hitGuest(selection, socket, room, damages, board, guest, setGuest);
-      setUserTurnAndEmit(
-        { ...guest, color: "paleturquoise" },
-        user,
-        room,
-        socket,
-        setUserTurn
-      );
-    }
-    setBoardAndEmit(newGrid, user, room, socket, setBoard);
+    socket.emit("hit", { userTurn, selection, room });
+
+    cancel();
   };
+
   const nextRound = () => {
-    socket.emit("next round", { no: "no" });
+    socket.emit("next round", { room });
   };
 
   if (startForm) {
     return (
       <StartForm
-        user={user}
         joinRoom={joinRoom}
         createRoom={createRoom}
         setUser={setUser}
@@ -342,9 +249,13 @@ function App() {
   } else {
     return (
       <div className={"App scanlines"}>
-        <RoomPanel host={host.username} room={room} />
-        <VersusPanel hostHealth={host.health} guestHealth={guest.health} />
-        <NamesPanel host={host} guest={guest} userTurn={userTurn} />
+        <RoomPanel host={host?.username} room={room} />
+        <VersusPanel hostHealth={host?.health} guestHealth={guest?.health} />
+        <NamesPanel
+          host={host?.username}
+          guest={guest?.username}
+          userTurn={userTurn?.username}
+        />
         <DamageCountPanel
           host={host}
           guest={guest}
@@ -357,11 +268,7 @@ function App() {
           <PlaygroundActions
             host={host}
             guest={guest}
-            user={user}
-            userTurn={userTurn}
-            definitions={definitions}
-            selection={selection}
-            onStartNextRount={nextRound}
+            onStartNextRound={nextRound}
             onSend={send}
             onCancel={cancel}
           />

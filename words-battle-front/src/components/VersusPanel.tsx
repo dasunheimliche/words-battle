@@ -1,11 +1,11 @@
 import React from "react";
 
 interface VersusPanelProps {
-  hostHealth: number;
-  guestHealth: number;
+  hostHealth: number | undefined;
+  guestHealth: number | undefined;
 }
 
-const VersusPanel = ({ hostHealth, guestHealth }: VersusPanelProps) => {
+const VersusPanel = ({ hostHealth = 0, guestHealth = 0 }: VersusPanelProps) => {
   return (
     <div className="versus-panel">
       <div id="host" className="player-panel">

@@ -1,15 +1,11 @@
 import React from "react";
 import { winner } from "../utils/functions";
-import { User, Position } from "../types/types";
+import { User } from "../types/types";
 
 interface PlaygroundActionsProps {
-  host: User;
-  guest: User;
-  user: User;
-  userTurn: User;
-  definitions: { definitions: string; id: string }[];
-  selection: Position[] | undefined;
-  onStartNextRount: () => void;
+  host: User | null;
+  guest: User | null;
+  onStartNextRound: () => void;
   onSend: () => void;
   onCancel: () => void;
 }
@@ -17,39 +13,20 @@ interface PlaygroundActionsProps {
 const PlaygroundActions = ({
   host,
   guest,
-  user,
-  userTurn,
-  definitions,
-  selection,
-  onStartNextRount,
+  onStartNextRound,
   onSend,
   onCancel,
 }: PlaygroundActionsProps) => {
-  const isButtonEnabled =
-    userTurn.username === user.username &&
-    !(definitions[0].definitions === "no word found") &&
-    selection &&
-    selection.length >= 2;
-  const isMyTurn = userTurn.username === user.username;
-
   return (
     <div className="playground-actions">
-      <button
-        className="playground-button"
-        onClick={onSend}
-        disabled={!isButtonEnabled}
-      >
+      <button className="playground-button" onClick={onSend}>
         SEND
       </button>
-      <button
-        className="playground-button"
-        onClick={onCancel}
-        disabled={!isMyTurn}
-      >
+      <button className="playground-button" onClick={onCancel}>
         CANCEL
       </button>
       {winner(host, guest) && (
-        <button className="playground-button" onClick={onStartNextRount}>
+        <button className="playground-button" onClick={onStartNextRound}>
           NEXT ROUND
         </button>
       )}

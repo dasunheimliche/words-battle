@@ -1,6 +1,6 @@
-import React, { Dispatch } from "react";
+import React from "react";
 import { parse } from "node-html-parser";
-import { Position, Board, User } from "../types/types";
+import { Position, Board, User, Definition, Definitions } from "../types/types";
 import axios from "axios";
 
 export const daño = (
@@ -12,8 +12,8 @@ export const daño = (
   return selection.reduce((acc, [x, y]) => acc + damages[board[y][x]], 0);
 };
 
-export const winner = (host: User, guest: User) => {
-  if (!host.username || !guest.username) return undefined;
+export const winner = (host: User | null, guest: User | null) => {
+  if (!host?.username || !guest?.username) return undefined;
   if (host.health <= 0) return `${guest.username} wins!`;
   if (guest.health <= 0) return `${host.username} wins!`;
   return undefined;
@@ -51,8 +51,7 @@ export const selectedWord = (
 
 export const searchDefs = async (
   selection: Position[] | undefined,
-  board: Board,
-  setBlock: Dispatch<boolean>
+  board: Board
 ) => {
   if (!selection || selection.length === 1) return;
 
@@ -89,7 +88,6 @@ export const searchDefs = async (
       throw Error;
     }
 
-    setBlock(false);
     return [{ definitions: main?.text, id: "1" }];
   } catch (err) {
     return [{ definitions: "no word found", id: "error" }];
@@ -107,4 +105,40 @@ export function isServerSleeping() {
   } else if (sleep === "true") {
     return true;
   }
+}
+
+export const isClickeable = (
+  guest: User | null,
+  tilePosition: Position,
+  lastPosition: Position
+): boolean => {
+  if (!guest) return false;
+
+  if (lastPosition[0] === -1 && lastPosition[1] === -1) return true;
+
+  if (
+    tilePosition[0] <= lastPosition[0] + 1 &&
+    tilePosition[0] >= lastPosition[0] - 1 &&
+    tilePosition[1] <= lastPosition[1] + 1 &&
+    tilePosition[1] >= lastPosition[1] - 1
+  ) {
+    return true;
+  }
+  return false;
+};
+
+export function isSelectionValid(
+  fetching: boolean,
+  selection: Position[] | undefined,
+  userTurn: User | null,
+  user: User | null,
+  definitions: Definitions
+): boolean {
+  if (fetching) return false;
+  if (!selection) return false;
+  if (selection.length <= 1) return false;
+  if (userTurn?.username !== user?.username) return false;
+  if (definitions[0].definitions === "no word found") return false;
+
+  return true;
 }

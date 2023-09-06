@@ -12,7 +12,6 @@ interface User {
 }
 
 interface Props {
-  user: User;
   joinRoom: (e: React.MouseEvent<HTMLButtonElement>) => void;
   createRoom: (e: React.MouseEvent<HTMLButtonElement>) => void;
   setUser: Dispatch<User>;
@@ -30,7 +29,6 @@ interface OptionsProps {
 interface InputsProps {
   onTypeUsername: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onTypeRoomname: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  username: string;
 }
 
 interface EnterButtonProps {
@@ -40,7 +38,6 @@ interface EnterButtonProps {
 }
 
 export default function StartForm({
-  user,
   joinRoom,
   createRoom,
   setUser,
@@ -80,7 +77,6 @@ export default function StartForm({
           onSelectJoin={() => setMode("join")}
         />
         <Inputs
-          username={user.username}
           onTypeUsername={handleTypeUsername}
           onTypeRoomname={handleTypeRoomname}
         />
@@ -122,7 +118,7 @@ function Tabs({ mode, onSelectCreate, onSelectJoin }: OptionsProps) {
   );
 }
 
-function Inputs({ onTypeUsername, onTypeRoomname, username }: InputsProps) {
+function Inputs({ onTypeUsername, onTypeRoomname }: InputsProps) {
   return (
     <div className={style.inputs}>
       <label>
@@ -131,7 +127,6 @@ function Inputs({ onTypeUsername, onTypeRoomname, username }: InputsProps) {
           type="text"
           placeholder="username"
           onChange={onTypeUsername}
-          value={username}
           required
         />
       </label>

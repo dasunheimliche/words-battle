@@ -2,27 +2,30 @@ import React from "react";
 import { User } from "../types/types";
 
 interface NamesPanelProps {
-  host: User;
-  guest: User;
-  userTurn: User;
+  host: string | undefined;
+  guest: string | undefined;
+  userTurn: string | undefined;
 }
 
-const NamesPanel = ({ host, guest, userTurn }: NamesPanelProps) => {
-  const isHostTurn =
-    host.username === userTurn.username || userTurn.username === "";
-  const isGuestTurn = guest.username === userTurn.username;
+const NamesPanel = ({
+  host = "",
+  guest = "",
+  userTurn = "",
+}: NamesPanelProps) => {
+  const isHostTurn = host === userTurn || userTurn === "";
+  const isGuestTurn = guest === userTurn;
 
-  const guestExists = guest.username !== "";
+  const guestExists = guest !== "";
 
   return (
     <div className={"names"}>
       <div className={"name host-name"}>
-        {host.username} (host)
+        {host} (host)
         {isHostTurn && <span className="host-arrow arrow"></span>}
       </div>
       <div className={"name guest-name"}>
         {isGuestTurn && <span className="guest-arrow arrow"></span>}
-        {guestExists && `${guest.username} (guest)`}
+        {guestExists && `${guest} (guest)`}
         {!guestExists && (
           <div className="waiting parpadeo">{"Waiting for a guest..."}</div>
         )}

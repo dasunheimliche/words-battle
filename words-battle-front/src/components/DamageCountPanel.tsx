@@ -4,9 +4,9 @@ import { Position, User, Board } from "../types/types";
 import { damages } from "../utils/variables";
 
 interface DamageCountProps {
-  host: User;
-  guest: User;
-  userTurn: User;
+  host: User | null;
+  guest: User | null;
+  userTurn: User | null;
   selection: Position[] | undefined;
   board: Board;
 }
@@ -19,8 +19,8 @@ const DamageCountPanel = ({
   board,
 }: DamageCountProps) => {
   const sessionWinner: string | undefined = winner(host, guest);
-  const isGuestTurn = guest.username === userTurn.username;
-  const isHostTurn = guest.username !== userTurn.username;
+  const isGuestTurn = guest?.username === userTurn?.username;
+  const isHostTurn = guest?.username !== userTurn?.username;
 
   return (
     <div className="damage-count">

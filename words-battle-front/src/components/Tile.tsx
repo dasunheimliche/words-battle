@@ -1,182 +1,35 @@
-import React, { useEffect, Dispatch, useState } from "react";
+import React, { Dispatch } from "react";
 import { Position, User } from "../types/types";
 import { Socket as SocketType } from "socket.io-client";
+import { isClickeable } from "../utils/functions";
 
 interface TileProps {
-  tilePosition: Position;
-  lastPosition: Position;
-  selection: Position[] | undefined;
+  onClickTile: any;
+  isChecked: boolean | undefined;
+  isTileDisabled: boolean | undefined;
   char: string;
-  state: boolean;
-  socket: SocketType;
-  user: User;
-  room: string;
-  userTurn: User;
-  guest: User;
-
-  setSelection: Dispatch<Position[] | undefined>;
-  setState: Dispatch<boolean>;
-  setLastPosition: Dispatch<Position>;
-  setSelectionAndEmit: (
-    selection: Position[],
-    user: User,
-    room: string,
-    socket: SocketType,
-    setSelection: Dispatch<Position[] | undefined>
-  ) => void;
-  setLastPositionAndEmit: (
-    position: Position,
-    user: User,
-    room: string,
-    socket: SocketType,
-    setLastPosition: Dispatch<Position>
-  ) => void;
-  setStateAndEmit: (
-    state: boolean,
-    user: User,
-    room: string,
-    socket: SocketType,
-    setState: Dispatch<boolean>
-  ) => void;
+  userTurn: User | null;
 }
 
-const Tile = ({
-  guest,
-  tilePosition,
-  lastPosition,
-  setLastPosition,
-  setLastPositionAndEmit,
+export default function Tile({
   char,
-  selection,
-  setSelection,
-  setSelectionAndEmit,
-  state,
-  setState,
-  setStateAndEmit,
-  socket,
-  user,
   userTurn,
-  room,
-}: TileProps) => {
-  const [position] = useState<Position>(tilePosition);
-  const [check, setCheck] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (state === false) {
-      setCheckAndEmit(false, socket, position, user, room);
-    }
-  }, [state]);
-
-  useEffect(() => {
-    socket.on("setCheck", (payload) => {
-      if (
-        position[0] === payload.position[0] &&
-        position[1] === payload.position[1]
-      ) {
-        setCheck(payload.check);
-      }
-    });
-
-    return () => {
-      socket.off("setCheck", (payload) => {
-        if (
-          position[0] === payload.position[0] &&
-          position[1] === payload.position[1]
-        ) {
-          setCheck(payload.check);
-        }
-      });
-    };
-  }, [check]);
-
-  const setCheckAndEmit = (
-    check: boolean,
-    socket: SocketType,
-    position: Position,
-    user: User,
-    room: string
-  ) => {
-    setCheck(check);
-    socket.emit("setCheck", { check, position, user, room });
-  };
-  const handleNewPosition = ():
-    | React.MouseEventHandler<HTMLDivElement>
-    | undefined => {
-    if (lastPosition[0] === -1 && lastPosition[1] === -1) {
-      setLastPositionAndEmit(tilePosition, user, room, socket, setLastPosition);
-      setCheckAndEmit(true, socket, position, user, room);
-      setStateAndEmit(true, user, room, socket, setState);
-      if (selection) {
-        setSelectionAndEmit(
-          [...selection, tilePosition],
-          user,
-          room,
-          socket,
-          setSelection
-        );
-      } else {
-        setSelectionAndEmit([tilePosition], user, room, socket, setSelection);
-      }
-      return;
-    }
-
-    if (!isClickeable()) {
-      return;
-    }
-
-    setLastPositionAndEmit(tilePosition, user, room, socket, setLastPosition);
-    setCheckAndEmit(true, socket, position, user, room);
-    setStateAndEmit(true, user, room, socket, setState);
-    if (selection) {
-      setSelectionAndEmit(
-        [...selection, tilePosition],
-        user,
-        room,
-        socket,
-        setSelection
-      );
-    } else {
-      setSelectionAndEmit([tilePosition], user, room, socket, setSelection);
-    }
-  };
-  const isClickeable = (): boolean => {
-    if (guest.username === "") {
-      return false;
-    }
-
-    if (
-      position[0] <= lastPosition[0] + 1 &&
-      position[0] >= lastPosition[0] - 1 &&
-      position[1] <= lastPosition[1] + 1 &&
-      position[1] >= lastPosition[1] - 1
-    ) {
-      return true;
-    }
-    return false;
-  };
-  const doNothing = () => {
-    return;
-  };
-
+  onClickTile,
+  isChecked,
+  isTileDisabled,
+}: TileProps) {
   return (
-    <div
+    <button
       style={
-        check
-          ? { backgroundColor: userTurn.color }
+        isChecked
+          ? { backgroundColor: userTurn?.color }
           : { backgroundColor: "rgb(142,163,145)" }
       }
       className="item pointer"
-      onClick={
-        userTurn.username === user.username
-          ? !check
-            ? handleNewPosition
-            : doNothing
-          : doNothing
-      }
+      onClick={onClickTile}
+      disabled={isTileDisabled}
     >
       {char}
-    </div>
+    </button>
   );
-};
-
-export default Tile;
+}

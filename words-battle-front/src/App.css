@@ -403,6 +403,7 @@
 }
 
 .item {
+  all: unset;
   outline: 1px solid rgba(0, 0, 0, 0.33);
   outline-offset: -1px;
   width: 4.37rem;
